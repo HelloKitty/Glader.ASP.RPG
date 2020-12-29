@@ -9,7 +9,7 @@ namespace Glader.ASP.RPGCharacter
 	/// <summary>
 	/// Database-based implementation of <see cref="IRPGCharacterEntry"/> <see cref="IRPGCharacterCreationDetails"/>
 	/// </summary>
-	[Table("characters")]
+	[Table("character")]
 	public class DBRPGCharacter : IRPGCharacterEntry, IRPGCharacterCreationDetails
 	{
 		/// <inheritdoc />
