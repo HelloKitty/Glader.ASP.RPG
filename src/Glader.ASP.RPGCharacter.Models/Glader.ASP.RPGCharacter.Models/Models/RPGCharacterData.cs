@@ -16,6 +16,12 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		[JsonProperty]
 		public RPGCharacterEntry Entry { get; private set; }
+		
+		/// <summary>
+		/// Details about the creation of the character.
+		/// </summary>
+		[JsonProperty]
+		public RPGCharacterCreationDetails CreationDetails { get; private set; }
 
 		/// <summary>
 		/// The character's progress.
@@ -23,9 +29,10 @@ namespace Glader.ASP.RPGCharacter
 		[JsonProperty]
 		public RPGCharacterProgress Progress { get; private set; }
 
-		public RPGCharacterData(RPGCharacterEntry entry, RPGCharacterProgress progress)
+		public RPGCharacterData(RPGCharacterEntry entry, RPGCharacterCreationDetails creationDetails, RPGCharacterProgress progress)
 		{
 			Entry = entry ?? throw new ArgumentNullException(nameof(entry));
+			CreationDetails = creationDetails ?? throw new ArgumentNullException(nameof(creationDetails));
 			Progress = progress ?? throw new ArgumentNullException(nameof(progress));
 		}
 

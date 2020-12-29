@@ -16,15 +16,11 @@ namespace Glader.ASP.RPGCharacter
 		[JsonProperty]
 		public string Name { get; private set; }
 
-		/// <inheritdoc />
-		[JsonProperty]
-		public DateTime CreationDate { get; private set; }
 
-		public RPGCharacterEntry(int id, string name, DateTime creationDate)
+		public RPGCharacterEntry(int id, string name)
 		{
 			Id = id;
 			Name = name ?? throw new ArgumentNullException(nameof(name));
-			CreationDate = creationDate;
 		}
 
 		/// <summary>

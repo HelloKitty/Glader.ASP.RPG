@@ -18,10 +18,5 @@ namespace Glader.ASP.RPGCharacter
 		/// Represents the RPG Character's name.
 		/// </summary>
 		string Name { get; }
-
-		/// <summary>
-		/// Represents the timestamp of the creation.
-		/// </summary>
-		DateTime CreationDate { get; }
 	}
 }
