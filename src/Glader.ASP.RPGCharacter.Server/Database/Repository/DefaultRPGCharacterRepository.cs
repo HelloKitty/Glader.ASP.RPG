@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Glader.ASP.RPGCharacter
 {
@@ -30,6 +32,34 @@ namespace Glader.ASP.RPGCharacter
 				.Where(o => o.OwnershipId == ownershipId)
 				.Select(ownership => ownership.Character)
 				.ToArrayAsync(token);
+		}
+
+		public async Task<DBRPGCharacter> CreateCharacterAsync(int ownershipId, string name, CancellationToken token = default)
+		{
+			await using IDbContextTransaction transaction = await Context.Database.BeginTransactionAsync(token);
+
+			try
+			{
+				EntityEntry<DBRPGCharacter> entry = await Context
+					.Characters
+					.AddAsync(new DBRPGCharacter(name), token);
+
+				await Context.SaveChangesAsync(token);
+
+				//Now we link the character via the Ownership table
+				await Context
+					.CharacterOwnership
+					.AddAsync(new DBRPGCharacterOwnership(ownershipId, entry.Entity.Id), token);
+
+				await Context.SaveChangesAsync(token);
+				await transaction.CommitAsync(token);
+
+				return entry.Entity;
+			}
+			catch (Exception)
+			{
+				throw;
+			}
 		}
 	}
 }
