@@ -12,7 +12,8 @@ using Microsoft.Extensions.Logging;
 namespace Glader.ASP.RPGCharacter
 {
 	[Route("api/[controller]")]
-	public sealed class CharacterDataController : AuthorizationReadyController, ICharacterDataQueryService
+	public sealed class CharacterDataController : AuthorizationReadyController, 
+		ICharacterDataQueryService, ICharacterCreationService
 	{
 		private IRPGCharacterRepository CharacterRepository { get; }
 
@@ -23,6 +24,7 @@ namespace Glader.ASP.RPGCharacter
 			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
 		}
 
+		/// <inheritdoc />
 		[ProducesJson]
 		[AuthorizeJwt]
 		[HttpGet("Characters")]
@@ -43,6 +45,7 @@ namespace Glader.ASP.RPGCharacter
 			return new RPGCharacterData(new RPGCharacterEntry(character.Id, character.Name), new RPGCharacterCreationDetails(character.CreationDate), new RPGCharacterProgress(character.Progress.Experience, character.Progress.Level, character.Progress.PlayTime));
 		}
 
+		/// <inheritdoc />
 		[ProducesJson]
 		[HttpGet("Characters/{id}")]
 		public async Task<ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>> 
@@ -56,6 +59,34 @@ namespace Glader.ASP.RPGCharacter
 			}
 			else
 				return new ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>(CharacterDataQueryResponseCode.CharacterDoesNotExist);
+		}
+
+		/// <inheritdoc />
+		[ProducesJson]
+		[AuthorizeJwt]
+		[HttpPost("Characters")]
+		public async Task<ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>> CreateCharacterAsync([FromBody] RPGCharacterCreationRequest request, CancellationToken token = default)
+		{
+			//TODO: Fix GetAccountId API
+			int accountId = ClaimsReader.GetAccountId<int>(User);
+
+			if (!ModelState.IsValid)
+				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.GeneralError);
+
+			//TODO: Add validation pipeline.
+			if (String.IsNullOrWhiteSpace(request.Name))
+				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.InvalidName);
+
+			//TODO: Better handling and response code implementation.
+			try
+			{
+				DBRPGCharacter character = await CharacterRepository.CreateCharacterAsync(accountId, request.Name, token);
+				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(new RPGCharacterCreationResult(character.Id));
+			}
+			catch (Exception e)
+			{
+				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.GeneralError);
+			}
 		}
 	}
 }
