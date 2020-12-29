@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,19 +14,33 @@ namespace Glader.ASP.RPGCharacter
 	[Route("api/[controller]")]
 	public sealed class CharacterDataController : AuthorizationReadyController, ICharacterDataQueryService
 	{
-		private RPGCharacterDatabaseContext Context { get; }
+		private IRPGCharacterRepository CharacterRepository { get; }
 
 		public CharacterDataController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, 
-			RPGCharacterDatabaseContext context) 
+			IRPGCharacterRepository characterRepository) 
 			: base(claimsReader, logger)
 		{
-			Context = context ?? throw new ArgumentNullException(nameof(context));
+			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
 		}
 
 		[ProducesJson]
+		[AuthorizeJwt]
+		[HttpGet("Characters")]
 		public async Task<RPGCharacterData[]> RetrieveCharactersDataAsync(CancellationToken token = default)
 		{
-			throw new NotImplementedException();
+			//TODO: Fix GetAccountId API
+			int accountId = ClaimsReader.GetAccountId<int>(User);
+			return (await CharacterRepository
+					.RetrieveOwnedCharactersAsync(accountId, token))
+				.Select(ConvertDbToTransit)
+				.ToArray();
+		}
+
+		private RPGCharacterData ConvertDbToTransit(DBRPGCharacter character)
+		{
+			if (character == null) throw new ArgumentNullException(nameof(character));
+
+			return new RPGCharacterData(new RPGCharacterEntry(character.Id, character.Name), new RPGCharacterCreationDetails(character.CreationDate), new RPGCharacterProgress(character.Progress.Experience, character.Progress.Level, character.Progress.PlayTime));
 		}
 
 		[ProducesJson]
@@ -33,10 +48,11 @@ namespace Glader.ASP.RPGCharacter
 		public async Task<ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>> 
 			RetrieveCharacterDataAsync([FromRoute(Name = "id")] int characterId, CancellationToken token = default)
 		{
-			if (await Context.Characters.AnyAsync(c => c.Id == characterId, token))
+			//TODO: Properly handle failure and return correct response codes.
+			if (await CharacterRepository.ContainsAsync(characterId, token))
 			{
-				DBRPGCharacter character = await Context.Characters.FindAsync(characterId);
-				return new ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>(new RPGCharacterData(new RPGCharacterEntry(character.Id, character.Name), new RPGCharacterCreationDetails(character.CreationDate), new RPGCharacterProgress(character.Progress.Experience, character.Progress.Level, character.Progress.PlayTime)));
+				DBRPGCharacter character = await CharacterRepository.RetrieveAsync(characterId, token);
+				return new ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>(ConvertDbToTransit(character));
 			}
 			else
 				return new ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>(CharacterDataQueryResponseCode.CharacterDoesNotExist);
