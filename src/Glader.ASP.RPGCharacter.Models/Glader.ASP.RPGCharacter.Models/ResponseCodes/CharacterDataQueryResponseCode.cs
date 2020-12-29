@@ -18,13 +18,13 @@ namespace Glader.ASP.RPGCharacter
 		GeneralError = 1,
 
 		/// <summary>
-		/// The requested character does not exist.
-		/// </summary>
-		CharacterDoesNotExist = 2,
-
-		/// <summary>
 		/// The character data is data not authorized to query.
 		/// </summary>
-		NotAuthorized = 3,
+		NotAuthorized = 2,
+
+		/// <summary>
+		/// The requested character does not exist.
+		/// </summary>
+		CharacterDoesNotExist = 3,
 	}
 }

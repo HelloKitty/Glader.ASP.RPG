@@ -10,7 +10,7 @@ namespace Glader.ASP.RPGCharacter
 {
 	/// <summary>
 	/// Contract for REST service that provides
-	/// character data services.
+	/// character data query services.
 	/// </summary>
 	[Headers("User-Agent: Glader")]
 	public interface ICharacterDataQueryService
@@ -34,7 +34,5 @@ namespace Glader.ASP.RPGCharacter
 		/// <returns>An array of all RPG Character Data.</returns>
 		[Get("/api/CharacterData/Characters/{id}")]
 		Task<ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>> RetrieveCharacterDataAsync([AliasAs("id")] int characterId, CancellationToken token = default);
-
-
 	}
 }
