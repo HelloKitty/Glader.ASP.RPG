@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glader.ASP.RPGCharacter.Mod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glader.ASP.RPGCharacter.Client", "src\Glader.ASP.RPGCharacter.Client\Glader.ASP.RPGCharacter.Client.csproj", "{91EED49B-FBE2-4897-BE7E-AFD81F82ACAA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Glader.ASP.RPGCharacter.Server", "src\Glader.ASP.RPGCharacter.Server\Glader.ASP.RPGCharacter.Server.csproj", "{49BD51B1-C323-40DD-95EA-79BB08A83CB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{91EED49B-FBE2-4897-BE7E-AFD81F82ACAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91EED49B-FBE2-4897-BE7E-AFD81F82ACAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91EED49B-FBE2-4897-BE7E-AFD81F82ACAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49BD51B1-C323-40DD-95EA-79BB08A83CB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49BD51B1-C323-40DD-95EA-79BB08A83CB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49BD51B1-C323-40DD-95EA-79BB08A83CB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49BD51B1-C323-40DD-95EA-79BB08A83CB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +36,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{22D009DC-84BA-40CD-A3C4-EA8F0F50FCC9} = {53708FD5-C174-420D-AFDC-601849002998}
 		{91EED49B-FBE2-4897-BE7E-AFD81F82ACAA} = {53708FD5-C174-420D-AFDC-601849002998}
+		{49BD51B1-C323-40DD-95EA-79BB08A83CB8} = {53708FD5-C174-420D-AFDC-601849002998}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BCB4DCA-13A6-4667-80F4-8F4BCE6EAA5A}
