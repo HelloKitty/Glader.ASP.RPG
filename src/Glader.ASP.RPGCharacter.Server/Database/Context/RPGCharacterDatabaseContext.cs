@@ -39,6 +39,16 @@ namespace Glader.ASP.RPGCharacter
 				builder.Property(c => c.PlayTime)
 					.HasDefaultValue(TimeSpan.Zero);
 			});
+
+			modelBuilder.Entity<DBRPGCharacterOwnership>(builder =>
+			{
+				//index by owner since we will query character lists and such.
+				builder.HasIndex(c => c.OwnershipId);
+
+				//Builds a composite key between the owner and characterid.
+				//EF Requires keys, keyless entities are second class citizens.
+				builder.HasKey(c => new {c.OwnershipId, c.CharacterId});
+			});
 		}
 	}
 }

@@ -18,7 +18,6 @@ namespace Glader.ASP.RPGCharacter
 		/// (Ex. the account ID that owns or is linked to the character.
 		/// </summary>
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-		[Key]
 		public int OwnershipId { get; private set; }
 
 		/// <summary>

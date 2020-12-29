@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPGCharacter;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20201229092509_MadeOwnershipMultiple")]
+    partial class MadeOwnershipMultiple
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,13 +44,17 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
             modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterOwnership", b =>
                 {
-                    b.Property<int>("OwnershipId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
-                    b.HasKey("OwnershipId", "CharacterId");
+                    b.Property<int>("OwnershipId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CharacterId");
 
