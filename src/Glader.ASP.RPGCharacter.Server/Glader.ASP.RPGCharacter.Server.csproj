@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Glader.Essentials.ASP" Version="2.2.45" />
+    <PackageReference Include="Glader.Essentials.ASP" Version="2.2.46" />
     <PackageReference Include="Glader.Essentials.Database" Version="2.2.45" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Glader.ASP.RPGCharacter.Client\Glader.ASP.RPGCharacter.Client.csproj" />
     <ProjectReference Include="..\Glader.ASP.RPGCharacter.Models\Glader.ASP.RPGCharacter.Models\Glader.ASP.RPGCharacter.Models.csproj" />
   </ItemGroup>
 

@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Glader.Essentials;
 using Microsoft.EntityFrameworkCore;
 
 namespace Glader.ASP.RPGCharacter
@@ -26,14 +27,18 @@ namespace Glader.ASP.RPGCharacter
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllers();
-			services.AddDbContext<RPGCharacterDatabaseContext>(builder =>
+			services.AddControllers()
+				.RegisterCharacterDataController();
+
+			services.RegisterCharacterDatabase(builder =>
 			{
 				builder.UseMySql("server=127.0.0.1;port=3306;Database=glader.test;Uid=root;Pwd=test;", optionsBuilder =>
 				{
 					optionsBuilder.MigrationsAssembly(GetType().Assembly.FullName);
 				});
 			});
+
+			services.RegisterGladerASP();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
