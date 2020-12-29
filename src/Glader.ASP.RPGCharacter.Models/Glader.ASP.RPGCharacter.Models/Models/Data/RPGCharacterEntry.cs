@@ -16,7 +16,6 @@ namespace Glader.ASP.RPGCharacter
 		[JsonProperty]
 		public string Name { get; private set; }
 
-
 		public RPGCharacterEntry(int id, string name)
 		{
 			Id = id;
