@@ -28,7 +28,8 @@ namespace Glader.ASP.RPGCharacter
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers()
-				.RegisterCharacterDataController();
+				.RegisterCharacterDataController()
+				.AddNewtonsoftJson();
 
 			services.RegisterCharacterDatabase(builder =>
 			{
