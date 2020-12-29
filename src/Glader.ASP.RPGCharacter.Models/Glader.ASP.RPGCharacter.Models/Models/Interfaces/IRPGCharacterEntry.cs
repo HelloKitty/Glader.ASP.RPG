@@ -7,13 +7,8 @@ namespace Glader.ASP.RPGCharacter
 	/// <summary>
 	/// Contract for a data model that represents an RPG character entry.
 	/// </summary>
-	public interface IRPGCharacterEntry
+	public interface IRPGCharacterEntry : ICharacterEntryLinkable
 	{
-		/// <summary>
-		/// Represents the RPG Character's id.
-		/// </summary>
-		int Id { get; }
-
 		/// <summary>
 		/// Represents the RPG Character's name.
 		/// </summary>

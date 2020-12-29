@@ -10,12 +10,12 @@ namespace Glader.ASP.RPGCharacter
 	/// Database-based implementation of <see cref="IRPGCharacterEntry"/> <see cref="IRPGCharacterCreationDetails"/>
 	/// </summary>
 	[Table("characters")]
-	public sealed class DBRPGCharacter : IRPGCharacterEntry, IRPGCharacterCreationDetails, ICharacterEntryLinkable
+	public class DBRPGCharacter : IRPGCharacterEntry, IRPGCharacterCreationDetails
 	{
 		/// <inheritdoc />
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		[Key]
-		public int Id { get; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; private set; }
 
 		/// <inheritdoc />
 		[Required]
@@ -26,22 +26,25 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		[Required]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public DateTime CreationDate { get; }
+		public DateTime CreationDate { get; private set; }
 
 		/// <summary>
 		/// Last time the character entry was modified.
 		/// </summary>
 		[Required]
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-		public DateTime LastModifiedDate { get; }
+		public DateTime LastModifiedDate { get; private set; }
 
 		[Required]
 		[ForeignKey(nameof(Id))]
-		public DBRPGCharacterProgress Progress { get; }
+		public virtual DBRPGCharacterProgress Progress { get; private set; }
 
 		public DBRPGCharacter(string name)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));
+
+			//Empty progress with defaults.
+			Progress = new DBRPGCharacterProgress();
 		}
 	}
 }

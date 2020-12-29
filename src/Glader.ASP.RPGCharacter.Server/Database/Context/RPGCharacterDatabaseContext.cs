@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPGCharacter
 {
@@ -27,6 +28,12 @@ namespace Glader.ASP.RPGCharacter
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<DBRPGCharacterProgress>(builder =>
+			{
+				builder.Property(c => c.PlayTime)
+					.HasDefaultValue(TimeSpan.Zero);
+			});
 		}
 	}
 }
