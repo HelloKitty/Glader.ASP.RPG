@@ -4,9 +4,23 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RootNamespace>Glader.ASP.RPGCharacter</RootNamespace>
+    <Version>0.0.1</Version>
+    <Authors>Andrew Blakely, Glader</Authors>
+    <Product>Glader.ASP.RPGCharacter</Product>
+    <Description>Glader.ASP.RPGCharacter is an ASP Core, EntityFramework, Refit-based and JSON-based Role-playing Game Character library.</Description>
+    <PackageProjectUrl>https://github.com/HelloKitty/Glader.ASP.RPGCharacter</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/Glader.ASP.RPGCharacter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Glader ASP Service Discovery RPGCharacter</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Glader.Essentials.ASP" Version="2.2.46" />
-    <PackageReference Include="Glader.Essentials.Database" Version="2.2.45" />
+    <PackageReference Include="Glader.Essentials.Database" Version="2.2.46" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
