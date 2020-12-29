@@ -11,8 +11,8 @@ namespace Glader.ASP.RPGCharacter
 	/// </summary>
 	public sealed class DefaultRPGCharacterRepository : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter>, IRPGCharacterRepository
 	{
-		public DefaultRPGCharacterRepository(DbSet<DBRPGCharacter> modelSet, DbContext context) 
-			: base(modelSet, context)
+		public DefaultRPGCharacterRepository(RPGCharacterDatabaseContext context) 
+			: base(context.Characters, context)
 		{
 
 		}
