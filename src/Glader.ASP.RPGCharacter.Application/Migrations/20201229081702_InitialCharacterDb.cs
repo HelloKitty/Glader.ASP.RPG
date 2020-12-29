@@ -26,7 +26,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "characters",
+                name: "character",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -39,9 +39,9 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_characters", x => x.Id);
+                    table.PrimaryKey("PK_character", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_characters_character_progress_Id",
+                        name: "FK_character_character_progress_Id",
                         column: x => x.Id,
                         principalTable: "character_progress",
                         principalColumn: "Id",
@@ -52,7 +52,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "characters");
+                name: "character");
 
             migrationBuilder.DropTable(
                 name: "character_progress");

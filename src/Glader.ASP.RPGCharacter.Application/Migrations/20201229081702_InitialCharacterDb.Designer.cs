@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext))]
-    [Migration("20201229072800_InitialCharacterDb")]
+    [Migration("20201229081702_InitialCharacterDb")]
     partial class InitialCharacterDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("characters");
+                    b.ToTable("character");
                 });
 
             modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterProgress", b =>

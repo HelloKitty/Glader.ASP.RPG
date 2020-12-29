@@ -13,6 +13,11 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		public DbSet<DBRPGCharacter> Characters { get; set; }
 
+		/// <summary>
+		/// The ownership relationship of characters.
+		/// </summary>
+		public DbSet<DBRPGCharacterOwnership> CharacterOwnership { get; set; }
+
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext> options)
 			: base(options)
 		{

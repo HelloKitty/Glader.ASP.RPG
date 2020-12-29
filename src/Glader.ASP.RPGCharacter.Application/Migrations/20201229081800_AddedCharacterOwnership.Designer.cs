@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPGCharacter;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20201229081800_AddedCharacterOwnership")]
+    partial class AddedCharacterOwnership
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
