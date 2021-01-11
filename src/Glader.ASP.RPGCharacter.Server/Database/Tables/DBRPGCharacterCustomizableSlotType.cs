@@ -4,11 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Glader
+namespace Glader.ASP.RPGCharacter
 {
 	/// <summary>
-	/// Database table model that represents an ownership relationship
-	/// for a character.
+	/// The character customization slot type.
 	/// </summary>
 	[Table("character_customization_slot_type")]
 	public class DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>
