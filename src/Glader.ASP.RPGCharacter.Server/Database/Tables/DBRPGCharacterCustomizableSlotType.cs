@@ -11,7 +11,7 @@ namespace Glader
 	/// for a character.
 	/// </summary>
 	[Table("character_customization_slot_type")]
-	public class DBRPGCharacterCustomizableSlot<TCustomizableSlotType>
+	public class DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>
 		where TCustomizableSlotType : Enum
 	{
 		/// <summary>
@@ -31,14 +31,14 @@ namespace Glader
 		/// </summary>
 		public string Description { get; private set; }
 
-		public DBRPGCharacterCustomizableSlot(TCustomizableSlotType slotType, string visualName, string description)
+		public DBRPGCharacterCustomizableSlotType(TCustomizableSlotType slotType, string visualName, string description)
 		{
 			SlotType = slotType ?? throw new ArgumentNullException(nameof(slotType));
 			VisualName = visualName;
 			Description = description;
 		}
 
-		public DBRPGCharacterCustomizableSlot(TCustomizableSlotType slotType)
+		public DBRPGCharacterCustomizableSlotType(TCustomizableSlotType slotType)
 		{
 			SlotType = slotType ?? throw new ArgumentNullException(nameof(slotType));
 			VisualName = String.Empty;
@@ -48,7 +48,7 @@ namespace Glader
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
-		public DBRPGCharacterCustomizableSlot()
+		public DBRPGCharacterCustomizableSlotType()
 		{
 			
 		}
