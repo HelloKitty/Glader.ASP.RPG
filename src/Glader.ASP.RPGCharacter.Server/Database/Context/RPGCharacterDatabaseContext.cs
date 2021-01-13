@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPGCharacter
 {
-	public sealed class RPGCharacterDatabaseContext : DbContext
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType> : DbContext
+		where TCustomizableSlotType : Enum
 	{
 		/// <summary>
 		/// The character table.
@@ -18,7 +20,17 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		public DbSet<DBRPGCharacterOwnership> CharacterOwnership { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext> options)
+		/// <summary>
+		/// The customized slots for the character.
+		/// </summary>
+		public DbSet<DBRPGCharacterCustomizableSlot<TCustomizableSlotType>> CustomizableSlots { get; set; }
+
+		/// <summary>
+		/// The customizable slot types supported.
+		/// </summary>
+		public DbSet<DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>> CustomizableSlotTypes { get; set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType>> options)
 			: base(options)
 		{
 
@@ -49,6 +61,19 @@ namespace Glader.ASP.RPGCharacter
 				//EF Requires keys, keyless entities are second class citizens.
 				builder.HasKey(c => new {c.OwnershipId, c.CharacterId});
 			});
+
+			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType>>(builder =>
+			{
+				builder.HasIndex(c => c.CharacterId);
+				builder.HasKey(c => new {c.CharacterId, c.SlotType});
+			});
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>().HasData(
+				((TCustomizableSlotType[]) Enum.GetValues(typeof(TCustomizableSlotType)))
+				.Select(v => new DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>(v, v.ToString(), String.Empty))
+				.ToArray()
+			);
 		}
 	}
 }

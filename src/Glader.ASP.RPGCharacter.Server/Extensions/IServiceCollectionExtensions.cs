@@ -15,14 +15,15 @@ namespace Glader.ASP.RPGCharacter
 		/// <param name="services">Service container.</param>
 		/// <param name="optionsAction">The DB context options action.</param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterCharacterDatabase(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction)
+		public static IServiceCollection RegisterCharacterDatabase<TCustomizableSlotType>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction)
+			where TCustomizableSlotType : Enum
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 			if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
 			//DefaultServiceEndpointRepository : IServiceEndpointRepository
-			services.AddTransient<IRPGCharacterRepository, DefaultRPGCharacterRepository>();
-			services.AddDbContext<RPGCharacterDatabaseContext>(optionsAction);
+			services.AddTransient<IRPGCharacterRepository, DefaultRPGCharacterRepository<TCustomizableSlotType>>();
+			services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType>>(optionsAction);
 
 			//Example:
 			//services.AddDbContext<ServiceDiscoveryDatabaseContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3306;Database=guardians.global;Uid=root;Pwd=test;"); });

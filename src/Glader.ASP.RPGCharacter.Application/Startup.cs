@@ -34,7 +34,7 @@ namespace Glader.ASP.RPGCharacter
 				.RegisterCharacterDataController()
 				.AddNewtonsoftJson();
 
-			services.RegisterCharacterDatabase(builder =>
+			services.RegisterCharacterDatabase<TestCustomizationSlotType>(builder =>
 			{
 				builder.UseMySql("server=127.0.0.1;port=3306;Database=glader.test;Uid=root;Pwd=test;", optionsBuilder =>
 				{

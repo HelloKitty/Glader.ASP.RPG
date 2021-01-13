@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
-    [DbContext(typeof(RPGCharacterDatabaseContext))]
-    [Migration("20201229092806_RemovedUselessOwnershipId")]
-    partial class RemovedUselessOwnershipId
+    [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType>))]
+    [Migration("20210113234320_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -40,6 +40,68 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("character");
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlot<Glader.ASP.RPGCharacter.TestCustomizationSlotType>", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SlotType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomizationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharacterId", "SlotType");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("SlotType");
+
+                    b.ToTable("character_customization_slot");
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlotType<Glader.ASP.RPGCharacter.TestCustomizationSlotType>", b =>
+                {
+                    b.Property<int>("SlotType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("VisualName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("SlotType");
+
+                    b.ToTable("character_customization_slot_type");
+
+                    b.HasData(
+                        new
+                        {
+                            SlotType = 0,
+                            Description = "",
+                            VisualName = "Shoes"
+                        },
+                        new
+                        {
+                            SlotType = 1,
+                            Description = "",
+                            VisualName = "Feet"
+                        },
+                        new
+                        {
+                            SlotType = 2,
+                            Description = "",
+                            VisualName = "Shirt"
+                        },
+                        new
+                        {
+                            SlotType = 3,
+                            Description = "",
+                            VisualName = "Hair"
+                        });
                 });
 
             modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterOwnership", b =>
@@ -90,6 +152,15 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.HasOne("Glader.ASP.RPGCharacter.DBRPGCharacterProgress", "Progress")
                         .WithMany()
                         .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlot<Glader.ASP.RPGCharacter.TestCustomizationSlotType>", b =>
+                {
+                    b.HasOne("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlotType<Glader.ASP.RPGCharacter.TestCustomizationSlotType>", "SlotDefinition")
+                        .WithMany()
+                        .HasForeignKey("SlotType")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
