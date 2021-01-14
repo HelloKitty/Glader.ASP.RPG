@@ -59,8 +59,9 @@ namespace Glader.ASP.RPGCharacter
 		}
 	}
 
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType> : RPGCharacterDatabaseContext
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : RPGCharacterDatabaseContext
 		where TCustomizableSlotType : Enum
+		where TProportionSlotType : Enum
 	{
 		/// <summary>
 		/// The customized slots for the character.
@@ -72,7 +73,17 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		public DbSet<DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>> CustomizableSlotTypes { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext> options)
+		/// <summary>
+		/// The customized slots for the character.
+		/// </summary>
+		public DbSet<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>> ProportionSlots { get; set; }
+
+		/// <summary>
+		/// The customizable slot types supported.
+		/// </summary>
+		public DbSet<DBRPGCharacterProportionSlotType<TProportionSlotType>> ProportionSlotTypes { get; set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>> options)
 			: base(options)
 		{
 
@@ -105,6 +116,26 @@ namespace Glader.ASP.RPGCharacter
 			modelBuilder.Entity<DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>().HasData(
 				((TCustomizableSlotType[]) Enum.GetValues(typeof(TCustomizableSlotType)))
 				.Select(v => new DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>(v, v.ToString(), String.Empty))
+				.ToArray()
+			);
+
+			modelBuilder.Entity<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>>(builder =>
+			{
+				builder.HasIndex(c => c.CharacterId);
+				builder.HasKey(c => new { c.CharacterId, c.SlotType });
+
+				if(!typeof(TProportionStructureType).IsPrimitive)
+				{
+					//TODO: A total hack, but it must be a reference type if we make it Owned.
+					Expression<Func<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>, TProportionStructureType>> expression = c => c.Proportion;
+					((dynamic)builder).OwnsOne(expression);
+				}
+			});
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGCharacterProportionSlotType<TProportionSlotType>>().HasData(
+				((TProportionSlotType[])Enum.GetValues(typeof(TProportionSlotType)))
+				.Select(v => new DBRPGCharacterProportionSlotType<TProportionSlotType>(v, v.ToString(), String.Empty))
 				.ToArray()
 			);
 		}
