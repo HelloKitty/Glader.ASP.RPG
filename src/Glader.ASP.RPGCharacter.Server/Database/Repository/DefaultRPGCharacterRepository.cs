@@ -18,10 +18,11 @@ namespace Glader.ASP.RPGCharacter
 	{
 		public new RPGCharacterDatabaseContext Context { get; }
 
-		public DefaultRPGCharacterRepository(RPGCharacterDatabaseContext context) 
-			: base(context.Characters, context)
+		public DefaultRPGCharacterRepository(IDBContextAdapter<RPGCharacterDatabaseContext> contextAdapter) 
+			: base(contextAdapter.Context.Set<DBRPGCharacter>(), contextAdapter.Context)
 		{
-			Context = context;
+			if (contextAdapter == null) throw new ArgumentNullException(nameof(contextAdapter));
+			Context = contextAdapter.Context;
 		}
 
 		/// <inheritdoc />
