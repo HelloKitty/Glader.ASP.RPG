@@ -14,12 +14,11 @@ namespace Glader.ASP.RPGCharacter
 	/// <summary>
 	/// Default EF Core database-backed implementation of <see cref="IRPGCharacterRepository"/>
 	/// </summary>
-	public sealed class DefaultRPGCharacterRepository<TCustomizableSlotType, TColorStructureType> : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter>, IRPGCharacterRepository 
-		where TCustomizableSlotType : Enum
+	public sealed class DefaultRPGCharacterRepository : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter>, IRPGCharacterRepository
 	{
-		public new RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType> Context { get; }
+		public new RPGCharacterDatabaseContext Context { get; }
 
-		public DefaultRPGCharacterRepository(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType> context) 
+		public DefaultRPGCharacterRepository(RPGCharacterDatabaseContext context) 
 			: base(context.Characters, context)
 		{
 			Context = context;

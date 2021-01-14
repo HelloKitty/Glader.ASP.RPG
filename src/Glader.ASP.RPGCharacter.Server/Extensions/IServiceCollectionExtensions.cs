@@ -22,8 +22,9 @@ namespace Glader.ASP.RPGCharacter
 			if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
 			//DefaultServiceEndpointRepository : IServiceEndpointRepository
-			services.AddTransient<IRPGCharacterRepository, DefaultRPGCharacterRepository<TCustomizableSlotType, TColorStructureType>>();
+			services.AddTransient<IRPGCharacterRepository, DefaultRPGCharacterRepository>();
 			services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType>>(optionsAction);
+			services.AddDbContext<RPGCharacterDatabaseContext, RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType>>(optionsAction);
 
 			//Example:
 			//services.AddDbContext<ServiceDiscoveryDatabaseContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3306;Database=guardians.global;Uid=root;Pwd=test;"); });

@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPGCharacter
 {
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType> : DbContext
-		where TCustomizableSlotType : Enum
+	public abstract class RPGCharacterDatabaseContext : DbContext
 	{
 		/// <summary>
 		/// The character table.
@@ -21,28 +20,23 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		public DbSet<DBRPGCharacterOwnership> CharacterOwnership { get; set; }
 
-		/// <summary>
-		/// The customized slots for the character.
-		/// </summary>
-		public DbSet<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>> CustomizableSlots { get; set; }
-
-		/// <summary>
-		/// The customizable slot types supported.
-		/// </summary>
-		public DbSet<DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>> CustomizableSlotTypes { get; set; }
-
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType>> options)
+		protected RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext> options)
 			: base(options)
 		{
 
 		}
 
-		public RPGCharacterDatabaseContext()
+		protected RPGCharacterDatabaseContext(DbContextOptions options)
+			: base(options)
 		{
 
 		}
 
-		/// <inheritdoc />
+		protected RPGCharacterDatabaseContext()
+		{
+
+		}
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
@@ -60,8 +54,39 @@ namespace Glader.ASP.RPGCharacter
 
 				//Builds a composite key between the owner and characterid.
 				//EF Requires keys, keyless entities are second class citizens.
-				builder.HasKey(c => new {c.OwnershipId, c.CharacterId});
+				builder.HasKey(c => new { c.OwnershipId, c.CharacterId });
 			});
+		}
+	}
+
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType> : RPGCharacterDatabaseContext
+		where TCustomizableSlotType : Enum
+	{
+		/// <summary>
+		/// The customized slots for the character.
+		/// </summary>
+		public DbSet<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>> CustomizableSlots { get; set; }
+
+		/// <summary>
+		/// The customizable slot types supported.
+		/// </summary>
+		public DbSet<DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>> CustomizableSlotTypes { get; set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext> options)
+			: base(options)
+		{
+
+		}
+
+		public RPGCharacterDatabaseContext()
+		{
+
+		}
+
+		/// <inheritdoc />
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
 
 			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>(builder =>
 			{
