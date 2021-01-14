@@ -7,18 +7,18 @@ using System.Text;
 namespace Glader.ASP.RPGCharacter
 {
 	/// <summary>
-	/// The character customization slot type.
+	/// The character proportions slot type.
 	/// </summary>
-	[Table("character_customization_slot_type")]
-	public class DBRPGCharacterCustomizableSlotType<TCustomizableSlotType> : ICharacterSlotTypeDefinition<TCustomizableSlotType>
-		where TCustomizableSlotType : Enum
+	[Table("character_proportion_slot_type")]
+	public class DBRPGCharacterProportionSlotType<TProportionSlotType> : ICharacterSlotTypeDefinition<TProportionSlotType>
+		where TProportionSlotType : Enum
 	{
 		/// <summary>
 		/// The primary key (enumerated slot type).
 		/// </summary>
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-		public TCustomizableSlotType SlotType { get; private set; }
+		public TProportionSlotType SlotType { get; private set; }
 
 		/// <summary>
 		/// The visual human-readable name for the slot.
@@ -30,14 +30,14 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		public string Description { get; private set; }
 
-		public DBRPGCharacterCustomizableSlotType(TCustomizableSlotType slotType, string visualName, string description)
+		public DBRPGCharacterProportionSlotType(TProportionSlotType slotType, string visualName, string description)
 		{
 			SlotType = slotType ?? throw new ArgumentNullException(nameof(slotType));
 			VisualName = visualName;
 			Description = description;
 		}
 
-		public DBRPGCharacterCustomizableSlotType(TCustomizableSlotType slotType)
+		public DBRPGCharacterProportionSlotType(TProportionSlotType slotType)
 		{
 			SlotType = slotType ?? throw new ArgumentNullException(nameof(slotType));
 			VisualName = String.Empty;
@@ -47,7 +47,7 @@ namespace Glader.ASP.RPGCharacter
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
-		public DBRPGCharacterCustomizableSlotType()
+		public DBRPGCharacterProportionSlotType()
 		{
 			
 		}
