@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPGCharacter;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType>))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210114011044_SwappedEnumValue")]
+    partial class SwappedEnumValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,7 +42,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.ToTable("character");
                 });
 
-            modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlot<Glader.ASP.RPGCharacter.TestCustomizationSlotType, Glader.ASP.RPGCharacter.TestColorType>", b =>
+            modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlot<Glader.ASP.RPGCharacter.TestCustomizationSlotType>", b =>
                 {
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
@@ -160,38 +162,13 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlot<Glader.ASP.RPGCharacter.TestCustomizationSlotType, Glader.ASP.RPGCharacter.TestColorType>", b =>
+            modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlot<Glader.ASP.RPGCharacter.TestCustomizationSlotType>", b =>
                 {
                     b.HasOne("Glader.ASP.RPGCharacter.DBRPGCharacterCustomizableSlotType<Glader.ASP.RPGCharacter.TestCustomizationSlotType>", "SlotDefinition")
                         .WithMany()
                         .HasForeignKey("SlotType")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("Glader.ASP.RPGCharacter.TestColorType", "SlotColor", b1 =>
-                        {
-                            b1.Property<int>("DBRPGCharacterCustomizableSlot<TestCustomizationSlotType, TestColorType>CharacterId")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("DBRPGCharacterCustomizableSlot<TestCustomizationSlotType, TestColorType>SlotType")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("B")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("G")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("R")
-                                .HasColumnType("int");
-
-                            b1.HasKey("DBRPGCharacterCustomizableSlot<TestCustomizationSlotType, TestColorType>CharacterId", "DBRPGCharacterCustomizableSlot<TestCustomizationSlotType, TestColorType>SlotType");
-
-                            b1.ToTable("character_customization_slot");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DBRPGCharacterCustomizableSlot<TestCustomizationSlotType, TestColorType>CharacterId", "DBRPGCharacterCustomizableSlot<TestCustomizationSlotType, TestColorType>SlotType");
-                        });
                 });
 
             modelBuilder.Entity("Glader.ASP.RPGCharacter.DBRPGCharacterOwnership", b =>

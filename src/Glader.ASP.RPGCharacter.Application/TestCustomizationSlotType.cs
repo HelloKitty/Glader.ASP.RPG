@@ -7,9 +7,10 @@ namespace Glader.ASP.RPGCharacter
 {
 	public enum TestCustomizationSlotType
 	{
-		Shoes,
-		Feet,
-		Shirt,
-		Hair
+		Shoes = 0,
+		Feet = 1,
+		Shirt = 2,
+		Hair = 4,
+		Pants = 3
 	}
 }

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPGCharacter
 {
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType> : DbContext
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType> : DbContext
 		where TCustomizableSlotType : Enum
 	{
 		/// <summary>
@@ -23,14 +24,14 @@ namespace Glader.ASP.RPGCharacter
 		/// <summary>
 		/// The customized slots for the character.
 		/// </summary>
-		public DbSet<DBRPGCharacterCustomizableSlot<TCustomizableSlotType>> CustomizableSlots { get; set; }
+		public DbSet<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>> CustomizableSlots { get; set; }
 
 		/// <summary>
 		/// The customizable slot types supported.
 		/// </summary>
 		public DbSet<DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>> CustomizableSlotTypes { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType>> options)
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType>> options)
 			: base(options)
 		{
 
@@ -62,10 +63,17 @@ namespace Glader.ASP.RPGCharacter
 				builder.HasKey(c => new {c.OwnershipId, c.CharacterId});
 			});
 
-			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType>>(builder =>
+			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>(builder =>
 			{
 				builder.HasIndex(c => c.CharacterId);
 				builder.HasKey(c => new {c.CharacterId, c.SlotType});
+
+				if (!typeof(TColorStructureType).IsPrimitive)
+				{
+					//TODO: A total hack, but it must be a reference type if we make it Owned.
+					Expression<Func<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>, TColorStructureType>> expression = c => c.SlotColor;
+					((dynamic)builder).OwnsOne(expression);
+				}
 			});
 
 			//Seed the DB with the available enum entries.

@@ -11,7 +11,7 @@ namespace Glader.ASP.RPGCharacter
 	/// for a character.
 	/// </summary>
 	[Table("character_customization_slot")]
-	public class DBRPGCharacterCustomizableSlot<TCustomizableSlotType>
+	public class DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>
 		where TCustomizableSlotType : Enum
 	{
 		/// <summary>
@@ -38,11 +38,17 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		public int CustomizationId { get; private set; }
 
-		public DBRPGCharacterCustomizableSlot(int characterId, TCustomizableSlotType slotType, int customizationId)
+		/// <summary>
+		/// The color value of the slot.
+		/// </summary>
+		public TColorStructureType SlotColor { get; private set; }
+
+		public DBRPGCharacterCustomizableSlot(int characterId, TCustomizableSlotType slotType, int customizationId, TColorStructureType slotColor)
 		{
 			CharacterId = characterId;
 			SlotType = slotType;
 			CustomizationId = customizationId;
+			SlotColor = slotColor ?? throw new ArgumentNullException(nameof(slotColor));
 		}
 
 		/// <summary>
@@ -50,7 +56,7 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		public DBRPGCharacterCustomizableSlot()
 		{
-			
+
 		}
 	}
 }
