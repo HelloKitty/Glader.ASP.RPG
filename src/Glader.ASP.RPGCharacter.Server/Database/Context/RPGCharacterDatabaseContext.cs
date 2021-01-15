@@ -101,6 +101,10 @@ namespace Glader.ASP.RPGCharacter
 
 			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>(builder =>
 			{
+				builder.HasOne<DBRPGCharacter>()
+					.WithMany()
+					.HasForeignKey(c => c.CharacterId);
+
 				builder.HasIndex(c => c.CharacterId);
 				builder.HasKey(c => new {c.CharacterId, c.SlotType});
 
@@ -121,6 +125,10 @@ namespace Glader.ASP.RPGCharacter
 
 			modelBuilder.Entity<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>>(builder =>
 			{
+				builder.HasOne<DBRPGCharacter>()
+					.WithMany()
+					.HasForeignKey(c => c.CharacterId);
+
 				builder.HasIndex(c => c.CharacterId);
 				builder.HasKey(c => new { c.CharacterId, c.SlotType });
 
