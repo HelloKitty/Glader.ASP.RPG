@@ -19,11 +19,15 @@ namespace Glader.ASP.RPGCharacter
 		/// </summary>
 		/// <param name="builder"></param>
 		/// <returns></returns>
-		public static IMvcBuilder RegisterCharacterDataController(this IMvcBuilder builder)
+		public static IMvcBuilder RegisterCharacterDataController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>(this IMvcBuilder builder) 
+			where TCustomizableSlotType : Enum 
+			where TProportionSlotType : Enum
 		{
 			if(builder == null) throw new ArgumentNullException(nameof(builder));
 
-			return builder.RegisterController<CharacterDataController>();
+			return builder
+				.RegisterController<CharacterDataController>()
+				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>>();
 		}
 	}
 }
