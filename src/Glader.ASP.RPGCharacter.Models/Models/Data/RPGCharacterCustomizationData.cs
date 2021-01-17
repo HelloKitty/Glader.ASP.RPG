@@ -15,6 +15,7 @@ namespace Glader.ASP.RPGCharacter
 	/// <typeparam name="TProportionStructureType">The proportion data structure for customization.</typeparam>
 	public sealed class RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
 		where TCustomizableSlotType : Enum
+		where TProportionSlotType : Enum
 	{
 		/// <summary>
 		/// Dictionary of customized slots (think belt, pants, skin, hair) mapped to a specified slot id.
