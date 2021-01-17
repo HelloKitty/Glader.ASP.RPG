@@ -27,7 +27,7 @@ namespace Glader.ASP.RPGCharacter
 		/// <inheritdoc />
 		[ProducesJson]
 		[HttpGet("Characters/{id}")]
-		public async Task<ResponseModel<RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>, CharacterDataQueryResponseCode>> RetrieveCharacterAppearanceAsync(int characterId, CancellationToken token = default)
+		public async Task<ResponseModel<RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>, CharacterDataQueryResponseCode>> RetrieveCharacterAppearanceAsync([FromRoute(Name = "id")] int characterId, CancellationToken token = default)
 		{
 			try
 			{
