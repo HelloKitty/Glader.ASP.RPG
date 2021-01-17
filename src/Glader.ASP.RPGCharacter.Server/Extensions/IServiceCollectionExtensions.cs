@@ -22,12 +22,15 @@ namespace Glader.ASP.RPGCharacter
 			if (services == null) throw new ArgumentNullException(nameof(services));
 			if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
-			//DefaultServiceEndpointRepository : IServiceEndpointRepository
-			services.AddTransient<IRPGCharacterRepository, DefaultRPGCharacterRepository>();
 			services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>>(optionsAction);
 
 			//Registered for consumers of non-generic context
 			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext>, NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>>();
+
+			//DefaultServiceEndpointRepository : IServiceEndpointRepository
+			services.AddTransient<IRPGCharacterRepository, DefaultRPGCharacterRepository>();
+			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
+			services.AddTransient<IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>, DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>>();
 
 			//Example:
 			//services.AddDbContext<ServiceDiscoveryDatabaseContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3306;Database=guardians.global;Uid=root;Pwd=test;"); });
