@@ -31,7 +31,7 @@ namespace Glader.ASP.RPGCharacter
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddControllers()
-				.RegisterCharacterDataController()
+				.RegisterCharacterDataController<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>>()
 				.AddNewtonsoftJson();
 
 			services.RegisterCharacterDatabase<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>>(builder =>
