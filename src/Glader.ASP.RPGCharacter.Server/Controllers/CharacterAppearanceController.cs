@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Glader.ASP.RPGCharacter
 {
-	[Route("api/[controller]")]
+	//With generic controllers, cannot use the [controller] thingy. Must use strict name
+	[Route("api/CharacterAppearance")]
 	public sealed class CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
 		: AuthorizationReadyController, ICharacterAppearanceService<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
 		where TCustomizableSlotType : Enum
