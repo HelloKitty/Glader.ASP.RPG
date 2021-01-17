@@ -18,6 +18,17 @@ namespace Glader.ASP.RPGCharacter
 		where TProportionSlotType : Enum
 	{
 		/// <summary>
+		/// Empty instance of character customization data.
+		/// </summary>
+		public static RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> Empty { get; } = new RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>();
+
+		//DO NOT REMOVE
+		static RPGCharacterCustomizationData()
+		{
+			
+		}
+
+		/// <summary>
 		/// Dictionary of customized slots (think belt, pants, skin, hair) mapped to a specified slot id.
 		/// (Ex. the 3rd Hair Style)
 		/// </summary>
