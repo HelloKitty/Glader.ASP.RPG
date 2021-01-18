@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,10 +19,15 @@ namespace Glader.ASP.RPGCharacter
 	{
 		private IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> AppearanceRepository { get; }
 
-		public CharacterAppearanceController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> appearanceRepository) 
+		private IRPGCharacterRepository CharacterRepository { get; }
+
+		public CharacterAppearanceController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, 
+			IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> appearanceRepository, 
+			IRPGCharacterRepository characterRepository) 
 			: base(claimsReader, logger)
 		{
 			AppearanceRepository = appearanceRepository ?? throw new ArgumentNullException(nameof(appearanceRepository));
+			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
 		}
 
 		/// <inheritdoc />
@@ -59,6 +65,41 @@ namespace Glader.ASP.RPGCharacter
 
 				return Failure<RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>, CharacterDataQueryResponseCode>(CharacterDataQueryResponseCode.GeneralError);
 			}
+		}
+
+		[AuthorizeJwt]
+		[ProducesJson]
+		[HttpPost("Characters/{id}")]
+		public async Task<CharacterDataQueryResponseCode> CreateCharacterAppearanceAsync([FromRoute(Name = "id")] int characterId, [FromBody] RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> data, CancellationToken token = default)
+		{
+			int accountId = ClaimsReader.GetAccountId<int>(User);
+
+			try
+			{
+				if(!await CharacterRepository.ContainsAsync(characterId, token))
+					return CharacterDataQueryResponseCode.CharacterDoesNotExist;
+
+				//Only allow users who own the character to create its appearance
+				if(!await CharacterRepository.AccountOwnsCharacterAsync(accountId, characterId, token))
+					return CharacterDataQueryResponseCode.NotAuthorized;
+
+				if(data.ProportionData.Count > 0)
+					await AppearanceRepository.CreateSlotsAsync(data.ProportionData.Select(p => new DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>(characterId, p.Key, p.Value)).ToArray(), token);
+
+				if(data.SlotData.Count > 0)
+					await AppearanceRepository.CreateSlotsAsync(ConvertToCustomizableSlotData(characterId, data), token);
+
+				return CharacterDataQueryResponseCode.Success;
+			}
+			catch (Exception e)
+			{
+				return CharacterDataQueryResponseCode.GeneralError;
+			}
+		}
+
+		private static DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>[] ConvertToCustomizableSlotData(int characterId, RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> data)
+		{
+			return data.SlotData.Select(p => new DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>(characterId, p.Key, p.Value, data.SlotColorData.ContainsKey(p.Key) ? data.SlotColorData[p.Key] : default)).ToArray();
 		}
 	}
 }
