@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 
 namespace Glader.ASP.RPGCharacter
@@ -72,6 +73,9 @@ namespace Glader.ASP.RPGCharacter
 		[HttpPost("Characters/{id}")]
 		public async Task<CharacterDataQueryResponseCode> CreateCharacterAppearanceAsync([FromRoute(Name = "id")] int characterId, [FromBody] RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> data, CancellationToken token = default)
 		{
+			if (!ModelState.IsValid)
+				return CharacterDataQueryResponseCode.GeneralError;
+
 			int accountId = ClaimsReader.GetAccountId<int>(User);
 
 			try
@@ -83,11 +87,16 @@ namespace Glader.ASP.RPGCharacter
 				if(!await CharacterRepository.AccountOwnsCharacterAsync(accountId, characterId, token))
 					return CharacterDataQueryResponseCode.NotAuthorized;
 
+				//We scope the appearance persistence in a transaction because we don't want a HALF customized character.
+				await using IDbContextTransaction transaction = await AppearanceRepository.CreateTransactionAsync(token);
+
 				if(data.ProportionData.Count > 0)
 					await AppearanceRepository.CreateSlotsAsync(data.ProportionData.Select(p => new DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>(characterId, p.Key, p.Value)).ToArray(), token);
 
 				if(data.SlotData.Count > 0)
 					await AppearanceRepository.CreateSlotsAsync(ConvertToCustomizableSlotData(characterId, data), token);
+
+				await transaction.CommitAsync(token);
 
 				return CharacterDataQueryResponseCode.Success;
 			}
@@ -102,7 +111,21 @@ namespace Glader.ASP.RPGCharacter
 
 		private static DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>[] ConvertToCustomizableSlotData(int characterId, RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> data)
 		{
-			return data.SlotData.Select(p => new DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>(characterId, p.Key, p.Value, data.SlotColorData.ContainsKey(p.Key) ? data.SlotColorData[p.Key] : default)).ToArray();
+			return data
+				.SlotData
+				.Select(p => new DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>(characterId, p.Key, p.Value, GetSlotColorData(data, p))).ToArray();
+		}
+
+		private static TColorStructureType GetSlotColorData(RPGCharacterCustomizationData<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> data, KeyValuePair<TCustomizableSlotType, int> p)
+		{
+			//TODO: Should we really new it??
+			if (!data.SlotColorData.ContainsKey(p.Key))
+				return Activator.CreateInstance<TColorStructureType>();
+
+			if (data.SlotColorData[p.Key] == null)
+				return Activator.CreateInstance<TColorStructureType>();
+
+			return data.SlotColorData[p.Key];
 		}
 	}
 }
