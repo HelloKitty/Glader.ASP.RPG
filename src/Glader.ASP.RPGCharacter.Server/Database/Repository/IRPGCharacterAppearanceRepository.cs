@@ -49,5 +49,21 @@ namespace Glader.ASP.RPGCharacter
 		/// <param name="token"></param>
 		/// <returns></returns>
 		Task<bool> CreateSlotAsync(DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType> slot, CancellationToken token = default);
+
+		/// <summary>
+		/// Creates the slots for customized character data.
+		/// </summary>
+		/// <param name="slots"></param>
+		/// <param name="token"></param>
+		/// <returns></returns>
+		Task<bool> CreateSlotsAsync(DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>[] slots, CancellationToken token = default);
+
+		/// <summary>
+		/// Creates the slots for proportioned character data.
+		/// </summary>
+		/// <param name="slots"></param>
+		/// <param name="token"></param>
+		/// <returns></returns>
+		Task<bool> CreateSlotsAsync(DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>[] slots, CancellationToken token = default);
 	}
 }

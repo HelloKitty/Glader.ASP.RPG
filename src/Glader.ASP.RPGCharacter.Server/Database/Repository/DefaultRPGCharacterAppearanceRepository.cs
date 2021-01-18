@@ -64,5 +64,27 @@ namespace Glader.ASP.RPGCharacter
 			//If we changed a row, then it was added.
 			return 0 < await Context.SaveChangesAsync(true, token);
 		}
+
+		/// <inheritdoc />
+		public async Task<bool> CreateSlotsAsync(DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>[] slots, CancellationToken token = default)
+		{
+			await Context
+				.CustomizableSlots
+				.AddRangeAsync(slots, token);
+
+			//If we changed a row, then it was added.
+			return 0 < await Context.SaveChangesAsync(true, token);
+		}
+
+		/// <inheritdoc />
+		public async Task<bool> CreateSlotsAsync(DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>[] slots, CancellationToken token = default)
+		{
+			await Context
+				.ProportionSlots
+				.AddRangeAsync(slots, token);
+
+			//If we changed a row, then it was added.
+			return 0 < await Context.SaveChangesAsync(true, token);
+		}
 	}
 }
