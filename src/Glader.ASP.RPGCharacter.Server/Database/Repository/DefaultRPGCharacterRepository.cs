@@ -62,5 +62,13 @@ namespace Glader.ASP.RPGCharacter
 				throw;
 			}
 		}
+
+		/// <inheritdoc />
+		public async Task<bool> AccountOwnsCharacterAsync(int ownershipId, int characterId, CancellationToken token = default)
+		{
+			return await Context
+				.CharacterOwnership
+				.AnyAsync(o => o.CharacterId == characterId && o.OwnershipId == ownershipId, token);
+		}
 	}
 }

@@ -29,5 +29,14 @@ namespace Glader.ASP.RPGCharacter
 		/// <param name="token">Cancel token.</param>
 		/// <returns>The DB character instance created.</returns>
 		Task<DBRPGCharacter> CreateCharacterAsync(int ownershipId, string name, CancellationToken token = default);
+
+		/// <summary>
+		/// Indicates if a character is owned by a specified ownership id.
+		/// </summary>
+		/// <param name="ownershipId">The ownership id.</param>
+		/// <param name="characterId">The character id.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>True if the account owns the character.</returns>
+		Task<bool> AccountOwnsCharacterAsync(int ownershipId, int characterId, CancellationToken token = default);
 	}
 }
