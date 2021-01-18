@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Glader.ASP.RPGCharacter
 {
@@ -15,7 +16,7 @@ namespace Glader.ASP.RPGCharacter
 	/// <typeparam name="TProportionSlotType"></typeparam>
 	/// <typeparam name="TProportionStructureType"></typeparam>
 	public interface IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
-		where TProportionSlotType : Enum 
+		where TProportionSlotType : Enum
 		where TCustomizableSlotType : Enum
 	{
 		/// <summary>
@@ -65,5 +66,12 @@ namespace Glader.ASP.RPGCharacter
 		/// <param name="token"></param>
 		/// <returns></returns>
 		Task<bool> CreateSlotsAsync(DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>[] slots, CancellationToken token = default);
+
+		/// <summary>
+		/// Creates a transaction for the repository async.
+		/// </summary>
+		/// <param name="token">The cancel token.</param>
+		/// <returns>The transaction.</returns>
+		Task<IDbContextTransaction> CreateTransactionAsync(CancellationToken token = default);
 	}
 }

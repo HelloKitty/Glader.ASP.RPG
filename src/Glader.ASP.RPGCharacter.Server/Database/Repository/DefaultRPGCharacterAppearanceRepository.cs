@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Glader.ASP.RPGCharacter
 {
@@ -85,6 +86,14 @@ namespace Glader.ASP.RPGCharacter
 
 			//If we changed a row, then it was added.
 			return 0 < await Context.SaveChangesAsync(true, token);
+		}
+
+		/// <inheritdoc />
+		public async Task<IDbContextTransaction> CreateTransactionAsync(CancellationToken token = default)
+		{
+			return await Context
+				.Database
+				.BeginTransactionAsync(token);
 		}
 	}
 }
