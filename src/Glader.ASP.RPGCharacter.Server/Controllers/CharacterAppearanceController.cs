@@ -93,6 +93,9 @@ namespace Glader.ASP.RPGCharacter
 			}
 			catch (Exception e)
 			{
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"Failed to create character appearance for Character: {characterId} Account: {accountId}. Reason: {e}");
+
 				return CharacterDataQueryResponseCode.GeneralError;
 			}
 		}
