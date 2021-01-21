@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <RootNamespace>Glader.ASP.RPGCharacter</RootNamespace>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>Andrew Blakely, Glader</Authors>
     <Product>Glader.ASP.RPGCharacter</Product>
     <Description>Glader.ASP.RPGCharacter is an ASP Core, EntityFramework, Refit-based and JSON-based Role-playing Game Character library.</Description>
