@@ -41,9 +41,23 @@ namespace Glader.ASP.RPG
 		[ForeignKey(nameof(Id))]
 		public virtual DBRPGCharacterProgress Progress { get; private set; }
 
-		public DBRPGCharacter(string name)
+		[Column("Race")]
+		public TRaceType RaceId { get; private set; }
+
+		[ForeignKey(nameof(RaceId))]
+		public virtual DBRPGRace<TRaceType> Race { get; private set; }
+
+		[Column("Class")]
+		public TClassType ClassId { get; private set; }
+
+		[ForeignKey(nameof(ClassId))]
+		public virtual DBRPGClass<TClassType> @Class { get; private set; }
+
+		public DBRPGCharacter(string name, TRaceType raceId, TClassType classId)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));
+			RaceId = raceId ?? throw new ArgumentNullException(nameof(raceId));
+			ClassId = classId ?? throw new ArgumentNullException(nameof(classId));
 
 			//Empty progress with defaults.
 			Progress = new DBRPGCharacterProgress();
