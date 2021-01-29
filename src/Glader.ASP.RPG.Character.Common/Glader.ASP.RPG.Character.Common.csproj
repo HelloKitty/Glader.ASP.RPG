@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RootNamespace>Glader.ASP.RPGCharacter</RootNamespace>
+    <Version>0.0.2</Version>
+    <Authors>Andrew Blakely, Glader</Authors>
+    <Product>Glader.ASP.RPG</Product>
+    <Description>Glader.ASP.RPG is an ASP Core, EntityFramework, Refit-based and JSON-based Role-playing Game library.</Description>
+    <PackageProjectUrl>https://github.com/HelloKitty/Glader.ASP.RPG</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HelloKitty/Glader.ASP.RPG</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Glader ASP RPG Common</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+
+</Project>
