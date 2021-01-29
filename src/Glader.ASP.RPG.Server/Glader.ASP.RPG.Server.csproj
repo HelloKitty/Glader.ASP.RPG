@@ -33,9 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Glader.ASP.RPG.Character.Common\Glader.ASP.RPG.Character.Common.csproj" />
-    <ProjectReference Include="..\Glader.ASP.RPG.Character.Client\Glader.ASP.RPG.Character.Client.csproj" />
-    <ProjectReference Include="..\Glader.ASP.RPG.Character.Models\Glader.ASP.RPG.Character.Models.csproj" />
+    <ProjectReference Include="..\Character\Glader.ASP.RPG.Character.Client\Glader.ASP.RPG.Character.Client.csproj" />
+    <ProjectReference Include="..\Character\Glader.ASP.RPG.Character.Models\Glader.ASP.RPG.Character.Models.csproj" />
+    <ProjectReference Include="..\Glader.ASP.RPG.Common\Glader.ASP.RPG.Common.csproj" />
   </ItemGroup>
 
 </Project>

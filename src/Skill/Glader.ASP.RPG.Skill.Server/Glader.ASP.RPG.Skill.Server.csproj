@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Glader.ASP.RPG.Character.Common\Glader.ASP.RPG.Character.Common.csproj" />
+    <ProjectReference Include="..\..\Glader.ASP.RPG.Common\Glader.ASP.RPG.Common.csproj" />
   </ItemGroup>
 
 </Project>

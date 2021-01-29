@@ -10,7 +10,7 @@ namespace Glader.ASP.RPG
 	/// Models the types of skills.
 	/// </summary>
 	/// <typeparam name="TSkillType">The skill type.</typeparam>
-	[Table("skill_type")]
+	[Table("skill")]
 	public class DBRPGSkill<TSkillType> : IModelDescriptable
 		where TSkillType : Enum
 	{

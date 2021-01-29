@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Character\Glader.ASP.RPG.Character.Server\Glader.ASP.RPG.Character.Server.csproj" />
+    <ProjectReference Include="..\Glader.ASP.RPG.Server\Glader.ASP.RPG.Server.csproj" />
   </ItemGroup>
 
 </Project>
