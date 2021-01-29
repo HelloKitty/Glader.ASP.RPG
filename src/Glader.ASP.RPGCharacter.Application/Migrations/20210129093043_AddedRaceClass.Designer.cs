@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPG;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPG.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType>))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210129093043_AddedRaceClass")]
+    partial class AddedRaceClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,20 +232,6 @@ namespace Glader.ASP.RPG.Application.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("class");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "",
-                            VisualName = "Warrior"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "",
-                            VisualName = "Warlock"
-                        });
                 });
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGRace<Glader.ASP.RPG.TestRaceType>", b =>
@@ -260,20 +248,6 @@ namespace Glader.ASP.RPG.Application.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("race");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "",
-                            VisualName = "Human"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "",
-                            VisualName = "Orc"
-                        });
                 });
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacter<Glader.ASP.RPG.TestRaceType, Glader.ASP.RPG.TestClassType>", b =>

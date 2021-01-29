@@ -8,7 +8,7 @@ using Glader.Essentials;
 namespace Glader.ASP.RPG
 {
 	/// <summary>
-	/// <see cref="IGenericRepositoryCrudable{TKey,TModel}"/> for <see cref="DBRPGCharacter"/>.
+	/// <see cref="IGenericRepositoryCrudable{TKey,TModel}"/> for <see cref="DBRPGCharacter{TRaceType,TClassType}"/>.
 	/// </summary>
 	public interface IRPGCharacterRepository<TRaceType, TClassType> : IGenericRepositoryCrudable<int, DBRPGCharacter<TRaceType, TClassType>> 
 		where TRaceType : Enum 

@@ -36,6 +36,10 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		public DbSet<DBRPGCharacterOwnership<TRaceType, TClassType>> CharacterOwnership { get; set; }
 
+		public DbSet<DBRPGClass<TClassType>> Classes { get; set; }
+
+		public DbSet<DBRPGRace<TRaceType>> Races { get; set; }
+
 		protected RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TRaceType, TClassType>> options)
 			: base(options)
 		{
@@ -72,6 +76,20 @@ namespace Glader.ASP.RPG
 				//EF Requires keys, keyless entities are second class citizens.
 				builder.HasKey(c => new { c.OwnershipId, c.CharacterId });
 			});
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGRace<TRaceType>>().HasData(
+				((TRaceType[])Enum.GetValues(typeof(TRaceType)))
+				.Select(v => new DBRPGRace<TRaceType>(v, v.ToString(), String.Empty))
+				.ToArray()
+			);
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGClass<TClassType>>().HasData(
+				((TClassType[])Enum.GetValues(typeof(TClassType)))
+				.Select(v => new DBRPGClass<TClassType>(v, v.ToString(), String.Empty))
+				.ToArray()
+			);
 		}
 	}
 

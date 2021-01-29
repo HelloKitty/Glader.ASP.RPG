@@ -28,6 +28,7 @@ namespace Glader.ASP.RPG
 
 			//Registered for consumers of non-generic context
 			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext>, NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>();
+			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>>, GenericCharacterDatabaseContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>, RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>>();
 
 			//DefaultServiceEndpointRepository : IServiceEndpointRepository
 			services.AddTransient<IRPGCharacterRepository<TRaceType, TClassType>, DefaultRPGCharacterRepository<TRaceType, TClassType>>();
