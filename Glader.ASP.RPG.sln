@@ -7,6 +7,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{53708FD5-C17
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glader.ASP.RPGCharacter.Application", "src\Glader.ASP.RPGCharacter.Application\Glader.ASP.RPGCharacter.Application.csproj", "{35015033-8527-46A4-ABDA-7121F3F581A8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Character", "Character", "{D167D229-C5EA-4BCF-AAA1-C92325AB53E3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glader.ASP.RPG.Character.Client", "src\Character\Glader.ASP.RPG.Character.Client\Glader.ASP.RPG.Character.Client.csproj", "{D5EA7BA2-1050-40BC-8FE6-4A07516A04B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glader.ASP.RPG.Character.Models", "src\Character\Glader.ASP.RPG.Character.Models\Glader.ASP.RPG.Character.Models.csproj", "{EA49C3FE-BAA8-46CA-923C-D9E49D543E00}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Glader.ASP.RPG.Character.Server", "src\Character\Glader.ASP.RPG.Character.Server\Glader.ASP.RPG.Character.Server.csproj", "{4DBF97D6-BDBD-4629-8E02-58CE18D25059}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +25,28 @@ Global
 		{35015033-8527-46A4-ABDA-7121F3F581A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35015033-8527-46A4-ABDA-7121F3F581A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35015033-8527-46A4-ABDA-7121F3F581A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5EA7BA2-1050-40BC-8FE6-4A07516A04B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5EA7BA2-1050-40BC-8FE6-4A07516A04B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5EA7BA2-1050-40BC-8FE6-4A07516A04B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5EA7BA2-1050-40BC-8FE6-4A07516A04B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA49C3FE-BAA8-46CA-923C-D9E49D543E00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA49C3FE-BAA8-46CA-923C-D9E49D543E00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA49C3FE-BAA8-46CA-923C-D9E49D543E00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA49C3FE-BAA8-46CA-923C-D9E49D543E00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DBF97D6-BDBD-4629-8E02-58CE18D25059}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DBF97D6-BDBD-4629-8E02-58CE18D25059}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DBF97D6-BDBD-4629-8E02-58CE18D25059}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DBF97D6-BDBD-4629-8E02-58CE18D25059}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{35015033-8527-46A4-ABDA-7121F3F581A8} = {53708FD5-C174-420D-AFDC-601849002998}
+		{D167D229-C5EA-4BCF-AAA1-C92325AB53E3} = {53708FD5-C174-420D-AFDC-601849002998}
+		{D5EA7BA2-1050-40BC-8FE6-4A07516A04B9} = {D167D229-C5EA-4BCF-AAA1-C92325AB53E3}
+		{EA49C3FE-BAA8-46CA-923C-D9E49D543E00} = {D167D229-C5EA-4BCF-AAA1-C92325AB53E3}
+		{4DBF97D6-BDBD-4629-8E02-58CE18D25059} = {D167D229-C5EA-4BCF-AAA1-C92325AB53E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6BCB4DCA-13A6-4667-80F4-8F4BCE6EAA5A}

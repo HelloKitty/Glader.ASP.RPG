@@ -8,8 +8,8 @@
     <RootNamespace>Glader.ASP.RPGCharacter</RootNamespace>
     <Version>0.0.2</Version>
     <Authors>Andrew Blakely, Glader</Authors>
-    <Product>Glader.ASP.RPGCharacter</Product>
-    <Description>Glader.ASP.RPGCharacter is an ASP Core, EntityFramework, Refit-based and JSON-based Role-playing Game Character library.</Description>
+    <Product>Glader.ASP.RPG</Product>
+    <Description>Glader.ASP.RPG is an ASP Core, EntityFramework, Refit-based and JSON-based Role-playing Game library.</Description>
     <PackageProjectUrl>https://github.com/HelloKitty/Glader.ASP.RPGCharacter</PackageProjectUrl>
     <RepositoryUrl>https://github.com/HelloKitty/Glader.ASP.RPGCharacter</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
@@ -30,6 +30,11 @@
 
   <ItemGroup>
     <Folder Include="Database\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Glader.ASP.RPG.Character.Client\Glader.ASP.RPG.Character.Client.csproj" />
+    <ProjectReference Include="..\Glader.ASP.RPG.Character.Models\Glader.ASP.RPG.Character.Models.csproj" />
   </ItemGroup>
 
 </Project>

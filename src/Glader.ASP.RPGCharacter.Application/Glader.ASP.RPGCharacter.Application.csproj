@@ -17,5 +17,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Character\Glader.ASP.RPG.Character.Server\Glader.ASP.RPG.Character.Server.csproj" />
+  </ItemGroup>
 
 </Project>
