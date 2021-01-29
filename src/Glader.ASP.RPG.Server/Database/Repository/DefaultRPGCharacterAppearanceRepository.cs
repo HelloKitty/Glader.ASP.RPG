@@ -8,7 +8,7 @@ using Glader.Essentials;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// Default database-backed implementation of <see cref="IRPGCharacterAppearanceRepository{TCustomizableSlotType,TColorStructureType,TProportionSlotType,TProportionStructureType}"/>

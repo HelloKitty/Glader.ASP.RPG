@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// <see cref="IGenericRepositoryCrudable{TKey,TModel}"/> for <see cref="DBRPGCharacter"/>.

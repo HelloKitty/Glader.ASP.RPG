@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	public abstract class RPGCharacterDatabaseContext : DbContext
 	{

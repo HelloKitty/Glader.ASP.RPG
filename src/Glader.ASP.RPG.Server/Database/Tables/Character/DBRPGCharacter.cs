@@ -4,13 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// Database-based implementation of <see cref="IRPGCharacterEntry"/> <see cref="IRPGCharacterCreationDetails"/>
 	/// </summary>
 	[Table("character")]
-	public class DBRPGCharacter : IRPGCharacterEntry, IRPGCharacterCreationDetails
+	public class DBRPGCharacter<TRaceType, TClassType> : IRPGCharacterEntry, IRPGCharacterCreationDetails
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
 		/// <inheritdoc />
 		[Key]

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	[Route("api/[controller]")]
 	public sealed class CharacterDataController : AuthorizationReadyController, 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// Non-generic <see cref="RPGCharacterDatabaseContext"/> <see cref="IDBContextAdapter{TDBContextType}"/> adapter implementation.

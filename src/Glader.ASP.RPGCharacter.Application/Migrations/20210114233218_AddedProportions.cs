@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Glader.ASP.RPGCharacter.Application.Migrations
+namespace Glader.ASP.RPG.Application.Migrations
 {
     public partial class AddedProportions : Migration
     {

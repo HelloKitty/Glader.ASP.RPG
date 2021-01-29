@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Glader.Essentials;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// Enumerations of creation response codes.

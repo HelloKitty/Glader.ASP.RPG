@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Glader.Essentials;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// Data repository interface for <see cref="DBRPGCharacterCustomizableSlot{TCustomizableSlotType,TColorStructureType}"/> and <see cref="DBRPGCharacterProportionSlot{TProportionSlotType,TProportionStructureType}"/>

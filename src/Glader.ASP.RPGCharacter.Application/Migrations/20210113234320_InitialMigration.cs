@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Glader.ASP.RPGCharacter.Application.Migrations
+namespace Glader.ASP.RPG.Application.Migrations
 {
     public partial class InitialMigration : Migration
     {

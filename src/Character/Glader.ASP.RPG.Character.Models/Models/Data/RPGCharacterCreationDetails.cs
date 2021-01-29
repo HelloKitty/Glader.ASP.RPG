@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	[JsonObject]
 	public sealed class RPGCharacterCreationDetails : IRPGCharacterCreationDetails

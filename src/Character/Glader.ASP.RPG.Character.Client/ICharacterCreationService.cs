@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Glader.Essentials;
 using Refit;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// Contract for REST service that provides

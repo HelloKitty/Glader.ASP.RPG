@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Glader.ASP.RPGCharacter
+namespace Glader.ASP.RPG
 {
 	[Table("character_progress")]
 	public sealed class DBRPGCharacterProgress : IRPGCharacterProgress, ICharacterEntryLinkable
