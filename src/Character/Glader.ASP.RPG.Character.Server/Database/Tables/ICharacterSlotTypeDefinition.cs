@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Glader.ASP.RPG;
 
 namespace Glader.ASP.RPGCharacter
 {
 	/// <summary>
 	/// Contract for slot definition types.
 	/// </summary>
-	public interface ICharacterSlotTypeDefinition<out TSlotType>
+	public interface ICharacterSlotTypeDefinition<out TSlotType> : IModelDescriptable
 		where TSlotType : Enum
 	{
 		/// <summary>
@@ -18,15 +19,5 @@ namespace Glader.ASP.RPGCharacter
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		TSlotType SlotType { get; }
-
-		/// <summary>
-		/// The visual human-readable name for the slot.
-		/// </summary>
-		string VisualName { get; }
-
-		/// <summary>
-		/// The description of the slot.
-		/// </summary>
-		string Description { get; }
 	}
 }

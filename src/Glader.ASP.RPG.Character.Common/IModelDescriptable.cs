@@ -2,6 +2,7 @@
 
 namespace Glader.ASP.RPG
 {
+	//TODO: Move to Glader Essentials
 	/// <summary>
 	/// Contract for types that are self-describing/descriptable.
 	/// </summary>
