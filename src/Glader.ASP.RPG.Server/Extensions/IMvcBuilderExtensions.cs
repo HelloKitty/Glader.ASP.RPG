@@ -14,20 +14,22 @@ namespace Glader.ASP.RPG
 	public static class IMvcBuilderExtensions
 	{
 		/// <summary>
-		/// Registers the general <see cref="CharacterDataController"/> with the MVC
+		/// Registers the general <see cref="CharacterDataController{TRaceType,TClassType}"/> with the MVC
 		/// controllers. See controller documentation for what it does and how it works.
 		/// </summary>
 		/// <param name="builder"></param>
 		/// <returns></returns>
-		public static IMvcBuilder RegisterCharacterDataController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>(this IMvcBuilder builder) 
+		public static IMvcBuilder RegisterCharacterDataController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>(this IMvcBuilder builder) 
 			where TCustomizableSlotType : Enum 
 			where TProportionSlotType : Enum
+			where TRaceType : Enum
+			where TClassType : Enum
 		{
 			if(builder == null) throw new ArgumentNullException(nameof(builder));
 
 			return builder
-				.RegisterController<CharacterDataController>()
-				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>>();
+				.RegisterController<CharacterDataController<TRaceType, TClassType>>()
+				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>();
 		}
 	}
 }

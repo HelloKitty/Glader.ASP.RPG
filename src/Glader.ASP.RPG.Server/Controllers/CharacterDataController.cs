@@ -12,13 +12,15 @@ using Microsoft.Extensions.Logging;
 namespace Glader.ASP.RPG
 {
 	[Route("api/[controller]")]
-	public sealed class CharacterDataController : AuthorizationReadyController, 
+	public sealed class CharacterDataController<TRaceType, TClassType> : AuthorizationReadyController, 
 		ICharacterDataQueryService, ICharacterCreationService
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
-		private IRPGCharacterRepository CharacterRepository { get; }
+		private IRPGCharacterRepository<TRaceType, TClassType> CharacterRepository { get; }
 
 		public CharacterDataController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, 
-			IRPGCharacterRepository characterRepository) 
+			IRPGCharacterRepository<TRaceType, TClassType> characterRepository) 
 			: base(claimsReader, logger)
 		{
 			CharacterRepository = characterRepository ?? throw new ArgumentNullException(nameof(characterRepository));
@@ -38,7 +40,7 @@ namespace Glader.ASP.RPG
 				.ToArray();
 		}
 
-		private RPGCharacterData ConvertDbToTransit(DBRPGCharacter character)
+		private RPGCharacterData ConvertDbToTransit(DBRPGCharacter<TRaceType, TClassType> character)
 		{
 			if (character == null) throw new ArgumentNullException(nameof(character));
 
@@ -54,7 +56,7 @@ namespace Glader.ASP.RPG
 			//TODO: Properly handle failure and return correct response codes.
 			if (await CharacterRepository.ContainsAsync(characterId, token))
 			{
-				DBRPGCharacter character = await CharacterRepository.RetrieveAsync(characterId, token);
+				DBRPGCharacter<TRaceType, TClassType> character = await CharacterRepository.RetrieveAsync(characterId, token);
 				return new ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>(ConvertDbToTransit(character));
 			}
 			else
@@ -80,7 +82,8 @@ namespace Glader.ASP.RPG
 			//TODO: Better handling and response code implementation.
 			try
 			{
-				DBRPGCharacter character = await CharacterRepository.CreateCharacterAsync(accountId, request.Name, token);
+				//TODO: Implement race/class handling.
+				DBRPGCharacter<TRaceType, TClassType> character = await CharacterRepository.CreateCharacterAsync(accountId, request.Name, default, default, token);
 				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(new RPGCharacterCreationResult(character.Id));
 			}
 			catch (Exception e)

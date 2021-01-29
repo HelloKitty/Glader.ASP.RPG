@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Glader.ASP.RPG
 {
@@ -9,7 +10,7 @@ namespace Glader.ASP.RPG
 	/// </summary>
 	/// <typeparam name="TDBContextType">The requested DB Context type.</typeparam>
 	public interface IDBContextAdapter<out TDBContextType>
-		where TDBContextType : RPGCharacterDatabaseContext
+		where TDBContextType : DbContext
 	{
 		/// <summary>
 		/// DB Context Type.

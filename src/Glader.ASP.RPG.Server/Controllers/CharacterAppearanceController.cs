@@ -13,18 +13,20 @@ namespace Glader.ASP.RPG
 {
 	//With generic controllers, cannot use the [controller] thingy. Must use strict name
 	[Route("api/CharacterAppearance")]
-	public sealed class CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
+	public sealed class CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> 
 		: AuthorizationReadyController, ICharacterAppearanceService<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
 		where TCustomizableSlotType : Enum
 		where TProportionSlotType : Enum
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
 		private IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> AppearanceRepository { get; }
 
-		private IRPGCharacterRepository CharacterRepository { get; }
+		private IRPGCharacterRepository<TRaceType, TClassType> CharacterRepository { get; }
 
 		public CharacterAppearanceController(IClaimsPrincipalReader claimsReader, ILogger<AuthorizationReadyController> logger, 
 			IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> appearanceRepository, 
-			IRPGCharacterRepository characterRepository) 
+			IRPGCharacterRepository<TRaceType, TClassType> characterRepository) 
 			: base(claimsReader, logger)
 		{
 			AppearanceRepository = appearanceRepository ?? throw new ArgumentNullException(nameof(appearanceRepository));

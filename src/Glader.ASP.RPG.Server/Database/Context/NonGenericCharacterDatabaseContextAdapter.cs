@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Glader.ASP.RPG
 {
@@ -11,16 +12,23 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TColorStructureType"></typeparam>
 	/// <typeparam name="TProportionSlotType"></typeparam>
 	/// <typeparam name="TProportionStructureType"></typeparam>
-	internal class NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IDBContextAdapter<RPGCharacterDatabaseContext>
+	/// <typeparam name="TRaceType"></typeparam>
+	/// <typeparam name="TClassType"></typeparam>
+	internal class NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> 
+		: IDBContextAdapter<RPGCharacterDatabaseContext>
 		where TCustomizableSlotType : Enum 
 		where TProportionSlotType : Enum
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
-		/// <inheritdoc />
-		public RPGCharacterDatabaseContext Context { get; }
+		private RPGCharacterDatabaseContext<TRaceType, TClassType> _Context { get; }
 
-		public NonGenericCharacterDatabaseContextAdapter(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> context)
+		/// <inheritdoc />
+		public RPGCharacterDatabaseContext Context => _Context;
+
+		public NonGenericCharacterDatabaseContextAdapter(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> context)
 		{
-			Context = context ?? throw new ArgumentNullException(nameof(context));
+			_Context = context ?? throw new ArgumentNullException(nameof(context));
 		}
 	}
 }

@@ -17,13 +17,17 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TColorStructureType"></typeparam>
 	/// <typeparam name="TProportionSlotType"></typeparam>
 	/// <typeparam name="TProportionStructureType"></typeparam>
-	public sealed class DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
+	/// <typeparam name="TRaceType"></typeparam>
+	/// <typeparam name="TClassType"></typeparam>
+	public sealed class DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
 		where TCustomizableSlotType : Enum 
 		where TProportionSlotType : Enum
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
-		private RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> Context { get; }
+		private RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> Context { get; }
 
-		public DefaultRPGCharacterAppearanceRepository(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> context)
+		public DefaultRPGCharacterAppearanceRepository(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> context)
 		{
 			Context = context ?? throw new ArgumentNullException(nameof(context));
 		}

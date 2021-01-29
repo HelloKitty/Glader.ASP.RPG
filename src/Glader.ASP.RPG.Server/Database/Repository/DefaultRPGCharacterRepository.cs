@@ -12,21 +12,23 @@ using Microsoft.EntityFrameworkCore.Storage;
 namespace Glader.ASP.RPG
 {
 	/// <summary>
-	/// Default EF Core database-backed implementation of <see cref="IRPGCharacterRepository"/>
+	/// Default EF Core database-backed implementation of <see cref="IRPGCharacterRepository{TRaceType,TClassType}"/>
 	/// </summary>
-	public sealed class DefaultRPGCharacterRepository : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter>, IRPGCharacterRepository
+	public sealed class DefaultRPGCharacterRepository<TRaceType, TClassType> : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter<TRaceType, TClassType>>, IRPGCharacterRepository<TRaceType, TClassType>
+		where TRaceType : Enum 
+		where TClassType : Enum
 	{
-		public new RPGCharacterDatabaseContext Context { get; }
+		public new RPGCharacterDatabaseContext<TRaceType, TClassType> Context { get; }
 
-		public DefaultRPGCharacterRepository(IDBContextAdapter<RPGCharacterDatabaseContext> contextAdapter) 
-			: base(contextAdapter.Context.Set<DBRPGCharacter>(), contextAdapter.Context)
+		public DefaultRPGCharacterRepository(IDBContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>> contextAdapter) 
+			: base(contextAdapter.Context.Set<DBRPGCharacter<TRaceType, TClassType>>(), contextAdapter.Context)
 		{
 			if (contextAdapter == null) throw new ArgumentNullException(nameof(contextAdapter));
 			Context = contextAdapter.Context;
 		}
 
 		/// <inheritdoc />
-		public async Task<DBRPGCharacter[]> RetrieveOwnedCharactersAsync(int ownershipId, CancellationToken token = default)
+		public async Task<DBRPGCharacter<TRaceType, TClassType>[]> RetrieveOwnedCharactersAsync(int ownershipId, CancellationToken token = default)
 		{
 			return await Context
 				.CharacterOwnership
@@ -35,22 +37,22 @@ namespace Glader.ASP.RPG
 				.ToArrayAsync(token);
 		}
 
-		public async Task<DBRPGCharacter> CreateCharacterAsync(int ownershipId, string name, CancellationToken token = default)
+		public async Task<DBRPGCharacter<TRaceType, TClassType>> CreateCharacterAsync(int ownershipId, string name, TRaceType race, TClassType classType, CancellationToken token = default)
 		{
 			await using IDbContextTransaction transaction = await Context.Database.BeginTransactionAsync(token);
 
 			try
 			{
-				EntityEntry<DBRPGCharacter> entry = await Context
+				EntityEntry<DBRPGCharacter<TRaceType, TClassType>> entry = await Context
 					.Characters
-					.AddAsync(new DBRPGCharacter(name), token);
+					.AddAsync(new DBRPGCharacter<TRaceType, TClassType>(name, race, classType), token);
 
 				await Context.SaveChangesAsync(token);
 
 				//Now we link the character via the Ownership table
 				await Context
 					.CharacterOwnership
-					.AddAsync(new DBRPGCharacterOwnership(ownershipId, entry.Entity.Id), token);
+					.AddAsync(new DBRPGCharacterOwnership<TRaceType, TClassType>(ownershipId, entry.Entity.Id), token);
 
 				await Context.SaveChangesAsync(token);
 				await transaction.CommitAsync(token);

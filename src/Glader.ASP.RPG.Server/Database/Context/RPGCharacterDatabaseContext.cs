@@ -10,17 +10,33 @@ namespace Glader.ASP.RPG
 {
 	public abstract class RPGCharacterDatabaseContext : DbContext
 	{
+		protected RPGCharacterDatabaseContext(DbContextOptions options)
+			: base(options)
+		{
+
+		}
+
+		protected RPGCharacterDatabaseContext()
+		{
+
+		}
+	}
+
+	public abstract class RPGCharacterDatabaseContext<TRaceType, TClassType> : RPGCharacterDatabaseContext
+		where TRaceType : Enum 
+		where TClassType : Enum
+	{
 		/// <summary>
 		/// The character table.
 		/// </summary>
-		public DbSet<DBRPGCharacter> Characters { get; set; }
+		public DbSet<DBRPGCharacter<TRaceType, TClassType>> Characters { get; set; }
 
 		/// <summary>
 		/// The ownership relationship of characters.
 		/// </summary>
-		public DbSet<DBRPGCharacterOwnership> CharacterOwnership { get; set; }
+		public DbSet<DBRPGCharacterOwnership<TRaceType, TClassType>> CharacterOwnership { get; set; }
 
-		protected RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext> options)
+		protected RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TRaceType, TClassType>> options)
 			: base(options)
 		{
 
@@ -47,7 +63,7 @@ namespace Glader.ASP.RPG
 					.HasDefaultValue(TimeSpan.Zero);
 			});
 
-			modelBuilder.Entity<DBRPGCharacterOwnership>(builder =>
+			modelBuilder.Entity<DBRPGCharacterOwnership<TRaceType, TClassType>>(builder =>
 			{
 				//index by owner since we will query character lists and such.
 				builder.HasIndex(c => c.OwnershipId);
@@ -59,9 +75,11 @@ namespace Glader.ASP.RPG
 		}
 	}
 
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : RPGCharacterDatabaseContext
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> : RPGCharacterDatabaseContext<TRaceType, TClassType>
 		where TCustomizableSlotType : Enum
 		where TProportionSlotType : Enum
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
 		/// <summary>
 		/// The customized slots for the character.
@@ -83,7 +101,7 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		public DbSet<DBRPGCharacterProportionSlotType<TProportionSlotType>> ProportionSlotTypes { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>> options)
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>> options)
 			: base(options)
 		{
 
@@ -101,7 +119,7 @@ namespace Glader.ASP.RPG
 
 			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>(builder =>
 			{
-				builder.HasOne<DBRPGCharacter>()
+				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
 					.WithMany()
 					.HasForeignKey(c => c.CharacterId);
 
@@ -125,7 +143,7 @@ namespace Glader.ASP.RPG
 
 			modelBuilder.Entity<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>>(builder =>
 			{
-				builder.HasOne<DBRPGCharacter>()
+				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
 					.WithMany()
 					.HasForeignKey(c => c.CharacterId);
 
