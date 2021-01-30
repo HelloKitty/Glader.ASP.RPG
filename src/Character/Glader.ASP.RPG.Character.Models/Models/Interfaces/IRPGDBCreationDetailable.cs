@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Glader.ASP.RPG
 {
-	public interface IRPGCharacterCreationDetails
+	public interface IRPGDBCreationDetailable
 	{
 		/// <summary>
 		/// Represents the timestamp of the creation.

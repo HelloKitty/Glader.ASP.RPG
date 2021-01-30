@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Glader.ASP.RPG
 {
 	[JsonObject]
-	public sealed class RPGCharacterCreationDetails : IRPGCharacterCreationDetails
+	public sealed class RPGCharacterCreationDetails : IRPGDBCreationDetailable
 	{
 		/// <inheritdoc />
 		[JsonProperty]

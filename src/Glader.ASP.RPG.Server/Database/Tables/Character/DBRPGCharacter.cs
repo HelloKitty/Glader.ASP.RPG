@@ -7,10 +7,10 @@ using System.Text;
 namespace Glader.ASP.RPG
 {
 	/// <summary>
-	/// Database-based implementation of <see cref="IRPGCharacterEntry"/> <see cref="IRPGCharacterCreationDetails"/>
+	/// Database-based implementation of <see cref="IRPGCharacterEntry"/> <see cref="IRPGDBCreationDetailable"/>
 	/// </summary>
 	[Table("character")]
-	public class DBRPGCharacter<TRaceType, TClassType> : IRPGCharacterEntry, IRPGCharacterCreationDetails
+	public class DBRPGCharacter<TRaceType, TClassType> : IRPGCharacterEntry, IRPGDBCreationDetailable
 		where TRaceType : Enum
 		where TClassType : Enum
 	{
