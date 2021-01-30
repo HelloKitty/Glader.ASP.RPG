@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPG;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPG.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType>))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210130052111_TryFixCascadeDeleteSkillLevel8")]
+    partial class TryFixCascadeDeleteSkillLevel8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -501,6 +503,11 @@ namespace Glader.ASP.RPG.Application.Migrations
                         .HasForeignKey("SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Glader.ASP.RPG.DBRPGCharacterSkillLevel<Glader.ASP.RPG.TestSkillType>", "SkillLevelData")
+                        .WithOne("KnownSkill")
+                        .HasForeignKey("Glader.ASP.RPG.DBRPGCharacterSkillKnown<Glader.ASP.RPG.TestSkillType>", "CharacterId", "SkillId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterSkillLevel<Glader.ASP.RPG.TestSkillType>", b =>
@@ -514,12 +521,6 @@ namespace Glader.ASP.RPG.Application.Migrations
                     b.HasOne("Glader.ASP.RPG.DBRPGSkill<Glader.ASP.RPG.TestSkillType>", "Skill")
                         .WithMany()
                         .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Glader.ASP.RPG.DBRPGCharacterSkillKnown<Glader.ASP.RPG.TestSkillType>", "KnownSkill")
-                        .WithOne("SkillLevelData")
-                        .HasForeignKey("Glader.ASP.RPG.DBRPGCharacterSkillLevel<Glader.ASP.RPG.TestSkillType>", "CharacterId", "SkillId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

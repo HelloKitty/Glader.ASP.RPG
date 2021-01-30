@@ -125,6 +125,8 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGCharacterSkillKnown<TSkillType>> CharacterKnownSkills { get; set; }
 
+		public DbSet<DBRPGCharacterSkillLevel<TSkillType>> CharacterSkillLevels { get; set; }
+
 		public DbSet<DBRPGSkill<TSkillType>> Skills { get; set; }
 
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>> options)
@@ -201,6 +203,18 @@ namespace Glader.ASP.RPG
 			modelBuilder.Entity<DBRPGCharacterSkillKnown<TSkillType>>(builder =>
 			{
 				builder.HasKey(m => new {m.CharacterId, m.SkillId});
+				builder.HasIndex(m => m.CharacterId);
+				builder.HasIndex(m => m.SkillId);
+
+				//Manual foreign key (without nav prop to char for simplified Type)
+				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
+					.WithMany()
+					.HasForeignKey(c => c.CharacterId);
+			});
+
+			modelBuilder.Entity<DBRPGCharacterSkillLevel<TSkillType>>(builder =>
+			{
+				builder.HasKey(m => new { m.CharacterId, m.SkillId });
 				builder.HasIndex(m => m.CharacterId);
 				builder.HasIndex(m => m.SkillId);
 

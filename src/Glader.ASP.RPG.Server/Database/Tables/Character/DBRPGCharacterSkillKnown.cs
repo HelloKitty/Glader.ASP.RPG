@@ -7,7 +7,7 @@ using System.Text;
 namespace Glader.ASP.RPG
 {
 	[Table("character_skill_known")]
-	public class DBRPGCharacterSkillKnown<TSkillType>
+	public class DBRPGCharacterSkillKnown<TSkillType> : IRPGDBCreationDetailable
 		where TSkillType : Enum
 	{
 		/// <summary>
@@ -20,6 +20,9 @@ namespace Glader.ASP.RPG
 
 		[ForeignKey(nameof(SkillId))]
 		public DBRPGSkill<TSkillType> Skill { get; private set; }
+
+		[InverseProperty(nameof(DBRPGCharacterSkillLevel<TSkillType>.KnownSkill))]
+		public virtual DBRPGCharacterSkillLevel<TSkillType> SkillLevelData { get; private set; }
 
 		/// <summary>
 		/// The creation data of the character.
