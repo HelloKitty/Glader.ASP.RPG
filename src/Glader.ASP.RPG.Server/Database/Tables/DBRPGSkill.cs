@@ -51,5 +51,13 @@ namespace Glader.ASP.RPG
 			VisualName = String.Empty;
 			Description = String.Empty;
 		}
+
+		/// <summary>
+		/// Serializer ctor.
+		/// </summary>
+		public DBRPGSkill()
+		{
+			
+		}
 	}
 }

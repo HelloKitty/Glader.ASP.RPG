@@ -34,7 +34,7 @@ namespace Glader.ASP.RPG
 				.RegisterCharacterDataController<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType>()
 				.AddNewtonsoftJson();
 
-			services.RegisterCharacterDatabase<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType>(builder =>
+			services.RegisterCharacterDatabase<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType>(builder =>
 			{
 				builder.UseMySql("server=127.0.0.1;port=3306;Database=glader.test;Uid=root;Pwd=test;", optionsBuilder =>
 				{

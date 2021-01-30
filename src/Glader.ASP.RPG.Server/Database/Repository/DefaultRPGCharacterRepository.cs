@@ -30,10 +30,12 @@ namespace Glader.ASP.RPG
 		/// <inheritdoc />
 		public async Task<DBRPGCharacter<TRaceType, TClassType>[]> RetrieveOwnedCharactersAsync(int ownershipId, CancellationToken token = default)
 		{
+			//INCLUDE IS REQUIRED TO GET PROGRESS
 			return await Context
 				.CharacterOwnership
 				.Where(o => o.OwnershipId == ownershipId)
 				.Select(ownership => ownership.Character)
+				.Include(m => m.Progress)
 				.ToArrayAsync(token);
 		}
 
@@ -71,6 +73,15 @@ namespace Glader.ASP.RPG
 			return await Context
 				.CharacterOwnership
 				.AnyAsync(o => o.CharacterId == characterId && o.OwnershipId == ownershipId, token);
+		}
+
+		public override async Task<DBRPGCharacter<TRaceType, TClassType>> RetrieveAsync(int key, CancellationToken token = new CancellationToken(), bool includeNavigationProperties = false)
+		{
+			//INCLUDE IS REQUIRED TO GET PROGRESS
+			return await Context
+				.Characters
+				.Include(m => m.Progress)
+				.FirstAsync(m => m.Id == key, token);
 		}
 	}
 }

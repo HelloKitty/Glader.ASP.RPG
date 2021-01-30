@@ -37,9 +37,8 @@ namespace Glader.ASP.RPG
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime LastModifiedDate { get; private set; }
 
-		[Required]
-		[ForeignKey(nameof(Id))]
-		public virtual DBRPGCharacterProgress Progress { get; private set; }
+		[InverseProperty(nameof(DBRPGCharacterProgress<TRaceType, TClassType>.Character))]
+		public virtual DBRPGCharacterProgress<TRaceType, TClassType> Progress { get; private set; }
 
 		[Column("Race")]
 		public TRaceType RaceId { get; private set; }
@@ -60,7 +59,7 @@ namespace Glader.ASP.RPG
 			ClassId = classId ?? throw new ArgumentNullException(nameof(classId));
 
 			//Empty progress with defaults.
-			Progress = new DBRPGCharacterProgress();
+			Progress = new DBRPGCharacterProgress<TRaceType, TClassType>();
 		}
 	}
 }

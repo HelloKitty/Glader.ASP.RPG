@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Glader.ASP.RPG.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType>))]
-    [Migration("20210129094040_AddRaceClassSeeding")]
-    partial class AddRaceClassSeeding
+    [Migration("20210130033655_AddedBasicSkills")]
+    partial class AddedBasicSkills
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -218,6 +218,28 @@ namespace Glader.ASP.RPG.Application.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterSkillKnown<Glader.ASP.RPG.TestSkillType>", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnName("Skill")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("CharacterId", "SkillId");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("SkillId");
+
+                    b.ToTable("character_skill_known");
+                });
+
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGClass<Glader.ASP.RPG.TestClassType>", b =>
                 {
                     b.Property<int>("Id")
@@ -275,6 +297,55 @@ namespace Glader.ASP.RPG.Application.Migrations
                             Id = 2,
                             Description = "",
                             VisualName = "Orc"
+                        });
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGSkill<Glader.ASP.RPG.TestSkillType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("IsPassiveSkill")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("VisualName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("skill");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "",
+                            IsPassiveSkill = false,
+                            VisualName = "Woodcutting"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "",
+                            IsPassiveSkill = false,
+                            VisualName = "Mining"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "",
+                            IsPassiveSkill = false,
+                            VisualName = "Firemaking"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "",
+                            IsPassiveSkill = false,
+                            VisualName = "Parry"
                         });
                 });
 
@@ -386,6 +457,21 @@ namespace Glader.ASP.RPG.Application.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("DBRPGCharacterProportionSlot<TestProportionSlotType, TestVectorType<float>>CharacterId", "DBRPGCharacterProportionSlot<TestProportionSlotType, TestVectorType<float>>SlotType");
                         });
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterSkillKnown<Glader.ASP.RPG.TestSkillType>", b =>
+                {
+                    b.HasOne("Glader.ASP.RPG.DBRPGCharacter<Glader.ASP.RPG.TestRaceType, Glader.ASP.RPG.TestClassType>", null)
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Glader.ASP.RPG.DBRPGSkill<Glader.ASP.RPG.TestSkillType>", "Skill")
+                        .WithMany()
+                        .HasForeignKey("SkillId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

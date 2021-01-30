@@ -9,31 +9,32 @@ namespace Glader.ASP.RPG
 	public static class IServiceCollectionExtensions
 	{
 		/// <summary>
-		/// Registers a <see cref="RPGCharacterDatabaseContext"/> and <see cref="IRPGCharacterRepository"/>
+		/// Registers a <see cref="RPGCharacterDatabaseContext"/> and <see cref="IRPGCharacterRepository{TRaceType,TClassType}"/>
 		/// in the provided <see cref="services"/>.
 		/// </summary>
 		/// <param name="services">Service container.</param>
 		/// <param name="optionsAction">The DB context options action.</param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterCharacterDatabase<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction)
+		public static IServiceCollection RegisterCharacterDatabase<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction)
 			where TCustomizableSlotType : Enum 
 			where TProportionSlotType : Enum
 			where TRaceType : Enum
 			where TClassType : Enum
+			where TSkillType : Enum
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 			if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
-			services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>(optionsAction);
+			services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>>(optionsAction);
 
 			//Registered for consumers of non-generic context
-			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext>, NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>();
-			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>>, GenericCharacterDatabaseContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>, RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>>();
+			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext>, NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>>();
+			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>>, GenericCharacterDatabaseContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>, RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>>>();
 
 			//DefaultServiceEndpointRepository : IServiceEndpointRepository
 			services.AddTransient<IRPGCharacterRepository<TRaceType, TClassType>, DefaultRPGCharacterRepository<TRaceType, TClassType>>();
 			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
-			services.AddTransient<IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>, DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>();
+			services.AddTransient<IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>, DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>>();
 
 			//Example:
 			//services.AddDbContext<ServiceDiscoveryDatabaseContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3306;Database=guardians.global;Uid=root;Pwd=test;"); });

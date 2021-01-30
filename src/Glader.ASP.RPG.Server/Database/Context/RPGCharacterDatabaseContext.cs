@@ -40,6 +40,8 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGRace<TRaceType>> Races { get; set; }
 
+		public DbSet<DBRPGCharacterProgress<TRaceType, TClassType>> CharacterProgresses { get; set; }
+
 		protected RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TRaceType, TClassType>> options)
 			: base(options)
 		{
@@ -61,7 +63,7 @@ namespace Glader.ASP.RPG
 		{
 			base.OnModelCreating(modelBuilder);
 
-			modelBuilder.Entity<DBRPGCharacterProgress>(builder =>
+			modelBuilder.Entity<DBRPGCharacterProgress<TRaceType, TClassType>>(builder =>
 			{
 				builder.Property(c => c.PlayTime)
 					.HasDefaultValue(TimeSpan.Zero);
@@ -93,11 +95,13 @@ namespace Glader.ASP.RPG
 		}
 	}
 
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType> : RPGCharacterDatabaseContext<TRaceType, TClassType>
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType> 
+		: RPGCharacterDatabaseContext<TRaceType, TClassType>
 		where TCustomizableSlotType : Enum
 		where TProportionSlotType : Enum
 		where TRaceType : Enum
 		where TClassType : Enum
+		where TSkillType : Enum
 	{
 		/// <summary>
 		/// The customized slots for the character.
@@ -119,7 +123,11 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		public DbSet<DBRPGCharacterProportionSlotType<TProportionSlotType>> ProportionSlotTypes { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>> options)
+		public DbSet<DBRPGCharacterSkillKnown<TSkillType>> CharacterKnownSkills { get; set; }
+
+		public DbSet<DBRPGSkill<TSkillType>> Skills { get; set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>> options)
 			: base(options)
 		{
 
@@ -182,6 +190,25 @@ namespace Glader.ASP.RPG
 				.Select(v => new DBRPGCharacterProportionSlotType<TProportionSlotType>(v, v.ToString(), String.Empty))
 				.ToArray()
 			);
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGSkill<TSkillType>>().HasData(
+				((TSkillType[])Enum.GetValues(typeof(TSkillType)))
+				.Select(v => new DBRPGSkill<TSkillType>(v, v.ToString(), String.Empty))
+				.ToArray()
+			);
+
+			modelBuilder.Entity<DBRPGCharacterSkillKnown<TSkillType>>(builder =>
+			{
+				builder.HasKey(m => new {m.CharacterId, m.SkillId});
+				builder.HasIndex(m => m.CharacterId);
+				builder.HasIndex(m => m.SkillId);
+
+				//Manual foreign key (without nav prop to char for simplified Type)
+				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
+					.WithMany()
+					.HasForeignKey(c => c.CharacterId);
+			});
 		}
 	}
 }

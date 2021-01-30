@@ -11,7 +11,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Glader.ASP.RPG
 {
-	[Route("api/[controller]")]
+	//TODO: If this controller 404's it's probably because it's generic. Cannot use [controller]
+	[Route("api/CharacterData")]
 	public sealed class CharacterDataController<TRaceType, TClassType> : AuthorizationReadyController, 
 		ICharacterDataQueryService, ICharacterCreationService
 		where TRaceType : Enum

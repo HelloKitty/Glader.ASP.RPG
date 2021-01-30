@@ -7,12 +7,19 @@ using System.Text;
 namespace Glader.ASP.RPG
 {
 	[Table("character_progress")]
-	public sealed class DBRPGCharacterProgress : IRPGCharacterProgress, ICharacterEntryLinkable
+	public class DBRPGCharacterProgress<TRaceType, TClassType> : IRPGCharacterProgress, ICharacterEntryLinkable 
+		where TClassType : Enum 
+		where TRaceType : Enum
 	{
 		/// <inheritdoc />
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int Id { get; private set; }
+
+		//We use this property attribute this way because of this: https://stackoverflow.com/questions/50575259/asp-net-core-2-1-crashing-due-to-model-inverseproperty
+		[Required]
+		[ForeignKey(nameof(Id))]
+		public virtual DBRPGCharacter<TRaceType, TClassType> Character { get; private set; }
 
 		/// <inheritdoc />
 		[Required]
