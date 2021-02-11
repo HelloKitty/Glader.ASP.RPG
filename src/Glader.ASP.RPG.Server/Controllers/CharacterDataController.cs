@@ -14,7 +14,7 @@ namespace Glader.ASP.RPG
 	//TODO: If this controller 404's it's probably because it's generic. Cannot use [controller]
 	[Route("api/CharacterData")]
 	public sealed class CharacterDataController<TRaceType, TClassType> : AuthorizationReadyController, 
-		ICharacterDataQueryService, ICharacterCreationService
+		ICharacterDataQueryService, ICharacterCreationService<TRaceType, TClassType>
 		where TRaceType : Enum
 		where TClassType : Enum
 	{
@@ -68,28 +68,30 @@ namespace Glader.ASP.RPG
 		[ProducesJson]
 		[AuthorizeJwt]
 		[HttpPost("Characters")]
-		public async Task<ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>> CreateCharacterAsync([FromBody] RPGCharacterCreationRequest request, CancellationToken token = default)
+		public async Task<ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>> 
+			CreateCharacterAsync([FromBody] RPGCharacterCreationRequest<TRaceType, TClassType> request, CancellationToken token = default)
 		{
 			//TODO: Fix GetAccountId API
 			int accountId = ClaimsReader.GetAccountId<int>(User);
 
 			if (!ModelState.IsValid)
-				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.GeneralError);
+				return Failure<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.GeneralError);
 
 			//TODO: Add validation pipeline.
 			if (String.IsNullOrWhiteSpace(request.Name))
-				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.InvalidName);
+				return Failure<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.InvalidName);
 
-			//TODO: Better handling and response code implementation.
 			try
 			{
-				//TODO: Implement race/class handling.
-				DBRPGCharacter<TRaceType, TClassType> character = await CharacterRepository.CreateCharacterAsync(accountId, request.Name, default, default, token);
-				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(new RPGCharacterCreationResult(character.Id));
+				DBRPGCharacter<TRaceType, TClassType> character = await CharacterRepository.CreateCharacterAsync(accountId, request.Name, request.Race, request.ClassType, token);
+				return Success<RPGCharacterCreationResult, CharacterCreationResponseCode>(new RPGCharacterCreationResult(character.Id));
 			}
 			catch (Exception e)
 			{
-				return new ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.GeneralError);
+				if(Logger.IsEnabled(LogLevel.Error))
+					Logger.LogError($"Failed to create Character: {request} Reason: {e}");
+
+				return Failure<RPGCharacterCreationResult, CharacterCreationResponseCode>(CharacterCreationResponseCode.GeneralError);
 			}
 		}
 	}
