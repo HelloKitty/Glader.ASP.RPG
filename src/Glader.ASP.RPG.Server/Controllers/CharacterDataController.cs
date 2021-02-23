@@ -29,12 +29,12 @@ namespace Glader.ASP.RPG
 
 		/// <inheritdoc />
 		[ProducesJson]
-		[AuthorizeJwt]
+		//[AuthorizeJwt]
 		[HttpGet("Characters")]
 		public async Task<RPGCharacterData<TRaceType, TClassType>[]> RetrieveCharactersDataAsync(CancellationToken token = default)
 		{
 			//TODO: Fix GetAccountId API
-			int accountId = ClaimsReader.GetAccountId<int>(User);
+			int accountId = 1;
 			return (await CharacterRepository
 					.RetrieveOwnedCharactersAsync(accountId, token))
 				.Select(ConvertDbToTransit)

@@ -33,11 +33,14 @@ namespace Glader.ASP.RPG
 			//INCLUDE IS REQUIRED TO GET PROGRESS
 			return await Context
 				.CharacterOwnership
+				.Include(o => o.Character)
+				.ThenInclude(o => o.Progress)
+				.Include(o => o.Character)
+				.ThenInclude(o => o.Race)
+				.Include(o => o.Character)
+				.ThenInclude(o => o.Class)
 				.Where(o => o.OwnershipId == ownershipId)
 				.Select(ownership => ownership.Character)
-				.Include(m => m.Progress)
-				.Include(m => m.Class)
-				.Include(m => m.Race)
 				.ToArrayAsync(token);
 		}
 
