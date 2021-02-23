@@ -14,7 +14,7 @@ namespace Glader.ASP.RPG
 	//TODO: If this controller 404's it's probably because it's generic. Cannot use [controller]
 	[Route("api/CharacterData")]
 	public sealed class CharacterDataController<TRaceType, TClassType> : AuthorizationReadyController, 
-		ICharacterDataQueryService, ICharacterCreationService<TRaceType, TClassType>
+		ICharacterDataQueryService<TRaceType, TClassType>, ICharacterCreationService<TRaceType, TClassType>
 		where TRaceType : Enum
 		where TClassType : Enum
 	{
@@ -31,7 +31,7 @@ namespace Glader.ASP.RPG
 		[ProducesJson]
 		[AuthorizeJwt]
 		[HttpGet("Characters")]
-		public async Task<RPGCharacterData[]> RetrieveCharactersDataAsync(CancellationToken token = default)
+		public async Task<RPGCharacterData<TRaceType, TClassType>[]> RetrieveCharactersDataAsync(CancellationToken token = default)
 		{
 			//TODO: Fix GetAccountId API
 			int accountId = ClaimsReader.GetAccountId<int>(User);
@@ -41,27 +41,27 @@ namespace Glader.ASP.RPG
 				.ToArray();
 		}
 
-		private RPGCharacterData ConvertDbToTransit(DBRPGCharacter<TRaceType, TClassType> character)
+		private RPGCharacterData<TRaceType, TClassType> ConvertDbToTransit(DBRPGCharacter<TRaceType, TClassType> character)
 		{
 			if (character == null) throw new ArgumentNullException(nameof(character));
 
-			return new RPGCharacterData(new RPGCharacterEntry(character.Id, character.Name), new RPGCharacterCreationDetails(character.CreationDate), new RPGCharacterProgress(character.Progress.Experience, character.Progress.Level, character.Progress.PlayTime));
+			return new RPGCharacterData<TRaceType, TClassType>(new RPGCharacterEntry(character.Id, character.Name), new RPGCharacterCreationDetails(character.CreationDate), new RPGCharacterProgress(character.Progress.Experience, character.Progress.Level, character.Progress.PlayTime), character.Race.Id, character.Class.Id);
 		}
 
 		/// <inheritdoc />
 		[ProducesJson]
 		[HttpGet("Characters/{id}")]
-		public async Task<ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>> 
+		public async Task<ResponseModel<RPGCharacterData<TRaceType, TClassType>, CharacterDataQueryResponseCode>> 
 			RetrieveCharacterDataAsync([FromRoute(Name = "id")] int characterId, CancellationToken token = default)
 		{
 			//TODO: Properly handle failure and return correct response codes.
 			if (await CharacterRepository.ContainsAsync(characterId, token))
 			{
 				DBRPGCharacter<TRaceType, TClassType> character = await CharacterRepository.RetrieveAsync(characterId, token);
-				return new ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>(ConvertDbToTransit(character));
+				return new ResponseModel<RPGCharacterData<TRaceType, TClassType>, CharacterDataQueryResponseCode>(ConvertDbToTransit(character));
 			}
 			else
-				return new ResponseModel<RPGCharacterData, CharacterDataQueryResponseCode>(CharacterDataQueryResponseCode.CharacterDoesNotExist);
+				return new ResponseModel<RPGCharacterData<TRaceType, TClassType>, CharacterDataQueryResponseCode>(CharacterDataQueryResponseCode.CharacterDoesNotExist);
 		}
 
 		/// <inheritdoc />

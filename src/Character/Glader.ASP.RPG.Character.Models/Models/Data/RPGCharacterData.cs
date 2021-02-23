@@ -9,7 +9,9 @@ namespace Glader.ASP.RPG
 	/// Contains the full character data for a character.
 	/// </summary>
 	[JsonObject]
-	public sealed class RPGCharacterData
+	public sealed class RPGCharacterData<TRaceType, TClassType>
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
 		/// <summary>
 		/// The entry data for the character.
@@ -29,11 +31,25 @@ namespace Glader.ASP.RPG
 		[JsonProperty]
 		public RPGCharacterProgress Progress { get; private set; }
 
-		public RPGCharacterData(RPGCharacterEntry entry, RPGCharacterCreationDetails creationDetails, RPGCharacterProgress progress)
+		/// <summary>
+		/// The race of the character.
+		/// </summary>
+		[JsonProperty]
+		public TRaceType Race { get; private set; }
+
+		/// <summary>
+		/// The class of the character.
+		/// </summary>
+		[JsonProperty(PropertyName = @"Class")]
+		public TClassType ClassType { get; private set; }
+
+		public RPGCharacterData(RPGCharacterEntry entry, RPGCharacterCreationDetails creationDetails, RPGCharacterProgress progress, TRaceType race, TClassType classType)
 		{
 			Entry = entry ?? throw new ArgumentNullException(nameof(entry));
 			CreationDetails = creationDetails ?? throw new ArgumentNullException(nameof(creationDetails));
 			Progress = progress ?? throw new ArgumentNullException(nameof(progress));
+			Race = race ?? throw new ArgumentNullException(nameof(race));
+			ClassType = classType ?? throw new ArgumentNullException(nameof(classType));
 		}
 
 		/// <summary>
