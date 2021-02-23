@@ -36,6 +36,8 @@ namespace Glader.ASP.RPG
 				.Where(o => o.OwnershipId == ownershipId)
 				.Select(ownership => ownership.Character)
 				.Include(m => m.Progress)
+				.Include(m => m.Class)
+				.Include(m => m.Race)
 				.ToArrayAsync(token);
 		}
 
@@ -81,6 +83,8 @@ namespace Glader.ASP.RPG
 			return await Context
 				.Characters
 				.Include(m => m.Progress)
+				.Include(m => m.Class)
+				.Include(m => m.Race)
 				.FirstAsync(m => m.Id == key, token);
 		}
 	}
