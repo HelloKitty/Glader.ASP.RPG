@@ -10,9 +10,7 @@ namespace Glader.ASP.RPG
 	/// Database-based implementation of <see cref="IRPGCharacterEntry"/> <see cref="IRPGDBCreationDetailable"/>
 	/// </summary>
 	[Table("character")]
-	public class DBRPGCharacter<TRaceType, TClassType> : IRPGCharacterEntry, IRPGDBCreationDetailable
-		where TRaceType : Enum
-		where TClassType : Enum
+	public class DBRPGCharacter : IRPGCharacterEntry, IRPGDBCreationDetailable
 	{
 		/// <inheritdoc />
 		[Key]
@@ -37,29 +35,15 @@ namespace Glader.ASP.RPG
 		[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime LastModifiedDate { get; private set; }
 
-		[InverseProperty(nameof(DBRPGCharacterProgress<TRaceType, TClassType>.Character))]
-		public virtual DBRPGCharacterProgress<TRaceType, TClassType> Progress { get; private set; }
+		[InverseProperty(nameof(DBRPGCharacterProgress.Character))]
+		public virtual DBRPGCharacterProgress Progress { get; private set; }
 
-		[Column("Race")]
-		public TRaceType RaceId { get; private set; }
-
-		[ForeignKey(nameof(RaceId))]
-		public virtual DBRPGRace<TRaceType> Race { get; private set; }
-
-		[Column("Class")]
-		public TClassType ClassId { get; private set; }
-
-		[ForeignKey(nameof(ClassId))]
-		public virtual DBRPGClass<TClassType> @Class { get; private set; }
-
-		public DBRPGCharacter(string name, TRaceType raceId, TClassType classId)
+		public DBRPGCharacter(string name)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));
-			RaceId = raceId ?? throw new ArgumentNullException(nameof(raceId));
-			ClassId = classId ?? throw new ArgumentNullException(nameof(classId));
 
 			//Empty progress with defaults.
-			Progress = new DBRPGCharacterProgress<TRaceType, TClassType>();
+			Progress = new DBRPGCharacterProgress();
 		}
 	}
 }

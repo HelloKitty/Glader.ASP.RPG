@@ -14,49 +14,63 @@ namespace Glader.ASP.RPG
 	/// <summary>
 	/// Default EF Core database-backed implementation of <see cref="IRPGCharacterRepository{TRaceType,TClassType}"/>
 	/// </summary>
-	public sealed class DefaultRPGCharacterRepository<TRaceType, TClassType> : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter<TRaceType, TClassType>>, IRPGCharacterRepository<TRaceType, TClassType>
+	public sealed class DefaultRPGCharacterRepository<TRaceType, TClassType> : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter>, IRPGCharacterRepository<TRaceType, TClassType>
 		where TRaceType : Enum 
 		where TClassType : Enum
 	{
 		public new RPGCharacterDatabaseContext<TRaceType, TClassType> Context { get; }
 
 		public DefaultRPGCharacterRepository(IDBContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>> contextAdapter) 
-			: base(contextAdapter.Context.Set<DBRPGCharacter<TRaceType, TClassType>>(), contextAdapter.Context)
+			: base(contextAdapter.Context.Set<DBRPGCharacter>(), contextAdapter.Context)
 		{
 			if (contextAdapter == null) throw new ArgumentNullException(nameof(contextAdapter));
 			Context = contextAdapter.Context;
 		}
 
 		/// <inheritdoc />
-		public async Task<DBRPGCharacter<TRaceType, TClassType>[]> RetrieveOwnedCharactersAsync(int ownershipId, CancellationToken token = default)
+		public async Task<FullCharacterData<TRaceType, TClassType>[]> RetrieveOwnedCharactersAsync(int ownershipId, CancellationToken token = default)
 		{
 			//INCLUDE IS REQUIRED TO GET PROGRESS
-			return await Context
+			var fullCharacterDatas = await Context
 				.CharacterOwnership
 				.Include(o => o.Character).ThenInclude(o => o.Progress)
-				.Include(o => o.Character).ThenInclude(o => o.Race)
-				.Include(o => o.Character).ThenInclude(o => o.Class)
 				.Where(o => o.OwnershipId == ownershipId)
 				.Select(ownership => ownership.Character)
+				.Join(Context.CharacterDefinitions
+						.Include(d => d.Race)
+						.Include(d => d.Class),
+					character => character.Id,
+					def => def.Id,
+					(character, def) => new { character, def })
 				.ToArrayAsync(token);
+
+			return fullCharacterDatas
+				.Select(data => new FullCharacterData<TRaceType, TClassType>(data.character, data.def))
+				.ToArray();
 		}
 
-		public async Task<DBRPGCharacter<TRaceType, TClassType>> CreateCharacterAsync(int ownershipId, string name, TRaceType race, TClassType classType, CancellationToken token = default)
+		public async Task<DBRPGCharacter> CreateCharacterAsync(int ownershipId, string name, TRaceType race, TClassType classType, CancellationToken token = default)
 		{
 			await using IDbContextTransaction transaction = await Context.Database.BeginTransactionAsync(token);
 
 			try
 			{
-				EntityEntry<DBRPGCharacter<TRaceType, TClassType>> entry = await Context
+				EntityEntry<DBRPGCharacter> entry = await Context
 					.Characters
-					.AddAsync(new DBRPGCharacter<TRaceType, TClassType>(name, race, classType), token);
+					.AddAsync(new DBRPGCharacter(name), token);
 
 				await Context.SaveChangesAsync(token);
 
 				//Now we link the character via the Ownership table
 				await Context
 					.CharacterOwnership
-					.AddAsync(new DBRPGCharacterOwnership<TRaceType, TClassType>(ownershipId, entry.Entity.Id), token);
+					.AddAsync(new DBRPGCharacterOwnership(ownershipId, entry.Entity.Id), token);
+
+				//Now we add the race/class definition table entry (originally was apart of DBRPGCharacter but to keep things simple
+				//typed we try to avoid generic type parameter carrying.
+				await Context
+					.CharacterDefinitions
+					.AddRangeAsync(new DBRPGCharacterDefinition<TRaceType, TClassType>(entry.Entity.Id, race, classType));
 
 				await Context.SaveChangesAsync(token);
 				await transaction.CommitAsync(token);
@@ -77,14 +91,30 @@ namespace Glader.ASP.RPG
 				.AnyAsync(o => o.CharacterId == characterId && o.OwnershipId == ownershipId, token);
 		}
 
-		public override async Task<DBRPGCharacter<TRaceType, TClassType>> RetrieveAsync(int key, CancellationToken token = new CancellationToken(), bool includeNavigationProperties = false)
+		/// <inheritdoc />
+		public async Task<FullCharacterData<TRaceType, TClassType>> RetrieveFullCharacterDataAsync(int id, CancellationToken token = default)
+		{
+			var data = await Context
+				.Characters
+				.Include(o => o.Progress)
+				.Where(c => c.Id == id)
+				.Join(Context.CharacterDefinitions
+						.Include(d => d.Race)
+						.Include(d => d.Class),
+					character => character.Id,
+					def => def.Id,
+					(character, def) => new { character, def })
+				.FirstAsync(token);
+
+			return new FullCharacterData<TRaceType, TClassType>(data.character, data.def);
+		}
+
+		public override async Task<DBRPGCharacter> RetrieveAsync(int key, CancellationToken token = new CancellationToken(), bool includeNavigationProperties = false)
 		{
 			//INCLUDE IS REQUIRED TO GET PROGRESS
 			return await Context
 				.Characters
 				.Include(m => m.Progress)
-				.Include(m => m.Class)
-				.Include(m => m.Race)
 				.FirstAsync(m => m.Id == key, token);
 		}
 	}

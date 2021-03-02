@@ -41,11 +41,11 @@ namespace Glader.ASP.RPG
 				.ToArray();
 		}
 
-		private RPGCharacterData<TRaceType, TClassType> ConvertDbToTransit(DBRPGCharacter<TRaceType, TClassType> character)
+		private RPGCharacterData<TRaceType, TClassType> ConvertDbToTransit(FullCharacterData<TRaceType, TClassType> characterData)
 		{
-			if (character == null) throw new ArgumentNullException(nameof(character));
+			if (characterData == null) throw new ArgumentNullException(nameof(characterData));
 
-			return new RPGCharacterData<TRaceType, TClassType>(new RPGCharacterEntry(character.Id, character.Name), new RPGCharacterCreationDetails(character.CreationDate), new RPGCharacterProgress(character.Progress.Experience, character.Progress.Level, character.Progress.PlayTime), character.Race.Id, character.Class.Id);
+			return new RPGCharacterData<TRaceType, TClassType>(new RPGCharacterEntry(characterData.Character.Id, characterData.Character.Name), new RPGCharacterCreationDetails(characterData.Character.CreationDate), new RPGCharacterProgress(characterData.Character.Progress.Experience, characterData.Character.Progress.Level, characterData.Character.Progress.PlayTime), characterData.Definition.Race.Id, characterData.Definition.Class.Id);
 		}
 
 		/// <inheritdoc />
@@ -57,8 +57,8 @@ namespace Glader.ASP.RPG
 			//TODO: Properly handle failure and return correct response codes.
 			if (await CharacterRepository.ContainsAsync(characterId, token))
 			{
-				DBRPGCharacter<TRaceType, TClassType> character = await CharacterRepository.RetrieveAsync(characterId, token);
-				return new ResponseModel<RPGCharacterData<TRaceType, TClassType>, CharacterDataQueryResponseCode>(ConvertDbToTransit(character));
+				FullCharacterData<TRaceType, TClassType> characterData = await CharacterRepository.RetrieveFullCharacterDataAsync(characterId, token);
+				return new ResponseModel<RPGCharacterData<TRaceType, TClassType>, CharacterDataQueryResponseCode>(ConvertDbToTransit(characterData));
 			}
 			else
 				return new ResponseModel<RPGCharacterData<TRaceType, TClassType>, CharacterDataQueryResponseCode>(CharacterDataQueryResponseCode.CharacterDoesNotExist);
@@ -83,7 +83,7 @@ namespace Glader.ASP.RPG
 
 			try
 			{
-				DBRPGCharacter<TRaceType, TClassType> character = await CharacterRepository.CreateCharacterAsync(accountId, request.Name, request.Race, request.ClassType, token);
+				DBRPGCharacter character = await CharacterRepository.CreateCharacterAsync(accountId, request.Name, request.Race, request.ClassType, token);
 				return Success<RPGCharacterCreationResult, CharacterCreationResponseCode>(new RPGCharacterCreationResult(character.Id));
 			}
 			catch (Exception e)

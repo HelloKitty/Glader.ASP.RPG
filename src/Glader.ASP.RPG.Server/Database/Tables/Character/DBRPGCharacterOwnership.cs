@@ -11,9 +11,7 @@ namespace Glader.ASP.RPG
 	/// for a character.
 	/// </summary>
 	[Table("character_ownership")]
-	public class DBRPGCharacterOwnership<TRaceType, TClassType> 
-		where TRaceType : Enum 
-		where TClassType : Enum
+	public class DBRPGCharacterOwnership
 	{
 		/// <summary>
 		/// Represents the id of the ownership.
@@ -32,7 +30,7 @@ namespace Glader.ASP.RPG
 		//This will make it cascade delete if the character is deleted.
 		[Required]
 		[ForeignKey(nameof(CharacterId))]
-		public virtual DBRPGCharacter<TRaceType, TClassType> Character { get; private set; }
+		public virtual DBRPGCharacter Character { get; private set; }
 
 		public DBRPGCharacterOwnership(int ownershipId, int characterId)
 		{

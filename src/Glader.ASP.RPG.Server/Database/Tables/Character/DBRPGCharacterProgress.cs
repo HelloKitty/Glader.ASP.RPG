@@ -7,9 +7,7 @@ using System.Text;
 namespace Glader.ASP.RPG
 {
 	[Table("character_progress")]
-	public class DBRPGCharacterProgress<TRaceType, TClassType> : IRPGCharacterProgress, ICharacterEntryLinkable 
-		where TClassType : Enum 
-		where TRaceType : Enum
+	public class DBRPGCharacterProgress : IRPGCharacterProgress, ICharacterEntryLinkable
 	{
 		/// <inheritdoc />
 		[Key]
@@ -19,7 +17,7 @@ namespace Glader.ASP.RPG
 		//We use this property attribute this way because of this: https://stackoverflow.com/questions/50575259/asp-net-core-2-1-crashing-due-to-model-inverseproperty
 		[Required]
 		[ForeignKey(nameof(Id))]
-		public virtual DBRPGCharacter<TRaceType, TClassType> Character { get; private set; }
+		public virtual DBRPGCharacter Character { get; private set; }
 
 		/// <inheritdoc />
 		[Required]

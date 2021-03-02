@@ -10,6 +10,18 @@ namespace Glader.ASP.RPG
 {
 	public abstract class RPGCharacterDatabaseContext : DbContext
 	{
+		/// <summary>
+		/// The character table.
+		/// </summary>
+		public DbSet<DBRPGCharacter> Characters { get; set; }
+
+		/// <summary>
+		/// The ownership relationship of characters.
+		/// </summary>
+		public DbSet<DBRPGCharacterOwnership> CharacterOwnership { get; set; }
+
+		public DbSet<DBRPGCharacterProgress> CharacterProgresses { get; set; }
+
 		protected RPGCharacterDatabaseContext(DbContextOptions options)
 			: base(options)
 		{
@@ -20,27 +32,38 @@ namespace Glader.ASP.RPG
 		{
 
 		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<DBRPGCharacterProgress>(builder =>
+			{
+				builder.Property(c => c.PlayTime)
+					.HasDefaultValue(TimeSpan.Zero);
+			});
+
+			modelBuilder.Entity<DBRPGCharacterOwnership>(builder =>
+			{
+				//index by owner since we will query character lists and such.
+				builder.HasIndex(c => c.OwnershipId);
+
+				//Builds a composite key between the owner and characterid.
+				//EF Requires keys, keyless entities are second class citizens.
+				builder.HasKey(c => new { c.OwnershipId, c.CharacterId });
+			});
+		}
 	}
 
 	public abstract class RPGCharacterDatabaseContext<TRaceType, TClassType> : RPGCharacterDatabaseContext
 		where TRaceType : Enum 
 		where TClassType : Enum
 	{
-		/// <summary>
-		/// The character table.
-		/// </summary>
-		public DbSet<DBRPGCharacter<TRaceType, TClassType>> Characters { get; set; }
-
-		/// <summary>
-		/// The ownership relationship of characters.
-		/// </summary>
-		public DbSet<DBRPGCharacterOwnership<TRaceType, TClassType>> CharacterOwnership { get; set; }
-
 		public DbSet<DBRPGClass<TClassType>> Classes { get; set; }
 
 		public DbSet<DBRPGRace<TRaceType>> Races { get; set; }
 
-		public DbSet<DBRPGCharacterProgress<TRaceType, TClassType>> CharacterProgresses { get; set; }
+		public DbSet<DBRPGCharacterDefinition<TRaceType, TClassType>> CharacterDefinitions { get; set; }
 
 		protected RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TRaceType, TClassType>> options)
 			: base(options)
@@ -62,22 +85,6 @@ namespace Glader.ASP.RPG
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
-
-			modelBuilder.Entity<DBRPGCharacterProgress<TRaceType, TClassType>>(builder =>
-			{
-				builder.Property(c => c.PlayTime)
-					.HasDefaultValue(TimeSpan.Zero);
-			});
-
-			modelBuilder.Entity<DBRPGCharacterOwnership<TRaceType, TClassType>>(builder =>
-			{
-				//index by owner since we will query character lists and such.
-				builder.HasIndex(c => c.OwnershipId);
-
-				//Builds a composite key between the owner and characterid.
-				//EF Requires keys, keyless entities are second class citizens.
-				builder.HasKey(c => new { c.OwnershipId, c.CharacterId });
-			});
 
 			//Seed the DB with the available enum entries.
 			modelBuilder.Entity<DBRPGRace<TRaceType>>().HasData(
@@ -147,7 +154,7 @@ namespace Glader.ASP.RPG
 
 			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>(builder =>
 			{
-				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
+				builder.HasOne<DBRPGCharacter>()
 					.WithMany()
 					.HasForeignKey(c => c.CharacterId);
 
@@ -171,7 +178,7 @@ namespace Glader.ASP.RPG
 
 			modelBuilder.Entity<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>>(builder =>
 			{
-				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
+				builder.HasOne<DBRPGCharacter>()
 					.WithMany()
 					.HasForeignKey(c => c.CharacterId);
 
@@ -207,7 +214,7 @@ namespace Glader.ASP.RPG
 				builder.HasIndex(m => m.SkillId);
 
 				//Manual foreign key (without nav prop to char for simplified Type)
-				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
+				builder.HasOne<DBRPGCharacter>()
 					.WithMany()
 					.HasForeignKey(c => c.CharacterId);
 			});
@@ -219,7 +226,7 @@ namespace Glader.ASP.RPG
 				builder.HasIndex(m => m.SkillId);
 
 				//Manual foreign key (without nav prop to char for simplified Type)
-				builder.HasOne<DBRPGCharacter<TRaceType, TClassType>>()
+				builder.HasOne<DBRPGCharacter>()
 					.WithMany()
 					.HasForeignKey(c => c.CharacterId);
 			});

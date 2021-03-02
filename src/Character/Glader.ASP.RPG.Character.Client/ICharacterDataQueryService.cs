@@ -18,7 +18,7 @@ namespace Glader.ASP.RPG
 		where TClassType : Enum
 	{
 		/// <summary>
-		/// REST endpoint that gets all the <see cref="RPGCharacterData"/> for the account associated with
+		/// REST endpoint that gets all the <see cref="RPGCharacterData{TRaceType,TClassType}"/> for the account associated with
 		/// the Auth token supplied.
 		/// </summary>
 		/// <param name="token">Cancel token.</param>
@@ -28,7 +28,7 @@ namespace Glader.ASP.RPG
 		Task<RPGCharacterData<TRaceType, TClassType>[]> RetrieveCharactersDataAsync(CancellationToken token = default);
 
 		/// <summary>
-		/// REST endpoint that gets all the <see cref="RPGCharacterData"/> for the account associated with
+		/// REST endpoint that gets all the <see cref="RPGCharacterData{TRaceType,TClassType}"/> for the account associated with
 		/// the Auth token supplied.
 		/// </summary>
 		/// <param name="characterId">The id of the character to query for.</param>
