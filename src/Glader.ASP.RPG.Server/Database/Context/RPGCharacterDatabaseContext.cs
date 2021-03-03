@@ -22,6 +22,10 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGCharacterProgress> CharacterProgresses { get; set; }
 
+		public DbSet<DBRPGGroup> Groups { get; set; }
+
+		public DbSet<DBRPGGroupMember> GroupMembers { get; set; }
+
 		protected RPGCharacterDatabaseContext(DbContextOptions options)
 			: base(options)
 		{
