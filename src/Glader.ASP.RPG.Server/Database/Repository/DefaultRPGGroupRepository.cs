@@ -39,14 +39,21 @@ namespace Glader.ASP.RPG
 		}
 
 		/// <inheritdoc />
-		public async Task RemoveMemberAsync(int characterId, CancellationToken token = default)
+		public async Task<DBRPGGroup> RemoveMemberAsync(int characterId, CancellationToken token = default)
 		{
-			var member = new DBRPGGroupMember(1, characterId);
+			//If there is only one member then we should disband the group
+			//But we NEED TO KNOW that the group was disbanded for future proof realtime social notifications
+			//involving group listing and possibily other stuff.
+			var groupMember = await Context.Set<DBRPGGroupMember>()
+				.FirstAsync(gm => gm.CharacterId == characterId, token);
 
-			Context.Set<DBRPGGroupMember>().Attach(member);
-			Context.Set<DBRPGGroupMember>().Remove(member);
+			groupMember.Group
+				.Members
+				.Remove(groupMember);
 
 			await Context.SaveChangesAsync(true, token);
+
+			return groupMember.Group;
 		}
 
 		/// <inheritdoc />

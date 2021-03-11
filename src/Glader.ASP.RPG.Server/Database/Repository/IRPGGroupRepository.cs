@@ -35,8 +35,8 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		/// <param name="characterId">The character id.</param>
 		/// <param name="token">Cancel token.</param>
-		/// <returns></returns>
-		Task RemoveMemberAsync(int characterId, CancellationToken token = default);
+		/// <returns>The group the member was apart of.</returns>
+		Task<DBRPGGroup> RemoveMemberAsync(int characterId, CancellationToken token = default);
 
 		//Don't make this cancellable, that makes no sense
 		/// <summary>
