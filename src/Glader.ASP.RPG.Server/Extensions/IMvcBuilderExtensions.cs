@@ -29,7 +29,8 @@ namespace Glader.ASP.RPG
 
 			return builder
 				.RegisterController<CharacterDataController<TRaceType, TClassType>>()
-				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>();
+				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>()
+				.RegisterController<GroupController>();
 		}
 	}
 }
