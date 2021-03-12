@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Glader.Essentials;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Glader.ASP.RPG
 {
@@ -63,8 +65,13 @@ namespace Glader.ASP.RPG
 				.Members
 				.Remove(groupMember);
 
+			//Group is empty, let's disband it.
+			if (!groupMember.Group.Members.Any())
+				ModelSet.Remove(groupMember.Group);
+
 			await Context.SaveChangesAsync(true, token);
 
+			//Caller will be able to see group state now, especially helpful if the group is empty or disbanded.
 			return groupMember.Group;
 		}
 
