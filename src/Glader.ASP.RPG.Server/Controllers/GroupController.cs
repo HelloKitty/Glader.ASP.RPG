@@ -35,13 +35,16 @@ namespace Glader.ASP.RPG
 			//One known case where this can fail is if another instance of this server app modified the DB inbetween the last check.
 			try
 			{
-				var group = await GroupRepository.RetrieveAsync(groupId, token);
+				var group = await GroupRepository.RetrieveAsync(groupId, token, true);
 
 				if (groupId != group.Id)
 					if (Logger.IsEnabled(LogLevel.Warning))
 						Logger.LogWarning($"Encountered {nameof(RetrieveGroupAsync)} where requested group: {groupId} did not match queried group. Queried group was: {group.Id}");
 
-				return Success<RPGGroupData, GroupDataQueryResponseCode>(new RPGGroupData(group.Id, group.Members.Select(gm => gm.CharacterId).ToArray()));
+				if (!group.IsEmpty)
+					return Success<RPGGroupData, GroupDataQueryResponseCode>(new RPGGroupData(group.Id, group.Members.Select(gm => gm.CharacterId).ToArray()));
+				else
+					return Success<RPGGroupData, GroupDataQueryResponseCode>(new RPGGroupData(group.Id, Array.Empty<int>()));
 			}
 			catch (Exception e)
 			{
@@ -115,7 +118,7 @@ namespace Glader.ASP.RPG
 		//TODO: We need a server authorization check
 		/// <inheritdoc />
 		[HttpDelete("Member/{cid}")]
-		public async Task<GroupMemberManageResponseCode> RemoveMemberAsync(int characterId, CancellationToken token = default)
+		public async Task<GroupMemberManageResponseCode> RemoveMemberAsync([FromRoute(Name = "cid")] int characterId, CancellationToken token = default)
 		{
 			//If the users isn't in a group then we have nothing we can do.
 			if (!await GroupRepository.IsInGroupAsync(characterId, token))

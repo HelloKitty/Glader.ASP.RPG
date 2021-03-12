@@ -13,8 +13,8 @@ namespace Glader.ASP.RPG
 	/// </summary>
 	public sealed class DefaultRPGGroupRepository : GeneralGenericCrudRepositoryProvider<int, DBRPGGroup>, IRPGGroupRepository
 	{
-		public DefaultRPGGroupRepository(RPGCharacterDatabaseContext context) 
-			: base(context.Groups, context)
+		public DefaultRPGGroupRepository(IDBContextAdapter<RPGCharacterDatabaseContext> contextAdapter) 
+			: base(contextAdapter.Context.Groups, contextAdapter.Context)
 		{
 
 		}
@@ -26,10 +26,20 @@ namespace Glader.ASP.RPG
 				.AnyAsync(gm => gm.CharacterId == characterId, token);
 		}
 
+		public override async Task<DBRPGGroup> RetrieveAsync(int key, CancellationToken token = default, bool includeNavigationProperties = false)
+		{
+			if (includeNavigationProperties)
+				return await ModelSet
+					.Include(g => g.Members)
+					.FirstAsync(g => g.Id == key, token);
+			else
+				return await ModelSet.FindAsync(new object[] { key }, token);
+		}
+
 		/// <inheritdoc />
 		public async Task AddMemberAsync(int groupId, int characterId, CancellationToken token = default)
 		{
-			DBRPGGroup group = await RetrieveAsync(groupId, token);
+			DBRPGGroup group = await RetrieveAsync(groupId, token, true);
 
 			//TODO: Does this work??
 			group.Members
@@ -45,6 +55,8 @@ namespace Glader.ASP.RPG
 			//But we NEED TO KNOW that the group was disbanded for future proof realtime social notifications
 			//involving group listing and possibily other stuff.
 			var groupMember = await Context.Set<DBRPGGroupMember>()
+				.Include(gm => gm.Group)
+				.ThenInclude(g => g.Members)
 				.FirstAsync(gm => gm.CharacterId == characterId, token);
 
 			groupMember.Group

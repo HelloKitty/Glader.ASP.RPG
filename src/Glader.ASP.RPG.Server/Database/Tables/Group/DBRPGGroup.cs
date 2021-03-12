@@ -53,7 +53,7 @@ namespace Glader.ASP.RPG
 		/// (Empty groups shouldn't really exist though).
 		/// </summary>
 		[NotMapped]
-		bool IsEmpty => Members == null || Members.Count == 0;
+		public bool IsEmpty => Members == null || Members.Count == 0;
 
 		public DBRPGGroup(string name, string comment)
 		{
