@@ -70,6 +70,7 @@ namespace Glader.ASP.RPG
 			try
 			{
 				var groupData = new DBRPGGroup(request.Name, String.Empty);
+				groupData.Members = new List<DBRPGGroupMember>() {new DBRPGGroupMember(1, request.CharacterId)};
 				bool createResult = await GroupRepository.TryCreateAsync(groupData, token);
 
 				//At this point group id is initialized, or should be!!
