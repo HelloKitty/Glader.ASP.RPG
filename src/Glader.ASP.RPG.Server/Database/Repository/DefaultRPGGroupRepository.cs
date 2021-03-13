@@ -81,5 +81,11 @@ namespace Glader.ASP.RPG
 			ModelSet.RemoveRange(ModelSet);
 			await Context.SaveChangesAsync(true);
 		}
+
+		/// <inheritdoc />
+		public async Task<DBRPGGroup[]> RetrieveAllAsync(CancellationToken token = default)
+		{
+			return await ModelSet.ToArrayAsync(token);
+		}
 	}
 }

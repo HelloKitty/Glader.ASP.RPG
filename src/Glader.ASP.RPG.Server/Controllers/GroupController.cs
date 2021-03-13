@@ -40,7 +40,8 @@ namespace Glader.ASP.RPG
 					if (Logger.IsEnabled(LogLevel.Warning))
 						Logger.LogWarning($"Encountered {nameof(RetrieveGroupAsync)} where requested group: {groupId} did not match queried group. Queried group was: {group.Id}");
 
-				if (!group.IsEmpty)
+				//TODO: This might no longer be required
+				if(!group.IsEmpty)
 					return Success<RPGGroupData, GroupDataQueryResponseCode>(new RPGGroupData(group.Id, group.Members.Select(gm => gm.CharacterId).ToArray()));
 				else
 					return Success<RPGGroupData, GroupDataQueryResponseCode>(new RPGGroupData(group.Id, Array.Empty<int>()));
@@ -52,6 +53,24 @@ namespace Glader.ASP.RPG
 
 				return Failure<RPGGroupData, GroupDataQueryResponseCode>(GroupDataQueryResponseCode.GeneralError);
 			}
+		}
+
+		//This is a rather bandwidth and resource intensive query if we have a lot of groups.
+		//TODO: We need a server authorization check
+		[NoResponseCache]
+		[HttpGet]
+		public async Task<RPGGroupData[]> RetrieveGroupsAsync(CancellationToken token = default)
+		{
+			DBRPGGroup[] groups = await GroupRepository.RetrieveAllAsync(token);
+
+			return groups.Select(group =>
+			{
+				//TODO: This might no longer be required
+				if (!group.IsEmpty)
+					return new RPGGroupData(group.Id, group.Members.Select(gm => gm.CharacterId).ToArray());
+				else
+					return new RPGGroupData(group.Id, Array.Empty<int>());
+			}).ToArray();
 		}
 
 		//TODO: We need a server authorization check
