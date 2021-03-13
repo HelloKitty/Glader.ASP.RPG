@@ -11,7 +11,7 @@ namespace Glader.ASP.RPG
 	/// Simplified type interface for <see cref="IGenericRepositoryCrudable{TKey,TModel}"/>
 	/// for model Type: <see cref="DBRPGGroup"/>.
 	/// </summary>
-	public interface IRPGGroupRepository : IGenericRepositoryCrudable<int, DBRPGGroup>
+	public interface IRPGGroupRepository : IGenericRepositoryCrudable<int, DBRPGGroup>, IEntireTableQueryable<DBRPGGroup>
 	{
 		/// <summary>
 		/// Indicates if the character with the specified id is already in a group.
