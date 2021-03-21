@@ -147,6 +147,23 @@ namespace Glader.ASP.RPG
 			return GroupMemberManageResponseCode.Success;
 		}
 
+		[HttpGet("Member/{cid}")]
+		public async Task<ResponseModel<RPGGroupData, GroupDataQueryResponseCode>> RetrieveMemberGroupAsync(int characterId, CancellationToken token = default)
+		{
+			//If the users isn't in a group then we have nothing we can do.
+			if(!await GroupRepository.IsInGroupAsync(characterId, token))
+				return Failure<RPGGroupData, GroupDataQueryResponseCode>(GroupDataQueryResponseCode.GroupDoesNotExist);
+
+			var memberEntry = await GroupRepository.RetrieveGroupMemberAsync(characterId, token);
+
+			//We can only assume that the group was disbanded and at this point they are no longer in a group
+			//due to a race condition.
+			if(memberEntry == null)
+				return Failure<RPGGroupData, GroupDataQueryResponseCode>(GroupDataQueryResponseCode.GroupDoesNotExist);
+
+			return Success<RPGGroupData, GroupDataQueryResponseCode>(new RPGGroupData(memberEntry.GroupId, memberEntry.Group.Members.Select(m => m.CharacterId).ToArray()));
+		}
+
 		//TODO: We need a server authorization check
 		/// <inheritdoc />
 		[HttpDelete]

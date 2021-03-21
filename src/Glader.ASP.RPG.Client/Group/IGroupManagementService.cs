@@ -69,6 +69,16 @@ namespace Glader.ASP.RPG
 
 		//TODO: This method should only be directly called by a SERVER. We need a way to define SERVER roles in authorization reqs.
 		/// <summary>
+		/// Attempts to retrieve group data for a specified member/character with id <see cref="characterId"/>.
+		/// </summary>
+		/// <param name="characterId">The id of the character to retrieve group information for.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns></returns>
+		[Get("/api/Group/Member/{cid}")]
+		Task<ResponseModel<RPGGroupData, GroupDataQueryResponseCode>> RetrieveMemberGroupAsync([AliasAs("cid")] int characterId, CancellationToken token = default);
+
+		//TODO: This method should only be directly called by a SERVER. We need a way to define SERVER roles in authorization reqs.
+		/// <summary>
 		/// Deletes all groups registered groups.
 		/// </summary>
 		/// <param name="token">Cancel token.</param>

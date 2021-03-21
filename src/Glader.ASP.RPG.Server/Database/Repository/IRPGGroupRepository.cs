@@ -22,6 +22,14 @@ namespace Glader.ASP.RPG
 		Task<bool> IsInGroupAsync(int characterId, CancellationToken token = default);
 
 		/// <summary>
+		/// Retrieves the <see cref="DBRPGGroupMember"/> that matches the <see cref="characterId"/>.
+		/// </summary>
+		/// <param name="characterId">The character id to retrieve the group member.</param>
+		/// <param name="token"></param>
+		/// <returns>The group memberbership.</returns>
+		Task<DBRPGGroupMember> RetrieveGroupMemberAsync(int characterId, CancellationToken token = default);
+
+		/// <summary>
 		/// Adds a member to a group with the id <see cref="groupId"/> if it exists.
 		/// </summary>
 		/// <param name="groupId">The group id to add to.</param>

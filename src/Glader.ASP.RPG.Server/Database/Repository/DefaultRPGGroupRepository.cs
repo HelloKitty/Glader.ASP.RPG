@@ -28,6 +28,14 @@ namespace Glader.ASP.RPG
 				.AnyAsync(gm => gm.CharacterId == characterId, token);
 		}
 
+		/// <inheritdoc />
+		public async Task<DBRPGGroupMember> RetrieveGroupMemberAsync(int characterId, CancellationToken token = default)
+		{
+			return await Context.Set<DBRPGGroupMember>()
+				.Include(gm => gm.Group)
+				.FirstOrDefaultAsync(gm => gm.CharacterId == characterId, token);
+		}
+
 		public override async Task<DBRPGGroup> RetrieveAsync(int key, CancellationToken token = default, bool includeNavigationProperties = false)
 		{
 			if (includeNavigationProperties)
