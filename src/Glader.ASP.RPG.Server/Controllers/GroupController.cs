@@ -148,7 +148,7 @@ namespace Glader.ASP.RPG
 		}
 
 		[HttpGet("Member/{cid}")]
-		public async Task<ResponseModel<RPGGroupData, GroupDataQueryResponseCode>> RetrieveMemberGroupAsync(int characterId, CancellationToken token = default)
+		public async Task<ResponseModel<RPGGroupData, GroupDataQueryResponseCode>> RetrieveMemberGroupAsync([FromRoute(Name = "cid")] int characterId, CancellationToken token = default)
 		{
 			//If the users isn't in a group then we have nothing we can do.
 			if(!await GroupRepository.IsInGroupAsync(characterId, token))
