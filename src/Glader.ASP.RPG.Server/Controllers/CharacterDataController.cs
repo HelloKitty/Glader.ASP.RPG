@@ -67,6 +67,18 @@ namespace Glader.ASP.RPG
 		/// <inheritdoc />
 		[ProducesJson]
 		[AuthorizeJwt]
+		[HttpGet]
+		public async Task<int> RetrieveAuthorizedCharacterAsync(CancellationToken token = default)
+		{
+			//Idea here is that a principal used for authorization may contain the claim for
+			//the subaccount id. The subaccount id is to be treated as the character id
+			//in our backend.
+			return ClaimsReader.GetCharacterId(User);
+		}
+
+		/// <inheritdoc />
+		[ProducesJson]
+		[AuthorizeJwt]
 		[HttpPost("Characters")]
 		public async Task<ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>> 
 			CreateCharacterAsync([FromBody] RPGCharacterCreationRequest<TRaceType, TClassType> request, CancellationToken token = default)

@@ -36,5 +36,14 @@ namespace Glader.ASP.RPG
 		/// <returns>An array of all RPG Character Data.</returns>
 		[Get("/api/CharacterData/Characters/{id}")]
 		Task<ResponseModel<RPGCharacterData<TRaceType, TClassType>, CharacterDataQueryResponseCode>> RetrieveCharacterDataAsync([AliasAs("id")] int characterId, CancellationToken token = default);
+
+		/// <summary>
+		/// REST endpoint that gets the character id that the user is authorized for.
+		/// </summary>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>An array of all RPG Character Data.</returns>
+		[RequiresAuthentication]
+		[Get("/api/CharacterData")]
+		Task<int> RetrieveAuthorizedCharacterAsync(CancellationToken token = default);
 	}
 }
