@@ -109,6 +109,13 @@ namespace Glader.ASP.RPG
 			return new FullCharacterData<TRaceType, TClassType>(data.character, data.def);
 		}
 
+		/// <inheritdoc />
+		public async Task<int> RetrieveAssociatedAccountIdAsync(int characterId, CancellationToken token = default)
+		{
+			var result = await Context.CharacterOwnership.FirstOrDefaultAsync(co => co.CharacterId == characterId, token);
+			return result.OwnershipId;
+		}
+
 		public override async Task<DBRPGCharacter> RetrieveAsync(int key, CancellationToken token = new CancellationToken(), bool includeNavigationProperties = false)
 		{
 			//INCLUDE IS REQUIRED TO GET PROGRESS

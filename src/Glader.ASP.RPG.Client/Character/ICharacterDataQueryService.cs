@@ -45,5 +45,9 @@ namespace Glader.ASP.RPG
 		[RequiresAuthentication]
 		[Get("/api/CharacterData")]
 		Task<int> RetrieveAuthorizedCharacterAsync(CancellationToken token = default);
+
+		//TODO: We should constrain this to a SERVER or ADMIN role
+		[Get("/api/CharacterData/Characters/{id}/account")]
+		Task<ResponseModel<RPGCharacterAccountData, CharacterDataQueryResponseCode>> RetrieveAccountAsync([AliasAs("id")] int characterId, CancellationToken token = default);
 	}
 }

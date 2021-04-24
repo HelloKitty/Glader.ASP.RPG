@@ -68,5 +68,13 @@ namespace Glader.ASP.RPG
 		/// <param name="token"></param>
 		/// <returns></returns>
 		Task<FullCharacterData<TRaceType, TClassType>> RetrieveFullCharacterDataAsync(int id, CancellationToken token = default);
+
+		/// <summary>
+		/// Retrieves the account id associated with the <see cref="characterId"/>.
+		/// </summary>
+		/// <param name="characterId">The character id.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>The account id associated with the character.</returns>
+		Task<int> RetrieveAssociatedAccountIdAsync(int characterId, CancellationToken token = default);
 	}
 }

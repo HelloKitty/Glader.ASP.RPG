@@ -76,6 +76,17 @@ namespace Glader.ASP.RPG
 			return ClaimsReader.GetCharacterId(User);
 		}
 
+		//TODO: We should constrain this to a SERVER or ADMIN role
+		[HttpGet("Characters/{id}/account")]
+		public async Task<ResponseModel<RPGCharacterAccountData, CharacterDataQueryResponseCode>> RetrieveAccountAsync([FromRoute(Name = "id")] int characterId, CancellationToken token = default)
+		{
+			if (!await CharacterRepository.ContainsAsync(characterId, token))
+				return Failure<RPGCharacterAccountData, CharacterDataQueryResponseCode>(CharacterDataQueryResponseCode.CharacterDoesNotExist);
+
+			int accountId = await CharacterRepository.RetrieveAssociatedAccountIdAsync(characterId, token);
+			return Success<RPGCharacterAccountData, CharacterDataQueryResponseCode>(new RPGCharacterAccountData(accountId));
+		}
+
 		/// <inheritdoc />
 		[ProducesJson]
 		[AuthorizeJwt]
