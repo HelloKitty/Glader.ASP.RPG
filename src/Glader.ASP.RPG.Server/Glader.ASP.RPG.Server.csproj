@@ -6,7 +6,7 @@
 
   <PropertyGroup>
     <RootNamespace>Glader.ASP.RPG</RootNamespace>
-    <Version>0.1.15</Version>
+    <Version>0.1.16</Version>
     <Authors>Andrew Blakely, Glader</Authors>
     <Product>Glader.ASP.RPG</Product>
     <Description>Glader.ASP.RPG is an ASP Core, EntityFramework, Refit-based and JSON-based Role-playing Game library.</Description>
