@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace Glader.ASP.RPG
@@ -10,6 +11,7 @@ namespace Glader.ASP.RPG
 	/// Table for RPG Race.
 	/// </summary>
 	/// <typeparam name="TRaceType">The race type.</typeparam>
+	[DataContract]
 	[Table("race")]
 	public class DBRPGRace<TRaceType> : IModelDescriptable
 		where TRaceType : Enum
@@ -19,16 +21,19 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
+		[DataMember(Order = 1)]
 		public TRaceType Id { get; private set; }
 
 		/// <summary>
 		/// The visual human-readable name for the race.
 		/// </summary>
+		[DataMember(Order = 2)]
 		public string VisualName { get; private set; }
 
 		/// <summary>
 		/// The description of the race.
 		/// </summary>
+		[DataMember(Order = 3)]
 		public string Description { get; private set; }
 
 		public DBRPGRace(TRaceType race, string visualName, string description)
