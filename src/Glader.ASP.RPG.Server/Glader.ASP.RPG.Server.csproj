@@ -36,6 +36,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Glader.ASP.RPG.Client\Glader.ASP.RPG.Client.csproj" />
     <ProjectReference Include="..\Glader.ASP.RPG.Common\Glader.ASP.RPG.Common.csproj" />
+    <ProjectReference Include="..\Glader.ASP.RPG.GameData\Glader.ASP.RPG.GameData.csproj" />
     <ProjectReference Include="..\Glader.ASP.RPG.Models\Glader.ASP.RPG.Models.csproj" />
   </ItemGroup>
 
