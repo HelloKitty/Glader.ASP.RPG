@@ -8,12 +8,12 @@ using Glader.ASP.RPG;
 
 namespace Glader.ASP.RPG
 {
-    [GeneratedCodeAttribute("GGDBF", "0.0.8.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.11.0")]
     public interface IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType> : IGGDBFContext where TSkillType : System.Enum
-   where TRaceType : System.Enum
-   where TClassType : System.Enum
-   where TProportionSlotType : System.Enum
-   where TCustomizableSlotType : System.Enum
+       where TRaceType : System.Enum
+       where TClassType : System.Enum
+       where TProportionSlotType : System.Enum
+       where TCustomizableSlotType : System.Enum
     {
         public IReadOnlyDictionary<TSkillType, DBRPGSkill<TSkillType>> Skill { get; init; }
 
@@ -27,12 +27,12 @@ namespace Glader.ASP.RPG
 
     }
 
-    [GeneratedCodeAttribute("GGDBF", "0.0.8.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.11.0")]
     public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType> : IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType> where TSkillType : System.Enum
-    where TRaceType : System.Enum
-    where TClassType : System.Enum
-    where TProportionSlotType : System.Enum
-    where TCustomizableSlotType : System.Enum
+        where TRaceType : System.Enum
+        where TClassType : System.Enum
+        where TProportionSlotType : System.Enum
+        where TCustomizableSlotType : System.Enum
     {
         public static RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType> Instance { get; private set; }
 
