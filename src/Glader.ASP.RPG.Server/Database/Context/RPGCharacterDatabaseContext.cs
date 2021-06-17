@@ -106,13 +106,14 @@ namespace Glader.ASP.RPG
 		}
 	}
 
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType> 
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> 
 		: RPGCharacterDatabaseContext<TRaceType, TClassType>
 		where TCustomizableSlotType : Enum
 		where TProportionSlotType : Enum
 		where TRaceType : Enum
 		where TClassType : Enum
 		where TSkillType : Enum
+		where TStatType : Enum
 	{
 		/// <summary>
 		/// The customized slots for the character.
@@ -140,7 +141,9 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGSkill<TSkillType>> Skills { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType>> options)
+		public DbSet<DBRPGStat<TStatType>> Stats { get; set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>> options)
 			: base(options)
 		{
 
