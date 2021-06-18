@@ -143,6 +143,8 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGStat<TStatType>> Stats { get; set; }
 
+		public DbSet<DBRPGStatDefault<TStatType, TRaceType, TClassType>> StatDefaults { get; set; }
+
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>> options)
 			: base(options)
 		{
@@ -237,6 +239,18 @@ namespace Glader.ASP.RPG
 					.WithMany()
 					.HasForeignKey(c => c.CharacterId);
 			});
+
+			modelBuilder.Entity<DBRPGStatDefault<TStatType, TRaceType, TClassType>>(builder =>
+			{
+				builder.OwnsMany<RPGStatDefinition<TStatType>>(m => m.Stats);
+				builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});
+			});
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGStat<TStatType>>().HasData(
+				((TStatType[])Enum.GetValues(typeof(TStatType)))
+				.Select(v => new DBRPGStat<TStatType>(v, v.ToString(), String.Empty))
+				.ToArray());
 		}
 	}
 }
