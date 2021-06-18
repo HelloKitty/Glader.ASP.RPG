@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using GGDBF;
@@ -9,7 +10,19 @@ using GGDBF;
 namespace Glader.ASP.RPG
 {
 	//TODO: Find a way to configure as owned without referencing EF Core.
-	public record RPGStatDefinition<TStatType>([property: Key] TStatType Id, int Value);
+	public record RPGStatDefinition<TStatType>([property: Key] TStatType Id, int Value)
+	{
+		public static IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>> Empty { get; } 
+
+		static RPGStatDefinition()
+		{
+			var map = new Dictionary<TStatType, RPGStatDefinition<TStatType>>();
+			foreach (var stat in Enum.GetValues(typeof(TStatType)).Cast<TStatType>())
+				map[stat] = new RPGStatDefinition<TStatType>(stat, default);
+
+			Empty = map;
+		}
+	};
 
 	/// <summary>
 	/// Table for for default stats gained based on race/class/level.
