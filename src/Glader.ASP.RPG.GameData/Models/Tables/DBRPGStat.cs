@@ -10,7 +10,7 @@ namespace Glader.ASP.RPG
 	/// <summary>
 	/// Table for RPG Stats.
 	/// </summary>
-	/// <typeparam name="TStatType">The class type.</typeparam>
+	/// <typeparam name="TStatType">The stat type.</typeparam>
 	[DataContract]
 	[Table("stat")]
 	public class DBRPGStat<TStatType> : IModelDescriptable
