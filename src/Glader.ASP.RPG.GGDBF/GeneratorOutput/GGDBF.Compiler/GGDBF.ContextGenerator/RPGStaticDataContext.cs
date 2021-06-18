@@ -8,7 +8,7 @@ using Glader.ASP.RPG;
 
 namespace Glader.ASP.RPG
 {
-    [GeneratedCodeAttribute("GGDBF", "0.0.11.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.14.0")]
     public interface IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> : IGGDBFContext where TSkillType : System.Enum
        where TRaceType : System.Enum
        where TClassType : System.Enum
@@ -28,9 +28,11 @@ namespace Glader.ASP.RPG
 
         public IReadOnlyDictionary<TStatType, DBRPGStat<TStatType>> Stat { get; init; }
 
+        public IReadOnlyDictionary<DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGStatDefault<TStatType, TRaceType, TClassType>> StatDefault { get; init; }
+
     }
 
-    [GeneratedCodeAttribute("GGDBF", "0.0.11.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.14.0")]
     public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> : IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> where TSkillType : System.Enum
         where TRaceType : System.Enum
         where TClassType : System.Enum
@@ -50,6 +52,7 @@ namespace Glader.ASP.RPG
                 CharacterCustomizationSlotType = await source.RetrieveTableAsync<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>(new NameOverrideTableRetrievalConfig<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>("CharacterCustomizationSlotType")),
                 CharacterProportionSlotType = await source.RetrieveTableAsync<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>>(new NameOverrideTableRetrievalConfig<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>>("CharacterProportionSlotType")),
                 Stat = await source.RetrieveTableAsync<TStatType, DBRPGStat<TStatType>>(new NameOverrideTableRetrievalConfig<TStatType, DBRPGStat<TStatType>>("Stat")),
+                StatDefault = await source.RetrieveTableAsync<DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGStatDefault<TStatType, TRaceType, TClassType>, RPGStaticDataContext_DBRPGStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType>>(new NameOverrideTableRetrievalConfig<DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGStatDefault<TStatType, TRaceType, TClassType>>("StatDefault") { KeyResolutionFunction = m => new DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>(m.Level, m.RaceId, m.ClassId) }),
             };
         }
     }
