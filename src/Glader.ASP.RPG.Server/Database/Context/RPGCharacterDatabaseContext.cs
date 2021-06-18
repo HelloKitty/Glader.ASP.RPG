@@ -143,7 +143,7 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGStat<TStatType>> Stats { get; set; }
 
-		public DbSet<DBRPGStatDefault<TStatType, TRaceType, TClassType>> StatDefaults { get; set; }
+		public DbSet<DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>> StatDefaults { get; set; }
 
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>> options)
 			: base(options)
@@ -240,7 +240,7 @@ namespace Glader.ASP.RPG
 					.HasForeignKey(c => c.CharacterId);
 			});
 
-			modelBuilder.Entity<DBRPGStatDefault<TStatType, TRaceType, TClassType>>(builder =>
+			modelBuilder.Entity<DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>(builder =>
 			{
 				builder.OwnsMany<RPGStatDefinition<TStatType>>(m => m.Stats);
 				builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});

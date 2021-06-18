@@ -28,7 +28,7 @@ namespace Glader.ASP.RPG
 
         public IReadOnlyDictionary<TStatType, DBRPGStat<TStatType>> Stat { get; init; }
 
-        public IReadOnlyDictionary<DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGStatDefault<TStatType, TRaceType, TClassType>> StatDefault { get; init; }
+        public IReadOnlyDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>> CharacterStatDefault { get; init; }
 
     }
 
@@ -52,7 +52,7 @@ namespace Glader.ASP.RPG
                 CharacterCustomizationSlotType = await source.RetrieveTableAsync<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>(new NameOverrideTableRetrievalConfig<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>("CharacterCustomizationSlotType")),
                 CharacterProportionSlotType = await source.RetrieveTableAsync<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>>(new NameOverrideTableRetrievalConfig<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>>("CharacterProportionSlotType")),
                 Stat = await source.RetrieveTableAsync<TStatType, DBRPGStat<TStatType>>(new NameOverrideTableRetrievalConfig<TStatType, DBRPGStat<TStatType>>("Stat")),
-                StatDefault = await source.RetrieveTableAsync<DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGStatDefault<TStatType, TRaceType, TClassType>, RPGStaticDataContext_DBRPGStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType>>(new NameOverrideTableRetrievalConfig<DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGStatDefault<TStatType, TRaceType, TClassType>>("StatDefault") { KeyResolutionFunction = m => new DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>(m.Level, m.RaceId, m.ClassId) }),
+                CharacterStatDefault = await source.RetrieveTableAsync<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>, RPGStaticDataContext_DBRPGCharacterStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType>>(new NameOverrideTableRetrievalConfig<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>("CharacterStatDefault") { KeyResolutionFunction = m => new DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>(m.Level, m.RaceId, m.ClassId) }),
             };
         }
     }

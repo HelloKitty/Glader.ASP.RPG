@@ -10,7 +10,7 @@ namespace Glader.ASP.RPG
 	[RequiredDataModel(typeof(DBRPGCharacterCustomizableSlotType<>))]
 	[RequiredDataModel(typeof(DBRPGCharacterProportionSlotType<>))]
 	[RequiredDataModel(typeof(DBRPGStat<>))]
-	[RequiredDataModel(typeof(DBRPGStatDefault<,,>))]
+	[RequiredDataModel(typeof(DBRPGCharacterStatDefault<,,>))]
 	public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> 
 		where TSkillType : Enum 
 		where TRaceType : Enum
@@ -31,6 +31,6 @@ namespace Glader.ASP.RPG
 
 		public IReadOnlyDictionary<TStatType, DBRPGStat<TStatType>> Stat { get; init; }
 
-		public IReadOnlyDictionary<DBRPGStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGStatDefault<TStatType, TRaceType, TClassType>> StatDefault { get; init; }
+		public IReadOnlyDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>> CharacterStatDefault { get; init; }
 	}
 }

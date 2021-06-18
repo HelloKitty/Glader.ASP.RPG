@@ -20,8 +20,8 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TClassType">The class type.</typeparam>
 	[DataContract]
 	[CompositeKeyHint(nameof(Level), nameof(RaceId), nameof(ClassId))]
-	[Table("stat_default")]
-	public class DBRPGStatDefault<TStatType, TRaceType, TClassType>
+	[Table("character_stat_default")]
+	public class DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>
 		where TStatType : Enum 
 		where TRaceType : Enum
 		where TClassType : Enum
@@ -50,7 +50,7 @@ namespace Glader.ASP.RPG
 		[DataMember(Order = 4)]
 		public ICollection<RPGStatDefinition<TStatType>> Stats { get; private set; }
 
-		public DBRPGStatDefault(int level, TRaceType raceId, TClassType classId)
+		public DBRPGCharacterStatDefault(int level, TRaceType raceId, TClassType classId)
 		{
 			if (level <= 0) throw new ArgumentOutOfRangeException(nameof(level));
 			Level = level;
@@ -58,7 +58,7 @@ namespace Glader.ASP.RPG
 			ClassId = classId ?? throw new ArgumentNullException(nameof(classId));
 		}
 
-		public DBRPGStatDefault()
+		public DBRPGCharacterStatDefault()
 		{
 			
 		}
