@@ -20,8 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="Glader.ASP.Authentication.Models" Version="0.0.5" />
-    <PackageReference Include="Glader.Essentials.ASP" Version="2.2.68" />
-    <PackageReference Include="Glader.Essentials.Database" Version="2.2.68" />
+    <PackageReference Include="Glader.Essentials.ASP" Version="2.2.73" />
+    <PackageReference Include="Glader.Essentials.Database" Version="2.2.73" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
