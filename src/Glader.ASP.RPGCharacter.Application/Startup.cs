@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using GGDBF;
 using Glader.Essentials;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,14 @@ namespace Glader.ASP.RPG
 		{
 			services.AddControllers()
 				.RegisterCharacterDataController<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType>()
+				.RegisterGGDBFController()
 				.AddNewtonsoftJson();
+
+			services.AddTransient<EntityFrameworkGGDBFDataSource>();
+
+			//TODO: Maybe put this in the RegisterGGDBF
+			//GGDBF requires a datasource registered
+			services.RegisterGGDBFContentServices<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter>();
 
 			services.RegisterCharacterDatabase<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType>(builder =>
 			{
@@ -40,7 +48,7 @@ namespace Glader.ASP.RPG
 				{
 					optionsBuilder.MigrationsAssembly(GetType().Assembly.FullName);
 				});
-			});
+			}, true);
 
 			services.RegisterGladerASP();
 

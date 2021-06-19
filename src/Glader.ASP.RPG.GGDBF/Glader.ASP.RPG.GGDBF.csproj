@@ -43,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGDBF.Compiler" Version="0.0.14" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    <PackageReference Include="GGDBF.Compiler" Version="0.0.19" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
 
   <ItemGroup>

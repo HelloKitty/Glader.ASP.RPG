@@ -8,7 +8,7 @@ using Glader.ASP.RPG;
 
 namespace Glader.ASP.RPG
 {
-    [GeneratedCodeAttribute("GGDBF", "0.0.14.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.19.0")]
     public interface IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> : IGGDBFContext where TSkillType : System.Enum
        where TRaceType : System.Enum
        where TClassType : System.Enum
@@ -32,7 +32,7 @@ namespace Glader.ASP.RPG
 
     }
 
-    [GeneratedCodeAttribute("GGDBF", "0.0.14.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.19.0")]
     public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> : IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> where TSkillType : System.Enum
         where TRaceType : System.Enum
         where TClassType : System.Enum

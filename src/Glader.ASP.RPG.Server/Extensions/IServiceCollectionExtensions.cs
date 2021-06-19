@@ -14,8 +14,9 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		/// <param name="services">Service container.</param>
 		/// <param name="optionsAction">The DB context options action.</param>
+		/// <param name="registerAsDbContext">Optionally registers the database context as resolveable by DBContext too.</param>
 		/// <returns></returns>
-		public static IServiceCollection RegisterCharacterDatabase<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction)
+		public static IServiceCollection RegisterCharacterDatabase<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>(this IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction, bool registerAsDbContext = false)
 			where TCustomizableSlotType : Enum 
 			where TProportionSlotType : Enum
 			where TRaceType : Enum
@@ -27,6 +28,9 @@ namespace Glader.ASP.RPG
 			if (optionsAction == null) throw new ArgumentNullException(nameof(optionsAction));
 
 			services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>(optionsAction);
+
+			if (registerAsDbContext)
+				services.AddTransient<DbContext>(provider => provider.GetService<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>());
 
 			//Registered for consumers of non-generic context
 			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext>, NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>();

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GGDBF.DataSource.Http" Version="0.0.19" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Glader.ASP.RPG.GGDBF\Glader.ASP.RPG.GGDBF.csproj" />
+    <ProjectReference Include="..\Glader.ASP.RPG.TestData\Glader.ASP.RPG.TestData.csproj" />
+  </ItemGroup>
+
+</Project>

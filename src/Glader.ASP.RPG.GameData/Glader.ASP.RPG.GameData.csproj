@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGDBF.Common" Version="0.0.14" />
+    <PackageReference Include="GGDBF.Common" Version="0.0.19" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 
