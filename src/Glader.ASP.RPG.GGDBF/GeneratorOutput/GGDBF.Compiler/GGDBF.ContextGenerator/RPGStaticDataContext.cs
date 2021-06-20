@@ -8,7 +8,7 @@ using Glader.ASP.RPG;
 
 namespace Glader.ASP.RPG
 {
-    [GeneratedCodeAttribute("GGDBF", "0.0.26.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.27.0")]
     public interface IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> : IGGDBFContext where TSkillType : System.Enum
        where TRaceType : System.Enum
        where TClassType : System.Enum
@@ -16,23 +16,23 @@ namespace Glader.ASP.RPG
        where TCustomizableSlotType : System.Enum
        where TStatType : System.Enum
     {
-        public IReadOnlyDictionary<TSkillType, DBRPGSkill<TSkillType>> Skill { get; init; }
+        public IReadOnlyDictionary<TSkillType, DBRPGSkill<TSkillType>> Skill { get; }
 
-        public IReadOnlyDictionary<TRaceType, DBRPGRace<TRaceType>> Race { get; init; }
+        public IReadOnlyDictionary<TRaceType, DBRPGRace<TRaceType>> Race { get; }
 
-        public IReadOnlyDictionary<TClassType, DBRPGClass<TClassType>> @Class { get; init; }
+        public IReadOnlyDictionary<TClassType, DBRPGClass<TClassType>> @Class { get; }
 
-        public IReadOnlyDictionary<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>> CharacterCustomizationSlotType { get; init; }
+        public IReadOnlyDictionary<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>> CharacterCustomizationSlotType { get; }
 
-        public IReadOnlyDictionary<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>> CharacterProportionSlotType { get; init; }
+        public IReadOnlyDictionary<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>> CharacterProportionSlotType { get; }
 
-        public IReadOnlyDictionary<TStatType, DBRPGStat<TStatType>> Stat { get; init; }
+        public IReadOnlyDictionary<TStatType, DBRPGStat<TStatType>> Stat { get; }
 
-        public IReadOnlyDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>> CharacterStatDefault { get; init; }
+        public IReadOnlyDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>> CharacterStatDefault { get; }
 
     }
 
-    [GeneratedCodeAttribute("GGDBF", "0.0.26.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.0.27.0")]
     public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> : IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType> where TSkillType : System.Enum
         where TRaceType : System.Enum
         where TClassType : System.Enum
