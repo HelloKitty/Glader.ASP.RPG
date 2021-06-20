@@ -9,8 +9,22 @@ namespace Glader.ASP.RPG.GGDBFStreamClientTest
 	{
 		static async Task Main(string[] args)
 		{
-			RefitHttpGGDBFDataSource dataSource = new RefitHttpGGDBFDataSource($@"https://localhost:5001/");
-			await dataSource.RetrieveTableAsync<TestClassType, DBRPGClass<TestClassType>>();
+			try
+			{
+				var dataSource = new RefitHttpGGDBFDataSource<RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>>($@"https://localhost:5001/", new RefitHttpGGDBFDataSourceOptions(true));
+				var tables = await dataSource.RetrieveTableAsync<DBRPGCharacterStatDefaultKey<TestStatType, TestRaceType, TestClassType>, DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>, RPGStaticDataContext_DBRPGCharacterStatDefault<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>>();
+				Console.WriteLine($"Meep");
+
+				await RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>.Initialize(dataSource);
+
+				Console.WriteLine(RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>.Instance.Class.Count);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
+
+			Console.ReadKey();
 		}
 	}
 }

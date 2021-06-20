@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGDBF.DataSource.EntityFramework" Version="0.0.19" />
-    <PackageReference Include="GGDBF.DataSource.Http.Server.ASP" Version="0.0.19" />
-    <PackageReference Include="GGDBF.Generator" Version="0.0.19" />
+    <PackageReference Include="GGDBF.DataSource.EntityFramework" Version="0.0.26" />
+    <PackageReference Include="GGDBF.DataSource.Http.Server.ASP" Version="0.0.26" />
+    <PackageReference Include="GGDBF.Generator" Version="0.0.26" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>

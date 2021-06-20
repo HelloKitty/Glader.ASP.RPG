@@ -16,6 +16,7 @@ using Glader.Essentials;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace Glader.ASP.RPG
 {
@@ -34,13 +35,16 @@ namespace Glader.ASP.RPG
 			services.AddControllers()
 				.RegisterCharacterDataController<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType>()
 				.RegisterGGDBFController()
-				.AddNewtonsoftJson();
+				.AddNewtonsoftJson(options =>
+				{
+					options.RegisterGGDBFSerializers();
+				});
 
 			services.AddTransient<EntityFrameworkGGDBFDataSource>();
 
 			//TODO: Maybe put this in the RegisterGGDBF
 			//GGDBF requires a datasource registered
-			services.RegisterGGDBFContentServices<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter>();
+			services.RegisterGGDBFContentServices<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter, RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>>();
 
 			services.RegisterCharacterDatabase<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType>(builder =>
 			{
