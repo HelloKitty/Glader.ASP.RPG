@@ -11,16 +11,9 @@ namespace Glader.ASP.RPG
 {
 	//TODO: Find a way to configure as owned without referencing EF Core.
 	public record RPGStatDefinition<TStatType>(TStatType Id, int Value)
+		where TStatType : Enum
 	{
 		public static IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>> Empty { get; }
-
-		/// <summary>
-		/// No reason to reference.
-		/// </summary>
-		[Key]
-		[IgnoreDataMember]
-		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-		public int Key { get; private set; }
 
 		static RPGStatDefinition()
 		{

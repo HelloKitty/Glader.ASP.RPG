@@ -8,7 +8,8 @@ using Glader.Essentials;
 
 namespace Glader.ASP.RPG
 {
-	internal static class DBRPGCharacterStatDefaultCache<TStatType, TRaceType, TClassType>
+	internal static class DBRPGCharacterStatDefaultCache<TStatType, TRaceType, TClassType> 
+		where TStatType : Enum
 	{
 		public static IDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>> BaseStatsCache { get; } = new ConcurrentDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>>();
 	}

@@ -242,8 +242,28 @@ namespace Glader.ASP.RPG
 
 			modelBuilder.Entity<DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>(builder =>
 			{
-				builder.OwnsMany<RPGStatDefinition<TStatType>>(m => m.Stats);
+				builder.OwnsMany(m => m.Stats, m =>
+				{
+					m.WithOwner()
+						.HasForeignKey(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Class), nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Race), nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level));
+
+					m.HasIndex(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Class),
+							nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Race),
+							nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level),
+							nameof(RPGStatDefinition<TStatType>.Id))
+						.IsUnique();
+				});
+
 				builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});
+			});
+
+			modelBuilder.Entity<RPGStatDefinition<TStatType>>(builder =>
+			{
+				//Adds FK to RPGStatDef to DBRPGStat
+				builder.HasOne<DBRPGStat<TStatType>>()
+					.WithOne()
+					.HasForeignKey<RPGStatDefinition<TStatType>>(s => s.Id)
+					.IsRequired();
 			});
 
 			//Seed the DB with the available enum entries.
