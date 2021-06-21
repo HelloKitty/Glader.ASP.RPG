@@ -9,9 +9,33 @@ using Glader.Essentials;
 namespace Glader.ASP.RPG
 {
 	internal static class DBRPGCharacterStatDefaultCache<TStatType, TRaceType, TClassType> 
-		where TStatType : Enum
+		where TStatType : Enum 
+		where TClassType : Enum 
+		where TRaceType : Enum
 	{
-		public static IDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>> BaseStatsCache { get; } = new ConcurrentDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>>();
+		private static object SyncObj = new object();
+
+		private static WeakReference<IReadOnlyDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>> TableWeakReference { get; set; } = new (null, false);
+
+		private static IDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>> _BaseStatsCache { get; set; } = new ConcurrentDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>>();
+
+		internal static IDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>> RetrieveStatsCache(IReadOnlyDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>> table)
+		{
+			//This should GENERALLY be really fast, just a ref compare and a return.
+			//Slow case the cache is dirty and re recreate it.
+			lock (SyncObj)
+			{
+				//Concept here is to check if it's the SAME table
+				if(TableWeakReference.TryGetTarget(out var storedTable))
+					if(Object.ReferenceEquals(storedTable, table))
+						return _BaseStatsCache;
+
+				//The table was out of date so we should clear the cache and update the weak reference for comparing.
+				_BaseStatsCache = new ConcurrentDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>>>();
+				TableWeakReference = new WeakReference<IReadOnlyDictionary<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>>(table, false);
+				return _BaseStatsCache;
+			}
+		}
 	}
 
 	public static class DBRPGCharacterStatDefaultExtensions
@@ -33,9 +57,10 @@ namespace Glader.ASP.RPG
 			where TClassType : Enum
 			where TStatType : Enum
 		{
+			var cache = DBRPGCharacterStatDefaultCache<TStatType, TRaceType, TClassType>.RetrieveStatsCache(table);
 			var cacheKey = new DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>(level, race, @class);
-			if (DBRPGCharacterStatDefaultCache<TStatType, TRaceType, TClassType>.BaseStatsCache.ContainsKey(cacheKey))
-				return DBRPGCharacterStatDefaultCache<TStatType, TRaceType, TClassType>.BaseStatsCache[cacheKey];
+			if (cache.ContainsKey(cacheKey))
+				return cache[cacheKey];
 
 			BaseStatsCacheDictionary<TStatType> results = new();
 
@@ -45,7 +70,7 @@ namespace Glader.ASP.RPG
 				.ForEach(results.AddStats);
 
 			//Add to cache so we don't have to calculate every time.
-			return DBRPGCharacterStatDefaultCache<TStatType, TRaceType, TClassType>.BaseStatsCache[cacheKey] = results;
+			return cache[cacheKey] = results;
 		}
 	}
 }
