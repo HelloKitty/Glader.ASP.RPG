@@ -32,10 +32,10 @@ namespace Glader.ASP.RPG
 		{
 			if (statDefinition == null) throw new ArgumentNullException(nameof(statDefinition));
 
-			if(this.ContainsKey(statDefinition.Id))
-				InternalMap[statDefinition.Id] = new RPGStatDefinition<TStatType>(statDefinition.Id, InternalMap[statDefinition.Id].Value + statDefinition.Value);
+			if(this.ContainsKey(statDefinition.Stat))
+				InternalMap[statDefinition.Stat] = new RPGStatDefinition<TStatType>(statDefinition.Stat, InternalMap[statDefinition.Stat].Value + statDefinition.Value);
 			else
-				InternalMap[statDefinition.Id] = statDefinition;
+				InternalMap[statDefinition.Stat] = statDefinition;
 		}
 
 		/// <inheritdoc />

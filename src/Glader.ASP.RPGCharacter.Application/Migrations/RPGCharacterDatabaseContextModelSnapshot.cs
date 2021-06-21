@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Glader.ASP.RPG.Application.Migrations
+namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType>))]
     partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
@@ -652,35 +652,35 @@ namespace Glader.ASP.RPG.Application.Migrations
 
                     b.OwnsMany("Glader.ASP.RPG.RPGStatDefinition<Glader.ASP.RPG.TestStatType>", "Stats", b1 =>
                         {
-                            b1.Property<int>("Key")
-                                .ValueGeneratedOnAdd()
+                            b1.Property<int>("Level")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>ClassId")
+                            b1.Property<int>("Race")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>Level")
-                                .HasColumnName("DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClas~1")
+                            b1.Property<int>("ClassId")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>RaceId")
-                                .HasColumnName("DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClas~2")
-                                .HasColumnType("int");
-
-                            b1.Property<int>("Id")
+                            b1.Property<int>("Stat")
                                 .HasColumnType("int");
 
                             b1.Property<int>("Value")
                                 .HasColumnType("int");
 
-                            b1.HasKey("Key");
+                            b1.HasKey("Level", "Race", "ClassId", "Stat");
 
-                            b1.HasIndex("DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>Level", "DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>RaceId", "DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>ClassId");
+                            b1.HasIndex("Stat");
 
                             b1.ToTable("RPGStatDefinition<TestStatType>");
 
+                            b1.HasOne("Glader.ASP.RPG.DBRPGStat<Glader.ASP.RPG.TestStatType>", null)
+                                .WithMany()
+                                .HasForeignKey("Stat")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
                             b1.WithOwner()
-                                .HasForeignKey("DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>Level", "DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>RaceId", "DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>ClassId");
+                                .HasForeignKey("Level", "Race", "ClassId");
                         });
                 });
 

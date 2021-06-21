@@ -244,27 +244,29 @@ namespace Glader.ASP.RPG
 			{
 				builder.OwnsMany(m => m.Stats, m =>
 				{
+					//WARNING: Make sure same order as the HasKey below: builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});
 					m.WithOwner()
-						.HasForeignKey(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Class), nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Race), nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level));
-
-					m.HasIndex(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Class),
+						.HasForeignKey(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level),
 							nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Race),
-							nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level),
-							nameof(RPGStatDefinition<TStatType>.Id))
-						.IsUnique();
+							nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.ClassId));
+
+					//WARNING: Make sure same order as the HasKey below: builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});
+					m.HasKey(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level),
+						nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Race),
+						nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.ClassId),
+						nameof(RPGStatDefinition<TStatType>.Stat));
+
+					//Adds FK to RPGStatDef to DBRPGStat
+					m.HasOne<DBRPGStat<TStatType>>()
+						.WithMany()
+						.HasForeignKey(definition => definition.Stat)
+						.IsRequired();
 				});
 
 				builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});
 			});
 
-			modelBuilder.Entity<RPGStatDefinition<TStatType>>(builder =>
-			{
-				//Adds FK to RPGStatDef to DBRPGStat
-				builder.HasOne<DBRPGStat<TStatType>>()
-					.WithOne()
-					.HasForeignKey<RPGStatDefinition<TStatType>>(s => s.Id)
-					.IsRequired();
-			});
+			modelBuilder.Owned<RPGStatDefinition<TStatType>>();
 
 			//Seed the DB with the available enum entries.
 			modelBuilder.Entity<DBRPGStat<TStatType>>().HasData(
