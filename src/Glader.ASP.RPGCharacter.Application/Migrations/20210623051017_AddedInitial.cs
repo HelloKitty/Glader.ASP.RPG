@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
-    public partial class NewInitial : Migration
+    public partial class AddedInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -328,10 +328,10 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RPGStatDefinition<TestStatType>",
+                name: "RPGStatValue<TestStatType>",
                 columns: table => new
                 {
-                    Stat = table.Column<int>(nullable: false),
+                    StatType = table.Column<int>(nullable: false),
                     Level = table.Column<int>(nullable: false),
                     Race = table.Column<int>(nullable: false),
                     ClassId = table.Column<int>(nullable: false),
@@ -339,15 +339,15 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RPGStatDefinition<TestStatType>", x => new { x.Level, x.Race, x.ClassId, x.Stat });
+                    table.PrimaryKey("PK_RPGStatValue<TestStatType>", x => new { x.Level, x.Race, x.ClassId, x.StatType });
                     table.ForeignKey(
-                        name: "FK_RPGStatDefinition<TestStatType>_stat_Stat",
-                        column: x => x.Stat,
+                        name: "FK_RPGStatValue<TestStatType>_stat_StatType",
+                        column: x => x.StatType,
                         principalTable: "stat",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_RPGStatDefinition<TestStatType>_character_stat_default_Level~",
+                        name: "FK_RPGStatValue<TestStatType>_character_stat_default_Level_Race~",
                         columns: x => new { x.Level, x.Race, x.ClassId },
                         principalTable: "character_stat_default",
                         principalColumns: new[] { "Level", "RaceId", "ClassId" },
@@ -524,9 +524,9 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RPGStatDefinition<TestStatType>_Stat",
-                table: "RPGStatDefinition<TestStatType>",
-                column: "Stat");
+                name: "IX_RPGStatValue<TestStatType>_StatType",
+                table: "RPGStatValue<TestStatType>",
+                column: "StatType");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -553,7 +553,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 name: "group_member");
 
             migrationBuilder.DropTable(
-                name: "RPGStatDefinition<TestStatType>");
+                name: "RPGStatValue<TestStatType>");
 
             migrationBuilder.DropTable(
                 name: "character_customization_slot_type");

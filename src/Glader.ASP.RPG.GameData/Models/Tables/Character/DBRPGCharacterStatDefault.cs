@@ -10,13 +10,18 @@ using GGDBF;
 namespace Glader.ASP.RPG
 {
 	[OwnedTypeHint]
-	public record RPGStatValue<TStatType>(TStatType StatType = default, int Value = default)
+	[DataContract]
+	public record RPGStatValue<TStatType>(
+		[property: DataMember(Order = 1)] TStatType StatType = default,
+		[property: DataMember(Order = 2)] int Value = default)
 		where TStatType : Enum
 	{
+		[IgnoreDataMember]
 		public static IReadOnlyDictionary<TStatType, RPGStatValue<TStatType>> Empty { get; }
 
 		//Foreign key is setup in code (due to issues with annotations when trying to generate)
-		[ForeignKeyHint(nameof(StatType), nameof(Stat))]
+		[IgnoreDataMember]
+		[ForeignKey(nameof(StatType))]
 		public virtual DBRPGStat<TStatType> Stat { get; private set; }
 
 		static RPGStatValue()

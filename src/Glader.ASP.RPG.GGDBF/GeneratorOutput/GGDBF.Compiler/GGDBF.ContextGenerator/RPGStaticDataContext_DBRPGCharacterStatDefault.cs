@@ -52,6 +52,12 @@ namespace Glader.ASP.RPG
         where TCustomizableSlotType : System.Enum
         where TStatType : System.Enum
     {
+        [IgnoreDataMemberAttribute]
+        public override Glader.ASP.RPG.DBRPGStat<TStatType> Stat
+        {
+            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType>.Instance.Stat[base.StatType];
+        }
+
         public void Initialize(IGGDBFDataConverter converter)
         {
         }

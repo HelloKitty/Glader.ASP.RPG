@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210623050614_AddedForeignKeyAttributeToStats.cs" />
+    <Compile Remove="Migrations\20210623050614_AddedForeignKeyAttributeToStats.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="GGDBF.DataSource.EntityFramework" Version="0.1.34" />
     <PackageReference Include="GGDBF.DataSource.Http.Server.ASP" Version="0.1.34" />
     <PackageReference Include="GGDBF.Generator" Version="0.1.34" />

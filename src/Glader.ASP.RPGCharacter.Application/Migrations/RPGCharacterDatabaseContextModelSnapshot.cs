@@ -650,7 +650,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Glader.ASP.RPG.RPGStatDefinition<Glader.ASP.RPG.TestStatType>", "Stats", b1 =>
+                    b.OwnsMany("Glader.ASP.RPG.RPGStatValue<Glader.ASP.RPG.TestStatType>", "Stats", b1 =>
                         {
                             b1.Property<int>("Level")
                                 .HasColumnType("int");
@@ -671,7 +671,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
                             b1.HasIndex("StatType");
 
-                            b1.ToTable("RPGStatDefinition<TestStatType>");
+                            b1.ToTable("RPGStatValue<TestStatType>");
 
                             b1.HasOne("Glader.ASP.RPG.DBRPGStat<Glader.ASP.RPG.TestStatType>", "Stat")
                                 .WithMany()

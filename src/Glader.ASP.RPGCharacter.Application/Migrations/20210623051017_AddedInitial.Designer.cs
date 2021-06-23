@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType>))]
-    [Migration("20210621080422_NewInitial")]
-    partial class NewInitial
+    [Migration("20210623051017_AddedInitial")]
+    partial class AddedInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -652,7 +652,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("Glader.ASP.RPG.RPGStatDefinition<Glader.ASP.RPG.TestStatType>", "Stats", b1 =>
+                    b.OwnsMany("Glader.ASP.RPG.RPGStatValue<Glader.ASP.RPG.TestStatType>", "Stats", b1 =>
                         {
                             b1.Property<int>("Level")
                                 .HasColumnType("int");
@@ -663,21 +663,21 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                             b1.Property<int>("ClassId")
                                 .HasColumnType("int");
 
-                            b1.Property<int>("Stat")
+                            b1.Property<int>("StatType")
                                 .HasColumnType("int");
 
                             b1.Property<int>("Value")
                                 .HasColumnType("int");
 
-                            b1.HasKey("Level", "Race", "ClassId", "Stat");
+                            b1.HasKey("Level", "Race", "ClassId", "StatType");
 
-                            b1.HasIndex("Stat");
+                            b1.HasIndex("StatType");
 
-                            b1.ToTable("RPGStatDefinition<TestStatType>");
+                            b1.ToTable("RPGStatValue<TestStatType>");
 
-                            b1.HasOne("Glader.ASP.RPG.DBRPGStat<Glader.ASP.RPG.TestStatType>", null)
+                            b1.HasOne("Glader.ASP.RPG.DBRPGStat<Glader.ASP.RPG.TestStatType>", "Stat")
                                 .WithMany()
-                                .HasForeignKey("Stat")
+                                .HasForeignKey("StatType")
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired();
 
