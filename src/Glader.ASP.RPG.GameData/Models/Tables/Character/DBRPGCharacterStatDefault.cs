@@ -9,11 +9,15 @@ using GGDBF;
 
 namespace Glader.ASP.RPG
 {
-	//TODO: Find a way to configure as owned without referencing EF Core.
-	public record RPGStatDefinition<TStatType>(TStatType Stat, int Value)
+	[OwnedTypeHint]
+	public record RPGStatDefinition<TStatType>(TStatType StatType = default, int Value = default)
 		where TStatType : Enum
 	{
 		public static IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>> Empty { get; }
+
+		//Foreign key is setup in code (due to issues with annotations when trying to generate)
+		[ForeignKeyHint(nameof(StatType), nameof(Stat))]
+		public virtual DBRPGStat<TStatType> Stat { get; private set; }
 
 		static RPGStatDefinition()
 		{
@@ -61,8 +65,9 @@ namespace Glader.ASP.RPG
 		public virtual DBRPGClass<TClassType> @Class { get; private set; }
 
 		//Serializable OwnedType collection of stats
-		[DataMember(Order = 4)]
-		public ICollection<RPGStatDefinition<TStatType>> Stats { get; private set; }
+		[OwnedTypeHint]
+		[IgnoreDataMember]
+		public virtual ICollection<RPGStatDefinition<TStatType>> Stats { get; private set; }
 
 		public DBRPGCharacterStatDefault(int level, TRaceType raceId, TClassType classId)
 		{

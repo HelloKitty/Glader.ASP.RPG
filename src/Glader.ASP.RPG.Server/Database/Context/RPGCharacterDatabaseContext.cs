@@ -254,12 +254,14 @@ namespace Glader.ASP.RPG
 					m.HasKey(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level),
 						nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Race),
 						nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.ClassId),
-						nameof(RPGStatDefinition<TStatType>.Stat));
+						nameof(RPGStatDefinition<TStatType>.StatType));
 
 					//Adds FK to RPGStatDef to DBRPGStat
-					m.HasOne<DBRPGStat<TStatType>>()
+					//Even though we have the prop we still NEED this because EF Core
+					//migration guilder chokes on this.
+					m.HasOne<DBRPGStat<TStatType>>(m => m.Stat)
 						.WithMany()
-						.HasForeignKey(definition => definition.Stat)
+						.HasForeignKey(definition => definition.StatType)
 						.IsRequired();
 				});
 
