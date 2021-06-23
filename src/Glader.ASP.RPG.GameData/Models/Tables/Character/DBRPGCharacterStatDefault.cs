@@ -10,20 +10,20 @@ using GGDBF;
 namespace Glader.ASP.RPG
 {
 	[OwnedTypeHint]
-	public record RPGStatDefinition<TStatType>(TStatType StatType = default, int Value = default)
+	public record RPGStatValue<TStatType>(TStatType StatType = default, int Value = default)
 		where TStatType : Enum
 	{
-		public static IReadOnlyDictionary<TStatType, RPGStatDefinition<TStatType>> Empty { get; }
+		public static IReadOnlyDictionary<TStatType, RPGStatValue<TStatType>> Empty { get; }
 
 		//Foreign key is setup in code (due to issues with annotations when trying to generate)
 		[ForeignKeyHint(nameof(StatType), nameof(Stat))]
 		public virtual DBRPGStat<TStatType> Stat { get; private set; }
 
-		static RPGStatDefinition()
+		static RPGStatValue()
 		{
-			var map = new Dictionary<TStatType, RPGStatDefinition<TStatType>>();
+			var map = new Dictionary<TStatType, RPGStatValue<TStatType>>();
 			foreach (var stat in Enum.GetValues(typeof(TStatType)).Cast<TStatType>())
-				map[stat] = new RPGStatDefinition<TStatType>(stat, default);
+				map[stat] = new RPGStatValue<TStatType>(stat, default);
 
 			Empty = map;
 		}
@@ -67,7 +67,7 @@ namespace Glader.ASP.RPG
 		//Serializable OwnedType collection of stats
 		[OwnedTypeHint]
 		[IgnoreDataMember]
-		public virtual ICollection<RPGStatDefinition<TStatType>> Stats { get; private set; }
+		public virtual ICollection<RPGStatValue<TStatType>> Stats { get; private set; }
 
 		public DBRPGCharacterStatDefault(int level, TRaceType raceId, TClassType classId)
 		{

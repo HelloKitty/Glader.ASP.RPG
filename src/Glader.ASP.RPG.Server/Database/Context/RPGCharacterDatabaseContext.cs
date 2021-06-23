@@ -254,7 +254,7 @@ namespace Glader.ASP.RPG
 					m.HasKey(nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Level),
 						nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.Race),
 						nameof(DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>.ClassId),
-						nameof(RPGStatDefinition<TStatType>.StatType));
+						nameof(RPGStatValue<TStatType>.StatType));
 
 					//Adds FK to RPGStatDef to DBRPGStat
 					//Even though we have the prop we still NEED this because EF Core
@@ -268,7 +268,7 @@ namespace Glader.ASP.RPG
 				builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});
 			});
 
-			modelBuilder.Owned<RPGStatDefinition<TStatType>>();
+			modelBuilder.Owned<RPGStatValue<TStatType>>();
 
 			//Seed the DB with the available enum entries.
 			modelBuilder.Entity<DBRPGStat<TStatType>>().HasData(
