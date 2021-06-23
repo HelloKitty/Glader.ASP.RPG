@@ -18,7 +18,7 @@ namespace Glader.ASP.RPG
 		/// REST endpoint that gets the character id that the user is authorized for.
 		/// </summary>
 		/// <param name="token">Cancel token.</param>
-		/// <returns>An array of all RPG Character Data.</returns>
+		/// <returns>The id of the character in the Auth token claim.</returns>
 		[RequiresAuthentication]
 		[Get("/api/CharacterData")]
 		Task<int> RetrieveAuthorizedCharacterAsync(CancellationToken token = default);
@@ -26,6 +26,16 @@ namespace Glader.ASP.RPG
 		//TODO: We should constrain this to a SERVER or ADMIN role
 		[Get("/api/CharacterData/Characters/{id}/account")]
 		Task<ResponseModel<RPGCharacterAccountData, CharacterDataQueryResponseCode>> RetrieveAccountAsync([AliasAs("id")] int characterId, CancellationToken token = default);
+
+		/// <summary>
+		/// Retrieves a basic integer array character list of all character associated with
+		/// the authorized account.
+		/// </summary>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>Sorted array of character ids matching the authorized account.</returns>
+		[RequiresAuthentication]
+		[Get("/api/CharacterData/CharactersBasic/")]
+		Task<int[]> RetrieveCharacterBasicListAsync(CancellationToken token = default);
 	}
 
 	/// <summary>

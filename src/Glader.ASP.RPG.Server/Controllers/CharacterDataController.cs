@@ -90,6 +90,22 @@ namespace Glader.ASP.RPG
 		/// <inheritdoc />
 		[ProducesJson]
 		[AuthorizeJwt]
+		[HttpGet("CharactersBasic")]
+		public async Task<int[]> RetrieveCharacterBasicListAsync(CancellationToken token = default)
+		{
+			//TODO: Properly handle failure and return correct response codes.
+			int accountId = ClaimsReader.GetAccountId<int>(User);
+
+			return (await CharacterRepository
+					.RetrieveOwnedCharactersAsync(accountId, token))
+				.Select(d => d.Character.Id)
+				.OrderBy(i => i)
+				.ToArray();
+		}
+
+		/// <inheritdoc />
+		[ProducesJson]
+		[AuthorizeJwt]
 		[HttpPost("Characters")]
 		public async Task<ResponseModel<RPGCharacterCreationResult, CharacterCreationResponseCode>> 
 			CreateCharacterAsync([FromBody] RPGCharacterCreationRequest<TRaceType, TClassType> request, CancellationToken token = default)
