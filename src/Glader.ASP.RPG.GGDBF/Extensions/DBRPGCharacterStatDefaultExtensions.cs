@@ -65,7 +65,9 @@ namespace Glader.ASP.RPG
 			BaseStatsCacheDictionary<TStatType> results = new();
 
 			//For every level we sum up the total of the default (base) stats a character would have.
-			table.Where(entry => entry.Value.Level <= level)
+			table.Where(entry => EqualityComparer<TClassType>.Default.Equals(entry.Value.ClassId, @class) 
+			                     && EqualityComparer<TRaceType>.Default.Equals(entry.Value.RaceId, race) 
+			                     && entry.Value.Level <= level)
 				.SelectMany(entry => entry.Value.Stats)
 				.ForEach(results.AddStats);
 
