@@ -139,11 +139,12 @@ namespace Glader.ASP.RPG
 			services.AddDbContext<TContextType>(optionsAction);
 		}
 
-		public static IServiceCollection RegisterGladerRPGGGDBF<TGGDBFDataSourceType, TGGDBFConverterType>(this IServiceCollection services, Func<RPGOptionsBuilder, RPGOptionsBuilder> rpgDatabaseOptionsBuilder)
+		public static IServiceCollection RegisterGladerRPGGGDBF<TGGDBFDataSourceType, TGGDBFConverterType>(this IServiceCollection services, Func<RPGOptionsBuilder, RPGOptionsBuilder> rpgDatabaseOptionsBuilder, IMvcBuilder mvcBuilder)
 			where TGGDBFDataSourceType : class, IGGDBFDataSource
 			where TGGDBFConverterType : class, IGGDBFDataConverter
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
+			if (mvcBuilder == null) throw new ArgumentNullException(nameof(mvcBuilder));
 
 			//RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>
 			var rpgOptions = rpgDatabaseOptionsBuilder(RPGOptionsBuilder.CreateDefault());
@@ -154,6 +155,12 @@ namespace Glader.ASP.RPG
 				.GetMethod(nameof(RegisterGGDBFContentServices), BindingFlags.Static | BindingFlags.NonPublic)
 				.MakeGenericMethod(new Type[]{ typeof(TGGDBFDataSourceType), typeof(TGGDBFConverterType), contextType })
 				.Invoke(null, new object[] { services });
+
+			mvcBuilder.RegisterGGDBFController()
+				.AddNewtonsoftJson(options =>
+				{
+					options.RegisterGGDBFSerializers();
+				});
 
 			return services;
 		}

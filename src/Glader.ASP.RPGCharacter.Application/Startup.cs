@@ -32,18 +32,13 @@ namespace Glader.ASP.RPG
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			var mvcBuilder = services.AddControllers()
-				.RegisterGGDBFController()
-				.AddNewtonsoftJson(options =>
-				{
-					options.RegisterGGDBFSerializers();
-				});
+			var mvcBuilder = services.AddControllers();
 
 			services.AddTransient<EntityFrameworkGGDBFDataSource>();
 
 			//TODO: Maybe put this in the RegisterGGDBF
 			//GGDBF requires a datasource registered
-			services.RegisterGladerRPGGGDBF<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter>(CreateRPGOptionsBuilder);
+			services.RegisterGladerRPGGGDBF<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter>(CreateRPGOptionsBuilder, mvcBuilder);
 
 			services.RegisterGladerRPGSystem(builder =>
 			{
