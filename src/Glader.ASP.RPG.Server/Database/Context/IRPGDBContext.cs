@@ -8,13 +8,11 @@ namespace Glader.ASP.RPG
 	/// <summary>
 	/// Database context adapter type.
 	/// </summary>
-	/// <typeparam name="TDBContextType">The requested DB Context type.</typeparam>
-	public interface IDBContextAdapter<out TDBContextType>
-		where TDBContextType : DbContext
+	public interface IRPGDBContext
 	{
 		/// <summary>
-		/// DB Context Type.
+		/// DB Context.
 		/// </summary>
-		TDBContextType Context { get; }
+		DbContext Context { get; }
 	}
 }

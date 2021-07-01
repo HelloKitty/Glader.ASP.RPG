@@ -18,13 +18,10 @@ namespace Glader.ASP.RPG
 		where TRaceType : Enum 
 		where TClassType : Enum
 	{
-		public new RPGCharacterDatabaseContext<TRaceType, TClassType> Context { get; }
-
-		public DefaultRPGCharacterRepository(IDBContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>> contextAdapter) 
+		public DefaultRPGCharacterRepository(IRPGDBContext contextAdapter) 
 			: base(contextAdapter.Context.Set<DBRPGCharacter>(), contextAdapter.Context)
 		{
-			if (contextAdapter == null) throw new ArgumentNullException(nameof(contextAdapter));
-			Context = contextAdapter.Context;
+
 		}
 
 		/// <inheritdoc />
@@ -32,11 +29,11 @@ namespace Glader.ASP.RPG
 		{
 			//INCLUDE IS REQUIRED TO GET PROGRESS
 			var fullCharacterDatas = await Context
-				.CharacterOwnership
+				.Set<DBRPGCharacterOwnership>()
 				.Include(o => o.Character).ThenInclude(o => o.Progress)
 				.Where(o => o.OwnershipId == ownershipId)
 				.Select(ownership => ownership.Character)
-				.Join(Context.CharacterDefinitions
+				.Join(Context.Set<DBRPGCharacterDefinition<TRaceType, TClassType>>()
 						.Include(d => d.Race)
 						.Include(d => d.Class),
 					character => character.Id,
@@ -56,20 +53,20 @@ namespace Glader.ASP.RPG
 			try
 			{
 				EntityEntry<DBRPGCharacter> entry = await Context
-					.Characters
+					.Set<DBRPGCharacter>()
 					.AddAsync(new DBRPGCharacter(name), token);
 
 				await Context.SaveChangesAsync(token);
 
 				//Now we link the character via the Ownership table
 				await Context
-					.CharacterOwnership
+					.Set<DBRPGCharacterOwnership>()
 					.AddAsync(new DBRPGCharacterOwnership(ownershipId, entry.Entity.Id), token);
 
 				//Now we add the race/class definition table entry (originally was apart of DBRPGCharacter but to keep things simple
 				//typed we try to avoid generic type parameter carrying.
 				await Context
-					.CharacterDefinitions
+					.Set<DBRPGCharacterDefinition<TRaceType, TClassType>>()
 					.AddRangeAsync(new DBRPGCharacterDefinition<TRaceType, TClassType>(entry.Entity.Id, race, classType));
 
 				await Context.SaveChangesAsync(token);
@@ -87,7 +84,7 @@ namespace Glader.ASP.RPG
 		public async Task<bool> AccountOwnsCharacterAsync(int ownershipId, int characterId, CancellationToken token = default)
 		{
 			return await Context
-				.CharacterOwnership
+				.Set<DBRPGCharacterOwnership>()
 				.AnyAsync(o => o.CharacterId == characterId && o.OwnershipId == ownershipId, token);
 		}
 
@@ -95,10 +92,10 @@ namespace Glader.ASP.RPG
 		public async Task<FullCharacterData<TRaceType, TClassType>> RetrieveFullCharacterDataAsync(int id, CancellationToken token = default)
 		{
 			var data = await Context
-				.Characters
+				.Set<DBRPGCharacter>()
 				.Include(o => o.Progress)
 				.Where(c => c.Id == id)
-				.Join(Context.CharacterDefinitions
+				.Join(Context.Set<DBRPGCharacterDefinition<TRaceType, TClassType>>()
 						.Include(d => d.Race)
 						.Include(d => d.Class),
 					character => character.Id,
@@ -112,7 +109,7 @@ namespace Glader.ASP.RPG
 		/// <inheritdoc />
 		public async Task<int> RetrieveAssociatedAccountIdAsync(int characterId, CancellationToken token = default)
 		{
-			var result = await Context.CharacterOwnership.FirstOrDefaultAsync(co => co.CharacterId == characterId, token);
+			var result = await Context.Set<DBRPGCharacterOwnership>().FirstOrDefaultAsync(co => co.CharacterId == characterId, token);
 			return result.OwnershipId;
 		}
 
@@ -120,7 +117,7 @@ namespace Glader.ASP.RPG
 		{
 			//INCLUDE IS REQUIRED TO GET PROGRESS
 			return await Context
-				.Characters
+				.Set<DBRPGCharacter>()
 				.Include(m => m.Progress)
 				.FirstAsync(m => m.Id == key, token);
 		}

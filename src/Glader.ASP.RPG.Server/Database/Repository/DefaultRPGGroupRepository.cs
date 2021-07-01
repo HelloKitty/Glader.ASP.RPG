@@ -15,8 +15,8 @@ namespace Glader.ASP.RPG
 	/// </summary>
 	public sealed class DefaultRPGGroupRepository : GeneralGenericCrudRepositoryProvider<int, DBRPGGroup>, IRPGGroupRepository
 	{
-		public DefaultRPGGroupRepository(IDBContextAdapter<RPGCharacterDatabaseContext> contextAdapter) 
-			: base(contextAdapter.Context.Groups, contextAdapter.Context)
+		public DefaultRPGGroupRepository(IRPGDBContext contextAdapter) 
+			: base(contextAdapter.Context.Set<DBRPGGroup>(), contextAdapter.Context)
 		{
 
 		}

@@ -8,7 +8,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPG
 {
-	public abstract class RPGCharacterDatabaseContext : DbContext
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> 
+		: DbContext
+		where TCustomizableSlotType : Enum
+		where TProportionSlotType : Enum
+		where TRaceType : Enum
+		where TClassType : Enum
+		where TSkillType : Enum
+		where TStatType : Enum
 	{
 		/// <summary>
 		/// The character table.
@@ -26,95 +33,12 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGGroupMember> GroupMembers { get; set; }
 
-		protected RPGCharacterDatabaseContext(DbContextOptions options)
-			: base(options)
-		{
-
-		}
-
-		protected RPGCharacterDatabaseContext()
-		{
-
-		}
-
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
-
-			modelBuilder.Entity<DBRPGCharacterProgress>(builder =>
-			{
-				builder.Property(c => c.PlayTime)
-					.HasDefaultValue(TimeSpan.Zero);
-			});
-
-			modelBuilder.Entity<DBRPGCharacterOwnership>(builder =>
-			{
-				//index by owner since we will query character lists and such.
-				builder.HasIndex(c => c.OwnershipId);
-
-				//Builds a composite key between the owner and characterid.
-				//EF Requires keys, keyless entities are second class citizens.
-				builder.HasKey(c => new { c.OwnershipId, c.CharacterId });
-			});
-		}
-	}
-
-	public abstract class RPGCharacterDatabaseContext<TRaceType, TClassType> : RPGCharacterDatabaseContext
-		where TRaceType : Enum 
-		where TClassType : Enum
-	{
 		public DbSet<DBRPGClass<TClassType>> Classes { get; set; }
 
 		public DbSet<DBRPGRace<TRaceType>> Races { get; set; }
 
 		public DbSet<DBRPGCharacterDefinition<TRaceType, TClassType>> CharacterDefinitions { get; set; }
 
-		protected RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TRaceType, TClassType>> options)
-			: base(options)
-		{
-
-		}
-
-		protected RPGCharacterDatabaseContext(DbContextOptions options)
-			: base(options)
-		{
-
-		}
-
-		protected RPGCharacterDatabaseContext()
-		{
-
-		}
-
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
-
-			//Seed the DB with the available enum entries.
-			modelBuilder.Entity<DBRPGRace<TRaceType>>().HasData(
-				((TRaceType[])Enum.GetValues(typeof(TRaceType)))
-				.Select(v => new DBRPGRace<TRaceType>(v, v.ToString(), String.Empty))
-				.ToArray()
-			);
-
-			//Seed the DB with the available enum entries.
-			modelBuilder.Entity<DBRPGClass<TClassType>>().HasData(
-				((TClassType[])Enum.GetValues(typeof(TClassType)))
-				.Select(v => new DBRPGClass<TClassType>(v, v.ToString(), String.Empty))
-				.ToArray()
-			);
-		}
-	}
-
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> 
-		: RPGCharacterDatabaseContext<TRaceType, TClassType>
-		where TCustomizableSlotType : Enum
-		where TProportionSlotType : Enum
-		where TRaceType : Enum
-		where TClassType : Enum
-		where TSkillType : Enum
-		where TStatType : Enum
-	{
 		/// <summary>
 		/// The customized slots for the character.
 		/// </summary>
@@ -160,6 +84,36 @@ namespace Glader.ASP.RPG
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
+
+			modelBuilder.Entity<DBRPGCharacterProgress>(builder =>
+			{
+				builder.Property(c => c.PlayTime)
+					.HasDefaultValue(TimeSpan.Zero);
+			});
+
+			modelBuilder.Entity<DBRPGCharacterOwnership>(builder =>
+			{
+				//index by owner since we will query character lists and such.
+				builder.HasIndex(c => c.OwnershipId);
+
+				//Builds a composite key between the owner and characterid.
+				//EF Requires keys, keyless entities are second class citizens.
+				builder.HasKey(c => new { c.OwnershipId, c.CharacterId });
+			});
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGRace<TRaceType>>().HasData(
+				((TRaceType[])Enum.GetValues(typeof(TRaceType)))
+				.Select(v => new DBRPGRace<TRaceType>(v, v.ToString(), String.Empty))
+				.ToArray()
+			);
+
+			//Seed the DB with the available enum entries.
+			modelBuilder.Entity<DBRPGClass<TClassType>>().HasData(
+				((TClassType[])Enum.GetValues(typeof(TClassType)))
+				.Select(v => new DBRPGClass<TClassType>(v, v.ToString(), String.Empty))
+				.ToArray()
+			);
 
 			modelBuilder.Entity<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>(builder =>
 			{

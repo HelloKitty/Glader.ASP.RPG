@@ -33,8 +33,7 @@ namespace Glader.ASP.RPG
 				services.AddTransient<DbContext>(provider => provider.GetService<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>());
 
 			//Registered for consumers of non-generic context
-			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext>, NonGenericCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>();
-			services.AddTransient<IDBContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>>, GenericCharacterDatabaseContextAdapter<RPGCharacterDatabaseContext<TRaceType, TClassType>, RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>>();
+			services.AddTransient<IRPGDBContext, DefaultCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>();
 
 			//DefaultServiceEndpointRepository : IServiceEndpointRepository
 			services.AddTransient<IRPGCharacterRepository<TRaceType, TClassType>, DefaultRPGCharacterRepository<TRaceType, TClassType>>();
