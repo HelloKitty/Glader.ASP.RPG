@@ -20,9 +20,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GGDBF.DataSource.Http.Server.ASP" Version="0.1.35" />
     <PackageReference Include="Glader.ASP.Authentication.Models" Version="0.0.5" />
-    <PackageReference Include="Glader.Essentials.ASP" Version="2.2.73" />
-    <PackageReference Include="Glader.Essentials.Database" Version="2.2.73" />
+    <PackageReference Include="Glader.Essentials.ASP" Version="2.2.74" />
+    <PackageReference Include="Glader.Essentials.Database" Version="2.2.74" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.0" />
@@ -38,6 +39,7 @@
     <ProjectReference Include="..\Glader.ASP.RPG.Client\Glader.ASP.RPG.Client.csproj" />
     <ProjectReference Include="..\Glader.ASP.RPG.Common\Glader.ASP.RPG.Common.csproj" />
     <ProjectReference Include="..\Glader.ASP.RPG.GameData\Glader.ASP.RPG.GameData.csproj" />
+    <ProjectReference Include="..\Glader.ASP.RPG.GGDBF\Glader.ASP.RPG.GGDBF.csproj" />
     <ProjectReference Include="..\Glader.ASP.RPG.Models\Glader.ASP.RPG.Models.csproj" />
   </ItemGroup>
 

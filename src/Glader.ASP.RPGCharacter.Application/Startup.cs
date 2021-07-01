@@ -32,8 +32,7 @@ namespace Glader.ASP.RPG
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddControllers()
-				.RegisterCharacterDataController<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType>()
+			var mvcBuilder = services.AddControllers()
 				.RegisterGGDBFController()
 				.AddNewtonsoftJson(options =>
 				{
@@ -44,27 +43,15 @@ namespace Glader.ASP.RPG
 
 			//TODO: Maybe put this in the RegisterGGDBF
 			//GGDBF requires a datasource registered
-			services.RegisterGGDBFContentServices<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter, RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>>();
+			services.RegisterGladerRPGGGDBF<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter>(CreateRPGOptionsBuilder);
 
-			//TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType
-			services.RegisterCharacterDatabase(builder =>
+			services.RegisterGladerRPGSystem(builder =>
 			{
 				builder.UseMySql("server=127.0.0.1;port=3306;Database=glader.test;Uid=root;Pwd=test;", optionsBuilder =>
 				{
 					optionsBuilder.MigrationsAssembly(GetType().Assembly.FullName);
 				});
-			}, builder =>
-			{
-				builder = builder with {RegisterAsNonGenericDBContext = true};
-
-				return builder
-					.WithCustomizationType<TestCustomizationSlotType, TestColorType>()
-					.WithProportionType<TestProportionSlotType, TestVectorType<float>>()
-					.WithRaceType<TestRaceType>()
-					.WithClassType<TestClassType>()
-					.WithSkillType<TestSkillType>()
-					.WithStatType<TestStatType>();
-			});
+			}, CreateRPGOptionsBuilder, mvcBuilder);
 
 			services.RegisterGladerASP();
 
@@ -88,6 +75,19 @@ namespace Glader.ASP.RPG
 					options.Audience = "auth-server";
 					options.TokenValidationParameters.ValidIssuer = "https://localhost:5003/";
 				});
+		}
+
+		private static RPGOptionsBuilder CreateRPGOptionsBuilder(RPGOptionsBuilder builder)
+		{
+			builder = builder with {RegisterAsNonGenericDBContext = true};
+
+			return builder
+				.WithCustomizationType<TestCustomizationSlotType, TestColorType>()
+				.WithProportionType<TestProportionSlotType, TestVectorType<float>>()
+				.WithRaceType<TestRaceType>()
+				.WithClassType<TestClassType>()
+				.WithSkillType<TestSkillType>()
+				.WithStatType<TestStatType>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
