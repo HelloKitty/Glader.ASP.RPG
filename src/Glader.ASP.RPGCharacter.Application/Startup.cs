@@ -46,13 +46,25 @@ namespace Glader.ASP.RPG
 			//GGDBF requires a datasource registered
 			services.RegisterGGDBFContentServices<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter, RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>>();
 
-			services.RegisterCharacterDatabase<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType>(builder =>
+			//TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType
+			services.RegisterCharacterDatabase(builder =>
 			{
 				builder.UseMySql("server=127.0.0.1;port=3306;Database=glader.test;Uid=root;Pwd=test;", optionsBuilder =>
 				{
 					optionsBuilder.MigrationsAssembly(GetType().Assembly.FullName);
 				});
-			}, true);
+			}, builder =>
+			{
+				builder = builder with {RegisterAsNonGenericDBContext = true};
+
+				return builder
+					.WithCustomizationType<TestCustomizationSlotType, TestColorType>()
+					.WithProportionType<TestProportionSlotType, TestVectorType<float>>()
+					.WithRaceType<TestRaceType>()
+					.WithClassType<TestClassType>()
+					.WithSkillType<TestSkillType>()
+					.WithStatType<TestStatType>();
+			});
 
 			services.RegisterGladerASP();
 
