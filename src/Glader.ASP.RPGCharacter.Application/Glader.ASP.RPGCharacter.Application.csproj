@@ -8,6 +8,26 @@
   <ItemGroup>
     <Compile Remove="Migrations\20210623050614_AddedForeignKeyAttributeToStats.cs" />
     <Compile Remove="Migrations\20210623050614_AddedForeignKeyAttributeToStats.Designer.cs" />
+    <Compile Remove="Migrations\20210707071754_AddedSubClassListOnItemClass.cs" />
+    <Compile Remove="Migrations\20210707071754_AddedSubClassListOnItemClass.Designer.cs" />
+    <Compile Remove="Migrations\20210707072132_AddedSubClassListOnItemClass.cs" />
+    <Compile Remove="Migrations\20210707072132_AddedSubClassListOnItemClass.Designer.cs" />
+    <Compile Remove="Migrations\20210707073219_AddedSubclassesLinkToItemClass.cs" />
+    <Compile Remove="Migrations\20210707073219_AddedSubclassesLinkToItemClass.Designer.cs" />
+    <Compile Remove="Migrations\20210707073704_AddedItemClassSubClassLink.cs" />
+    <Compile Remove="Migrations\20210707073704_AddedItemClassSubClassLink.Designer.cs" />
+    <Compile Remove="Migrations\20210707074057_AddedItemClassSubClassLink.cs" />
+    <Compile Remove="Migrations\20210707074057_AddedItemClassSubClassLink.Designer.cs" />
+    <Compile Remove="Migrations\20210707074549_AddedItemClassSubClassLink.cs" />
+    <Compile Remove="Migrations\20210707074549_AddedItemClassSubClassLink.Designer.cs" />
+    <Compile Remove="Migrations\20210707074809_AddedItemClassSubClassLink.cs" />
+    <Compile Remove="Migrations\20210707074809_AddedItemClassSubClassLink.Designer.cs" />
+    <Compile Remove="Migrations\20210707074919_AddedItemClassSubClassLink.cs" />
+    <Compile Remove="Migrations\20210707074919_AddedItemClassSubClassLink.Designer.cs" />
+    <Compile Remove="Migrations\20210707074955_AddedItemClassSubClassLink.cs" />
+    <Compile Remove="Migrations\20210707074955_AddedItemClassSubClassLink.Designer.cs" />
+    <Compile Remove="Migrations\20210707075057_AddedItemClassSubClassLink.cs" />
+    <Compile Remove="Migrations\20210707075057_AddedItemClassSubClassLink.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,16 +35,11 @@
     <PackageReference Include="GGDBF.DataSource.Http.Server.ASP" Version="0.1.35" />
     <PackageReference Include="GGDBF.Generator" Version="0.1.35" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.16">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

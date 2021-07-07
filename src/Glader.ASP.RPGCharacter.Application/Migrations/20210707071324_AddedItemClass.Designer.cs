@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPG;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType, TestItemClass>))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210707071324_AddedItemClass")]
+    partial class AddedItemClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -511,25 +513,6 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Glader.ASP.RPG.DBRPGSubItemClass<Glader.ASP.RPG.TestItemClass>", b =>
-                {
-                    b.Property<int>("ItemClassId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubClassId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("VisualName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.HasKey("ItemClassId", "SubClassId");
-
-                    b.ToTable("item_sub_class");
-                });
-
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterCustomizableSlot<Glader.ASP.RPG.TestCustomizationSlotType, Glader.ASP.RPG.TestColorType>", b =>
                 {
                     b.HasOne("Glader.ASP.RPG.DBRPGCharacter", null)
@@ -744,15 +727,6 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.HasOne("Glader.ASP.RPG.DBRPGGroup", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Glader.ASP.RPG.DBRPGSubItemClass<Glader.ASP.RPG.TestItemClass>", b =>
-                {
-                    b.HasOne("Glader.ASP.RPG.DBRPGItemClass<Glader.ASP.RPG.TestItemClass>", "ItemClass")
-                        .WithMany()
-                        .HasForeignKey("ItemClassId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

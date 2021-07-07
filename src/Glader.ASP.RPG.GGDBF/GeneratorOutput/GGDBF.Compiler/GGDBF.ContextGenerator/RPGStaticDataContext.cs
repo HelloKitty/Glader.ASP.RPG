@@ -33,6 +33,8 @@ namespace Glader.ASP.RPG
 
         public IReadOnlyDictionary<TItemClassType, DBRPGItemClass<TItemClassType>> ItemClass { get; }
 
+        public IReadOnlyDictionary<DBRPGSubItemClassKey<TItemClassType>, DBRPGSubItemClass<TItemClassType>> ItemSubClass { get; }
+
     }
 
     [GeneratedCodeAttribute("GGDBF", "0.1.35.0")]
@@ -58,6 +60,7 @@ namespace Glader.ASP.RPG
                 Stat = await source.RetrieveTableAsync<TStatType, DBRPGStat<TStatType>>(new NameOverrideTableRetrievalConfig<TStatType, DBRPGStat<TStatType>>("Stat")),
                 CharacterStatDefault = await source.RetrieveTableAsync<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>, RPGStaticDataContext_DBRPGCharacterStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>>(new NameOverrideTableRetrievalConfig<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>("CharacterStatDefault") { KeyResolutionFunction = m => new DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>(m.Level, m.RaceId, m.ClassId) }),
                 ItemClass = await source.RetrieveTableAsync<TItemClassType, DBRPGItemClass<TItemClassType>>(new NameOverrideTableRetrievalConfig<TItemClassType, DBRPGItemClass<TItemClassType>>("ItemClass")),
+                ItemSubClass = await source.RetrieveTableAsync<DBRPGSubItemClassKey<TItemClassType>, DBRPGSubItemClass<TItemClassType>, RPGStaticDataContext_DBRPGSubItemClass<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>>(new NameOverrideTableRetrievalConfig<DBRPGSubItemClassKey<TItemClassType>, DBRPGSubItemClass<TItemClassType>>("ItemSubClass") { KeyResolutionFunction = m => new DBRPGSubItemClassKey<TItemClassType>(m.ItemClassId, m.SubClassId) }),
             };
         }
     }
