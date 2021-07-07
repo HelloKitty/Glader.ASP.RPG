@@ -73,7 +73,7 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGItemClass<TItemClassType>> ItemClasses { get; set; }
 
-		public DbSet<DBRPGSubItemClass<TItemClassType>> ItemSubclasses { get; set; }
+		public DbSet<DBRPGSItemSubClass<TItemClassType>> ItemSubclasses { get; set; }
 
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType>> options)
 			: base(options)
@@ -241,7 +241,7 @@ namespace Glader.ASP.RPG
 				builder.SeedWithEnum<DBRPGItemClass<TItemClassType>, TItemClassType>(m => new DBRPGItemClass<TItemClassType>(m, m.ToString(), string.Empty));
 			});
 
-			modelBuilder.Entity<DBRPGSubItemClass<TItemClassType>>(builder =>
+			modelBuilder.Entity<DBRPGSItemSubClass<TItemClassType>>(builder =>
 			{
 				builder.HasKey(m => new {m.ItemClassId, m.SubClassId});
 			});

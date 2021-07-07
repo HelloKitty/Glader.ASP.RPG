@@ -15,7 +15,7 @@ namespace Glader.ASP.RPG
 	[DataContract]
 	[CompositeKeyHint(nameof(ItemClassId), nameof(SubClassId))]
 	[Table("item_sub_class")]
-	public class DBRPGSubItemClass<TItemClassType> : IModelDescriptable
+	public class DBRPGSItemSubClass<TItemClassType> : IModelDescriptable
 		where TItemClassType : Enum
 	{
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Glader.ASP.RPG
 		[DataMember(Order = 4)]
 		public string Description { get; private set; }
 
-		public DBRPGSubItemClass(int subClassId, TItemClassType itemClass, string visualName, string description)
+		public DBRPGSItemSubClass(int subClassId, TItemClassType itemClass, string visualName, string description)
 		{
 			if (subClassId <= 0) throw new ArgumentOutOfRangeException(nameof(subClassId));
 
@@ -56,7 +56,7 @@ namespace Glader.ASP.RPG
 			Description = description;
 		}
 
-		public DBRPGSubItemClass(int subClassId, TItemClassType itemClass)
+		public DBRPGSItemSubClass(int subClassId, TItemClassType itemClass)
 		{
 			if (subClassId <= 0) throw new ArgumentOutOfRangeException(nameof(subClassId));
 
@@ -69,7 +69,7 @@ namespace Glader.ASP.RPG
 		/// <summary>
 		/// Serializer ctor.
 		/// </summary>
-		public DBRPGSubItemClass()
+		public DBRPGSItemSubClass()
 		{
 
 		}

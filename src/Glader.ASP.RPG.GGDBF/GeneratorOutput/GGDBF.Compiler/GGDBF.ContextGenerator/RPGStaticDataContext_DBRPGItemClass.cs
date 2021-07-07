@@ -19,10 +19,10 @@ namespace Glader.ASP.RPG
        where TItemClassType : System.Enum
     {
         [DataMemberAttribute(Order = 1)]
-        public SerializableGGDBFCollection<DBRPGSubItemClassKey<TItemClassType>, DBRPGSubItemClass<TItemClassType>> _SerializedSubClasses;
+        public SerializableGGDBFCollection<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>> _SerializedSubClasses;
 
         [IgnoreDataMemberAttribute]
-        public override ICollection<DBRPGSubItemClass<TItemClassType>> SubClasses
+        public override ICollection<DBRPGSItemSubClass<TItemClassType>> SubClasses
         {
             get => _SerializedSubClasses != null ? _SerializedSubClasses.Load(RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>.Instance.ItemSubClass) : base.SubClasses;
         }
@@ -30,7 +30,7 @@ namespace Glader.ASP.RPG
 
         public void Initialize(IGGDBFDataConverter converter)
         {
-            _SerializedSubClasses = GGDBFHelpers.CreateSerializableCollection(m => new DBRPGSubItemClassKey<TItemClassType>(m.ItemClassId, m.SubClassId), SubClasses);
+            _SerializedSubClasses = GGDBFHelpers.CreateSerializableCollection(m => new DBRPGSItemSubClassKey<TItemClassType>(m.ItemClassId, m.SubClassId), SubClasses);
         }
     }
 }
