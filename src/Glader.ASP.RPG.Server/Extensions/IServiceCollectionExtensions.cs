@@ -126,7 +126,7 @@ namespace Glader.ASP.RPG
 			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
 			//IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
 			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>
-			services.AddTransient(typeof(IRPGCharacterAppearanceRepository<,,,>).MakeGenericType(rpgOptions.CustomizationTypes[0], rpgOptions.CustomizationTypes[1], rpgOptions.ProportionTypes[0], rpgOptions.ProportionTypes[1]), typeof(DefaultRPGCharacterAppearanceRepository<,,,,,,,,>).MakeGenericType(rpgOptions.BuildTypeParameters()));
+			services.AddTransient(typeof(IRPGCharacterAppearanceRepository<,,,>).MakeGenericType(rpgOptions.CustomizationTypes[0], rpgOptions.CustomizationTypes[1], rpgOptions.ProportionTypes[0], rpgOptions.ProportionTypes[1]), typeof(DefaultRPGCharacterAppearanceRepository<,,,>).MakeGenericType(rpgOptions.BuildTypeParameters()));
 
 			//DefaultRPGGroupRepository
 			services.AddTransient<IRPGGroupRepository, DefaultRPGGroupRepository>();
