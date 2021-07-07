@@ -36,6 +36,9 @@ namespace Glader.ASP.RPG
 		[DataMember(Order = 3)]
 		public string Description { get; private set; }
 
+		[InverseProperty(nameof(DBRPGSubItemClass<TItemClassType>.ItemClass))]
+		public virtual ICollection<DBRPGSubItemClass<TItemClassType>> SubClasses { get; private set; }
+
 		public DBRPGItemClass(TItemClassType itemClass, string visualName, string description)
 		{
 			Id = itemClass ?? throw new ArgumentNullException(nameof(itemClass));
