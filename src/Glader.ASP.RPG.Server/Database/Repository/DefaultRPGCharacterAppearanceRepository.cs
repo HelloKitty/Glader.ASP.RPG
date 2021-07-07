@@ -17,32 +17,24 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TColorStructureType"></typeparam>
 	/// <typeparam name="TProportionSlotType"></typeparam>
 	/// <typeparam name="TProportionStructureType"></typeparam>
-	/// <typeparam name="TRaceType"></typeparam>
-	/// <typeparam name="TClassType"></typeparam>
-	/// <typeparam name="TSkillType"></typeparam>
-	/// <typeparam name="TStatType"></typeparam>
-	/// <typeparam name="TItemClassType"></typeparam>
-	public sealed class DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
+	public sealed class DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
 		where TCustomizableSlotType : Enum 
 		where TProportionSlotType : Enum
-		where TRaceType : Enum
-		where TClassType : Enum
-		where TSkillType : Enum
-		where TStatType : Enum
-		where TItemClassType : Enum
 	{
-		private RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> Context { get; }
+		private DbContext Context { get; }
 
-		public DefaultRPGCharacterAppearanceRepository(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> context)
+		public DefaultRPGCharacterAppearanceRepository(IRPGDBContext context)
 		{
-			Context = context ?? throw new ArgumentNullException(nameof(context));
+			if (context == null) throw new ArgumentNullException(nameof(context));
+			Context = context.Context ?? throw new ArgumentNullException(nameof(context.Context));
 		}
 
 		/// <inheritdoc />
 		public async Task<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>[]> RetrieveAllCustomizedSlotsAsync(int characterId, CancellationToken token = default)
 		{
 			return await Context
-				.CustomizableSlots.Where(s => s.CharacterId == characterId)
+				.Set<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>()
+				.Where(s => s.CharacterId == characterId)
 				.ToArrayAsync(token);
 		}
 
@@ -50,7 +42,8 @@ namespace Glader.ASP.RPG
 		public async Task<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>[]> RetrieveAllProportionSlotsAsync(int characterId, CancellationToken token = default)
 		{
 			return await Context
-				.ProportionSlots.Where(s => s.CharacterId == characterId)
+				.Set<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>>()
+				.Where(s => s.CharacterId == characterId)
 				.ToArrayAsync(token);
 		}
 
@@ -58,7 +51,7 @@ namespace Glader.ASP.RPG
 		public async Task<bool> CreateSlotAsync(DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType> slot, CancellationToken token = default)
 		{
 			await Context
-				.CustomizableSlots
+				.Set<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>()
 				.AddAsync(slot, token);
 
 			//If we changed a row, then it was added.
@@ -69,7 +62,7 @@ namespace Glader.ASP.RPG
 		public async Task<bool> CreateSlotAsync(DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType> slot, CancellationToken token = default)
 		{
 			await Context
-				.ProportionSlots
+				.Set<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>>()
 				.AddAsync(slot, token);
 
 			//If we changed a row, then it was added.
@@ -80,7 +73,7 @@ namespace Glader.ASP.RPG
 		public async Task<bool> CreateSlotsAsync(DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>[] slots, CancellationToken token = default)
 		{
 			await Context
-				.CustomizableSlots
+				.Set<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>>()
 				.AddRangeAsync(slots, token);
 
 			//If we changed a row, then it was added.
@@ -91,7 +84,7 @@ namespace Glader.ASP.RPG
 		public async Task<bool> CreateSlotsAsync(DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>[] slots, CancellationToken token = default)
 		{
 			await Context
-				.ProportionSlots
+				.Set<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>>()
 				.AddRangeAsync(slots, token);
 
 			//If we changed a row, then it was added.
