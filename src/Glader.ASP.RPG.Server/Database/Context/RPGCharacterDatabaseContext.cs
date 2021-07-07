@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using Glader.Essentials;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPG
 {
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> 
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> 
 		: DbContext
 		where TCustomizableSlotType : Enum
 		where TProportionSlotType : Enum
@@ -16,6 +17,7 @@ namespace Glader.ASP.RPG
 		where TClassType : Enum
 		where TSkillType : Enum
 		where TStatType : Enum
+		where TItemClassType : Enum
 	{
 		/// <summary>
 		/// The character table.
@@ -69,7 +71,9 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>> StatDefaults { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>> options)
+		public DbSet<DBRPGItemClass<TItemClassType>> ItemClasses { get; set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType>> options)
 			: base(options)
 		{
 
@@ -229,6 +233,9 @@ namespace Glader.ASP.RPG
 				((TStatType[])Enum.GetValues(typeof(TStatType)))
 				.Select(v => new DBRPGStat<TStatType>(v, v.ToString(), String.Empty))
 				.ToArray());
+
+			modelBuilder.Entity<DBRPGItemClass<TItemClassType>>()
+				.SeedWithEnum<DBRPGItemClass<TItemClassType>, TItemClassType>(m => new DBRPGItemClass<TItemClassType>(m, m.ToString(), string.Empty));
 		}
 	}
 }

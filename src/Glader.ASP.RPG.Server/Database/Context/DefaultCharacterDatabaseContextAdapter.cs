@@ -16,7 +16,8 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TClassType"></typeparam>
 	/// <typeparam name="TSkillType"></typeparam>
 	/// <typeparam name="TStatType"></typeparam>
-	internal class DefaultCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> 
+	/// <typeparam name="TItemClassType"></typeparam>
+	internal class DefaultCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> 
 		: IRPGDBContext
 		where TCustomizableSlotType : Enum 
 		where TProportionSlotType : Enum
@@ -24,11 +25,12 @@ namespace Glader.ASP.RPG
 		where TClassType : Enum
 		where TSkillType : Enum
 		where TStatType : Enum
+		where TItemClassType : Enum
 	{
 		/// <inheritdoc />
 		public DbContext Context { get; }
 
-		public DefaultCharacterDatabaseContextAdapter(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> context)
+		public DefaultCharacterDatabaseContextAdapter(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> context)
 		{
 			Context = context ?? throw new ArgumentNullException(nameof(context));
 		}

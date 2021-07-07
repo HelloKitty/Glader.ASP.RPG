@@ -20,17 +20,20 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TRaceType"></typeparam>
 	/// <typeparam name="TClassType"></typeparam>
 	/// <typeparam name="TSkillType"></typeparam>
-	public sealed class DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
+	/// <typeparam name="TStatType"></typeparam>
+	/// <typeparam name="TItemClassType"></typeparam>
+	public sealed class DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> 
 		where TCustomizableSlotType : Enum 
 		where TProportionSlotType : Enum
 		where TRaceType : Enum
 		where TClassType : Enum
 		where TSkillType : Enum
 		where TStatType : Enum
+		where TItemClassType : Enum
 	{
-		private RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> Context { get; }
+		private RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> Context { get; }
 
-		public DefaultRPGCharacterAppearanceRepository(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType> context)
+		public DefaultRPGCharacterAppearanceRepository(RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> context)
 		{
 			Context = context ?? throw new ArgumentNullException(nameof(context));
 		}
