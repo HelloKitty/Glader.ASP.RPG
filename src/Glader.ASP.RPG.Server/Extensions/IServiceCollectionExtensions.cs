@@ -94,7 +94,7 @@ namespace Glader.ASP.RPG
 	public static class IServiceCollectionExtensions
 	{
 		/// <summary>
-		/// Registers a <see cref="RPGCharacterDatabaseContext{TCustomizableSlotType,TColorStructureType,TProportionSlotType,TProportionStructureType,TRaceType,TClassType,TSkillType,TStatType,TItemClassType,TQualityType,TQualityColorStructure}"/>
+		/// Registers a <see cref="RPGCharacterDatabaseContext{TCustomizableSlotType,TColorStructureType,TProportionSlotType,TProportionStructureType,TRaceType,TClassType,TSkillType,TStatType,TItemClassType,TQualityType,TQualityColorStructureType}"/>
 		/// and <see cref="IRPGCharacterRepository{TRaceType,TClassType}"/>
 		/// and the Glader.ASP.Controllers through <see cref="IMvcBuilderExtensions"/>'s controller methods within
 		/// the provided <see cref="services"/>.

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPG
 {
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructure> 
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> 
 		: DbContext
 		where TCustomizableSlotType : Enum
 		where TProportionSlotType : Enum
@@ -76,9 +76,11 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGSItemSubClass<TItemClassType>> ItemSubclasses { get; set; }
 
-		public DbSet<DBRPGQuality<TQualityType, TQualityColorStructure>> Qualities { get; private set; }
+		public DbSet<DBRPGQuality<TQualityType, TQualityColorStructureType>> Qualities { get; private set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructure>> options)
+		public DbSet<DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>> ItemTemplates { get; private set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>> options)
 			: base(options)
 		{
 
@@ -249,9 +251,16 @@ namespace Glader.ASP.RPG
 				builder.HasKey(m => new {m.ItemClassId, m.SubClassId});
 			});
 
-			modelBuilder.Entity<DBRPGQuality<TQualityType, TQualityColorStructure>>(builder =>
+			modelBuilder.Entity<DBRPGQuality<TQualityType, TQualityColorStructureType>>(builder =>
 			{
-				builder.SeedWithEnum<DBRPGQuality<TQualityType, TQualityColorStructure>, TQualityType>(m => new DBRPGQuality<TQualityType, TQualityColorStructure>(m, m.GetEnumDisplay()?.Name ?? m.ToString(), m.GetEnumDescription()?.Description ?? string.Empty));
+				builder.SeedWithEnum<DBRPGQuality<TQualityType, TQualityColorStructureType>, TQualityType>(m => new DBRPGQuality<TQualityType, TQualityColorStructureType>(m, m.GetEnumDisplay()?.Name ?? m.ToString(), m.GetEnumDescription()?.Description ?? string.Empty));
+			});
+
+			modelBuilder.Entity<DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>>(builder =>
+			{
+				builder.HasOne(m => m.ItemSubClass)
+					.WithMany()
+					.HasForeignKey(m => new {m.ClassId, m.SubClassId});
 			});
 		}
 	}

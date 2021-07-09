@@ -14,6 +14,7 @@ namespace Glader.ASP.RPG
 	[RequiredDataModel(typeof(DBRPGItemClass<>))]
 	[RequiredDataModel(typeof(DBRPGSItemSubClass<>))]
 	[RequiredDataModel(typeof(DBRPGQuality<,>))]
+	[RequiredDataModel(typeof(DBRPGItemTemplate<,,>))]
 	public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> 
 		where TSkillType : Enum 
 		where TRaceType : Enum
@@ -43,5 +44,7 @@ namespace Glader.ASP.RPG
 		public IReadOnlyDictionary<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>> ItemSubClass { get; init; }
 
 		public IReadOnlyDictionary<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>> Quality { get; init; }
+
+		public IReadOnlyDictionary<int, DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>> ItemTemplate { get; init; }
 	}
 }
