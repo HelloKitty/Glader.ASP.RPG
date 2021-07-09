@@ -9,13 +9,15 @@ using Glader.ASP.RPG;
 namespace Glader.ASP.RPG
 {
     [GeneratedCodeAttribute("GGDBF", "0.1.35.0")]
-    public interface IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType> : IGGDBFContext where TSkillType : System.Enum
+    public interface IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : IGGDBFContext where TSkillType : System.Enum
        where TRaceType : System.Enum
        where TClassType : System.Enum
        where TProportionSlotType : System.Enum
        where TCustomizableSlotType : System.Enum
        where TStatType : System.Enum
        where TItemClassType : System.Enum
+       where TQualityType : System.Enum
+
     {
         public IReadOnlyDictionary<TSkillType, DBRPGSkill<TSkillType>> Skill { get; }
 
@@ -35,18 +37,22 @@ namespace Glader.ASP.RPG
 
         public IReadOnlyDictionary<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>> ItemSubClass { get; }
 
+        public IReadOnlyDictionary<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>> Quality { get; }
+
     }
 
     [GeneratedCodeAttribute("GGDBF", "0.1.35.0")]
-    public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType> : IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType> where TSkillType : System.Enum
+    public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> where TSkillType : System.Enum
         where TRaceType : System.Enum
         where TClassType : System.Enum
         where TProportionSlotType : System.Enum
         where TCustomizableSlotType : System.Enum
         where TStatType : System.Enum
         where TItemClassType : System.Enum
+        where TQualityType : System.Enum
+
     {
-        public static RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType> Instance { get; private set; }
+        public static RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> Instance { get; private set; }
 
         public static async Task Initialize(IGGDBFDataSource source)
         {
@@ -58,9 +64,10 @@ namespace Glader.ASP.RPG
                 CharacterCustomizationSlotType = await source.RetrieveTableAsync<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>(new NameOverrideTableRetrievalConfig<TCustomizableSlotType, DBRPGCharacterCustomizableSlotType<TCustomizableSlotType>>("CharacterCustomizationSlotType")),
                 CharacterProportionSlotType = await source.RetrieveTableAsync<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>>(new NameOverrideTableRetrievalConfig<TProportionSlotType, DBRPGCharacterProportionSlotType<TProportionSlotType>>("CharacterProportionSlotType")),
                 Stat = await source.RetrieveTableAsync<TStatType, DBRPGStat<TStatType>>(new NameOverrideTableRetrievalConfig<TStatType, DBRPGStat<TStatType>>("Stat")),
-                CharacterStatDefault = await source.RetrieveTableAsync<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>, RPGStaticDataContext_DBRPGCharacterStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>>(new NameOverrideTableRetrievalConfig<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>("CharacterStatDefault") { KeyResolutionFunction = m => new DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>(m.Level, m.RaceId, m.ClassId) }),
-                ItemClass = await source.RetrieveTableAsync<TItemClassType, DBRPGItemClass<TItemClassType>, RPGStaticDataContext_DBRPGItemClass<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>>(new NameOverrideTableRetrievalConfig<TItemClassType, DBRPGItemClass<TItemClassType>>("ItemClass")),
-                ItemSubClass = await source.RetrieveTableAsync<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>, RPGStaticDataContext_DBRPGSItemSubClass<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>>(new NameOverrideTableRetrievalConfig<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>>("ItemSubClass") { KeyResolutionFunction = m => new DBRPGSItemSubClassKey<TItemClassType>(m.ItemClassId, m.SubClassId) }),
+                CharacterStatDefault = await source.RetrieveTableAsync<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>, RPGStaticDataContext_DBRPGCharacterStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>, DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>>("CharacterStatDefault") { KeyResolutionFunction = m => new DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>(m.Level, m.RaceId, m.ClassId) }),
+                ItemClass = await source.RetrieveTableAsync<TItemClassType, DBRPGItemClass<TItemClassType>, RPGStaticDataContext_DBRPGItemClass<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<TItemClassType, DBRPGItemClass<TItemClassType>>("ItemClass")),
+                ItemSubClass = await source.RetrieveTableAsync<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>, RPGStaticDataContext_DBRPGSItemSubClass<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>>("ItemSubClass") { KeyResolutionFunction = m => new DBRPGSItemSubClassKey<TItemClassType>(m.ItemClassId, m.SubClassId) }),
+                Quality = await source.RetrieveTableAsync<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>>("Quality")),
             };
         }
     }

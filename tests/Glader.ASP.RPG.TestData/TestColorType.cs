@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Glader.ASP.RPG
 {
+	[Owned]
 	public class TestColorType
 	{
 		public int R { get; private set; }

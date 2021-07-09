@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Glader.ASP.RPG.Common\Glader.ASP.RPG.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\Item\" />
+  </ItemGroup>
+
 </Project>

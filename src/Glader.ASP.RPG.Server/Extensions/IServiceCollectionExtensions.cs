@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Glader.ASP.RPG
 {
 	//<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>
-	public record RPGOptionsBuilder(Type[] CustomizationTypes, Type[] ProportionTypes, Type RaceType, Type ClassType, Type SkillType, Type StatType, Type ItemClassType)
+	public record RPGOptionsBuilder(Type[] CustomizationTypes, Type[] ProportionTypes, Type RaceType, Type ClassType, Type SkillType, Type StatType, Type ItemClassType, Type[] QualityTypes)
 	{
 		public enum UninitializedRPGEnum : int
 		{
@@ -25,7 +25,7 @@ namespace Glader.ASP.RPG
 		//<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>
 		internal Type[] BuildTypeParameters()
 		{
-			return new Type[] {CustomizationTypes[0], CustomizationTypes[1], ProportionTypes[0], ProportionTypes[1], RaceType, ClassType, SkillType, StatType, ItemClassType};
+			return new Type[] {CustomizationTypes[0], CustomizationTypes[1], ProportionTypes[0], ProportionTypes[1], RaceType, ClassType, SkillType, StatType, ItemClassType, QualityTypes[0], QualityTypes[1]};
 		}
 
 		public RPGOptionsBuilder WithCustomizationType<TCustomizableSlotType, TColorStructureType>()
@@ -70,6 +70,12 @@ namespace Glader.ASP.RPG
 			return this with { ItemClassType = typeof(TItemClassType) };
 		}
 
+		public RPGOptionsBuilder WithQualityType<TQualityType, TQualityColorStructureType>()
+			where TQualityType : Enum
+		{
+			return this with { QualityTypes = new[] { typeof(TQualityType), typeof(TQualityColorStructureType) } };
+		}
+
 
 		internal static RPGOptionsBuilder CreateDefault()
 		{
@@ -80,14 +86,15 @@ namespace Glader.ASP.RPG
 				ClassType: typeof(RPGOptionsBuilder.UninitializedRPGEnum),
 				SkillType: typeof(RPGOptionsBuilder.UninitializedRPGEnum),
 				StatType: typeof(RPGOptionsBuilder.UninitializedRPGEnum),
-				ItemClassType: typeof(RPGOptionsBuilder.UninitializedRPGEnum));
+				ItemClassType: typeof(RPGOptionsBuilder.UninitializedRPGEnum),
+				QualityTypes: new Type[2] { typeof(RPGOptionsBuilder.UninitializedRPGEnum), typeof(Vector3<byte>) });
 		}
 	}
 
 	public static class IServiceCollectionExtensions
 	{
 		/// <summary>
-		/// Registers a <see cref="RPGCharacterDatabaseContext{TCustomizableSlotType,TColorStructureType,TProportionSlotType,TProportionStructureType,TRaceType,TClassType,TSkillType,TStatType}"/>
+		/// Registers a <see cref="RPGCharacterDatabaseContext{TCustomizableSlotType,TColorStructureType,TProportionSlotType,TProportionStructureType,TRaceType,TClassType,TSkillType,TStatType,TItemClassType,TQualityType,TQualityColorStructure}"/>
 		/// and <see cref="IRPGCharacterRepository{TRaceType,TClassType}"/>
 		/// and the Glader.ASP.Controllers through <see cref="IMvcBuilderExtensions"/>'s controller methods within
 		/// the provided <see cref="services"/>.
@@ -106,7 +113,7 @@ namespace Glader.ASP.RPG
 
 			//We build the default parameters
 			var rpgOptions = rpgDatabaseOptionsBuilder(RPGOptionsBuilder.CreateDefault());
-			var dbContextType = typeof(RPGCharacterDatabaseContext<,,,,,,,,>).MakeGenericType(rpgOptions.BuildTypeParameters());
+			var dbContextType = typeof(RPGCharacterDatabaseContext<,,,,,,,,,,>).MakeGenericType(rpgOptions.BuildTypeParameters());
 
 			//services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>(optionsAction);
 			typeof(IServiceCollectionExtensions)
@@ -118,7 +125,7 @@ namespace Glader.ASP.RPG
 				services.AddTransient<DbContext>(provider => (DbContext)provider.GetService(dbContextType));
 
 			//Registered for consumers of non-generic context
-			services.AddTransient(typeof(IRPGDBContext), typeof(DefaultCharacterDatabaseContextAdapter<,,,,,,,,>).MakeGenericType(rpgOptions.BuildTypeParameters()));
+			services.AddTransient(typeof(IRPGDBContext), typeof(DefaultCharacterDatabaseContextAdapter<,,,,,,,,,,>).MakeGenericType(rpgOptions.BuildTypeParameters()));
 
 			//DefaultServiceEndpointRepository : IServiceEndpointRepository
 			services.AddTransient(typeof(IRPGCharacterRepository<,>).MakeGenericType(rpgOptions.RaceType, rpgOptions.ClassType), typeof(DefaultRPGCharacterRepository<,>).MakeGenericType(rpgOptions.RaceType, rpgOptions.ClassType));
@@ -157,7 +164,7 @@ namespace Glader.ASP.RPG
 			var rpgOptions = rpgDatabaseOptionsBuilder(RPGOptionsBuilder.CreateDefault());
 
 			//services.RegisterGGDBFContentServices<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter, RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>>();
-			Type contextType = typeof(RPGStaticDataContext<,,,,,,>).MakeGenericType(rpgOptions.SkillType, rpgOptions.RaceType, rpgOptions.ClassType, rpgOptions.ProportionTypes[0], rpgOptions.CustomizationTypes[0], rpgOptions.StatType, rpgOptions.ItemClassType);
+			Type contextType = typeof(RPGStaticDataContext<,,,,,,,,>).MakeGenericType(rpgOptions.SkillType, rpgOptions.RaceType, rpgOptions.ClassType, rpgOptions.ProportionTypes[0], rpgOptions.CustomizationTypes[0], rpgOptions.StatType, rpgOptions.ItemClassType, rpgOptions.QualityTypes[0], rpgOptions.QualityTypes[1]);
 			typeof(IServiceCollectionExtensions)
 				.GetMethod(nameof(RegisterGGDBFContentServices), BindingFlags.Static | BindingFlags.NonPublic)
 				.MakeGenericMethod(new Type[]{ typeof(TGGDBFDataSourceType), typeof(TGGDBFConverterType), contextType })

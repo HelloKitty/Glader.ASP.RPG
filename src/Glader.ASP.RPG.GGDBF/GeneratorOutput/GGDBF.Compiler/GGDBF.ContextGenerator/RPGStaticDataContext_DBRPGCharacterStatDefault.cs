@@ -10,26 +10,28 @@ namespace Glader.ASP.RPG
 {
     [GeneratedCodeAttribute("GGDBF", "0.1.35.0")]
     [DataContractAttribute]
-    public partial class RPGStaticDataContext_DBRPGCharacterStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType> : DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>, IGGDBFSerializable where TSkillType : System.Enum
+    public partial class RPGStaticDataContext_DBRPGCharacterStatDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : DBRPGCharacterStatDefault<TStatType, TRaceType, TClassType>, IGGDBFSerializable where TSkillType : System.Enum
        where TRaceType : System.Enum
        where TClassType : System.Enum
        where TProportionSlotType : System.Enum
        where TCustomizableSlotType : System.Enum
        where TStatType : System.Enum
        where TItemClassType : System.Enum
+       where TQualityType : System.Enum
+
     {
         [IgnoreDataMemberAttribute]
         public override Glader.ASP.RPG.DBRPGRace<TRaceType> Race
         {
-            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>.Instance.Race[base.RaceId];
+            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>.Instance.Race[base.RaceId];
         }
         [IgnoreDataMemberAttribute]
         public override Glader.ASP.RPG.DBRPGClass<TClassType> Class
         {
-            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>.Instance.@Class[base.ClassId];
+            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>.Instance.@Class[base.ClassId];
         }
         [DataMemberAttribute(Order = 1)]
-        public RPGStaticDataContext_DBRPGCharacterStatDefault_RPGStatValue<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>[] _SerializedStats;
+        public RPGStaticDataContext_DBRPGCharacterStatDefault_RPGStatValue<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>[] _SerializedStats;
 
         [IgnoreDataMemberAttribute]
         public override ICollection<RPGStatValue<TStatType>> Stats
@@ -40,24 +42,26 @@ namespace Glader.ASP.RPG
 
         public void Initialize(IGGDBFDataConverter converter)
         {
-            _SerializedStats = converter.Convert<Glader.ASP.RPG.RPGStatValue<TStatType>, RPGStaticDataContext_DBRPGCharacterStatDefault_RPGStatValue<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>>(Stats);
+            _SerializedStats = converter.Convert<Glader.ASP.RPG.RPGStatValue<TStatType>, RPGStaticDataContext_DBRPGCharacterStatDefault_RPGStatValue<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(Stats);
         }
     }
 
     [GeneratedCodeAttribute("GGDBF", "0.1.35.0")]
     [DataContractAttribute]
-    public partial record RPGStaticDataContext_DBRPGCharacterStatDefault_RPGStatValue<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType> : RPGStatValue<TStatType>, IGGDBFSerializable where TSkillType : System.Enum
+    public partial record RPGStaticDataContext_DBRPGCharacterStatDefault_RPGStatValue<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : RPGStatValue<TStatType>, IGGDBFSerializable where TSkillType : System.Enum
         where TRaceType : System.Enum
         where TClassType : System.Enum
         where TProportionSlotType : System.Enum
         where TCustomizableSlotType : System.Enum
         where TStatType : System.Enum
         where TItemClassType : System.Enum
+        where TQualityType : System.Enum
+
     {
         [IgnoreDataMemberAttribute]
         public override Glader.ASP.RPG.DBRPGStat<TStatType> Stat
         {
-            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType>.Instance.Stat[base.StatType];
+            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>.Instance.Stat[base.StatType];
         }
 
         public void Initialize(IGGDBFDataConverter converter)

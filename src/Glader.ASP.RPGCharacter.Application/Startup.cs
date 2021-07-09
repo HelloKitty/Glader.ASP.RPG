@@ -83,7 +83,8 @@ namespace Glader.ASP.RPG
 				.WithClassType<TestClassType>()
 				.WithSkillType<TestSkillType>()
 				.WithStatType<TestStatType>()
-				.WithItemClassType<TestItemClass>();
+				.WithItemClassType<TestItemClass>()
+				.WithQualityType<TestQualityType, TestColorType>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

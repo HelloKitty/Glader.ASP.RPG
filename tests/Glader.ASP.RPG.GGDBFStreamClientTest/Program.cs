@@ -11,13 +11,13 @@ namespace Glader.ASP.RPG.GGDBFStreamClientTest
 		{
 			try
 			{
-				var dataSource = new RefitHttpGGDBFDataSource<RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass>>($@"https://localhost:5001/", new RefitHttpGGDBFDataSourceOptions(true));
-				var tables = await dataSource.RetrieveTableAsync<DBRPGCharacterStatDefaultKey<TestStatType, TestRaceType, TestClassType>, DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>, RPGStaticDataContext_DBRPGCharacterStatDefault<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass>>();
+				var dataSource = new RefitHttpGGDBFDataSource<RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass, TestQualityType, TestColorType>>($@"https://localhost:5001/", new RefitHttpGGDBFDataSourceOptions(true));
+				var tables = await dataSource.RetrieveTableAsync<DBRPGCharacterStatDefaultKey<TestStatType, TestRaceType, TestClassType>, DBRPGCharacterStatDefault<TestStatType, TestRaceType, TestClassType>, RPGStaticDataContext_DBRPGCharacterStatDefault<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass, TestQualityType, TestColorType>>();
 				Console.WriteLine($"Meep");
 
-				await RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass>.Initialize(dataSource);
+				await RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass, TestQualityType, TestColorType>.Initialize(dataSource);
 
-				Console.WriteLine(RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass>.Instance.Class.Count);
+				Console.WriteLine(RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType, TestItemClass, TestQualityType, TestColorType>.Instance.Class.Count);
 			}
 			catch (Exception e)
 			{

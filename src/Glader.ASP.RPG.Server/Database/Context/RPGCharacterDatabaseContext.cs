@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Glader.ASP.RPG
 {
-	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType> 
+	public sealed class RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructure> 
 		: DbContext
 		where TCustomizableSlotType : Enum
 		where TProportionSlotType : Enum
@@ -18,6 +18,7 @@ namespace Glader.ASP.RPG
 		where TSkillType : Enum
 		where TStatType : Enum
 		where TItemClassType : Enum
+		where TQualityType : Enum
 	{
 		/// <summary>
 		/// The character table.
@@ -75,7 +76,9 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGSItemSubClass<TItemClassType>> ItemSubclasses { get; set; }
 
-		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType>> options)
+		public DbSet<DBRPGQuality<TQualityType, TQualityColorStructure>> Qualities { get; private set; }
+
+		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructure>> options)
 			: base(options)
 		{
 
@@ -244,6 +247,11 @@ namespace Glader.ASP.RPG
 			modelBuilder.Entity<DBRPGSItemSubClass<TItemClassType>>(builder =>
 			{
 				builder.HasKey(m => new {m.ItemClassId, m.SubClassId});
+			});
+
+			modelBuilder.Entity<DBRPGQuality<TQualityType, TQualityColorStructure>>(builder =>
+			{
+				builder.SeedWithEnum<DBRPGQuality<TQualityType, TQualityColorStructure>, TQualityType>(m => new DBRPGQuality<TQualityType, TQualityColorStructure>(m, m.GetEnumDisplay()?.Name ?? m.ToString(), m.GetEnumDescription()?.Description ?? string.Empty));
 			});
 		}
 	}
