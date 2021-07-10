@@ -42,7 +42,7 @@ namespace Glader.ASP.RPG
 		/// The proportion data for the slot.
 		/// </summary>
 		[DataMember(Order = 4)]
-		public TQualityColorStructureType Proportion { get; private set; }
+		public TQualityColorStructureType Color { get; private set; }
 
 		public DBRPGQuality(TQualityType qualityType, string visualName, string description)
 		{

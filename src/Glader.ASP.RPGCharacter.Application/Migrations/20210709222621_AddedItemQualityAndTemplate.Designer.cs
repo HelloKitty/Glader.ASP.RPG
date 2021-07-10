@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPG;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType, TestItemClass, TestQualityType, TestColorType>))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210709222621_AddedItemQualityAndTemplate")]
+    partial class AddedItemQualityAndTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -855,7 +857,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGQuality<Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
                 {
-                    b.OwnsOne("Glader.ASP.RPG.TestColorType", "Color", b1 =>
+                    b.OwnsOne("Glader.ASP.RPG.TestColorType", "Proportion", b1 =>
                         {
                             b1.Property<int>("DBRPGQuality<TestQualityType, TestColorType>Id")
                                 .HasColumnType("int");
