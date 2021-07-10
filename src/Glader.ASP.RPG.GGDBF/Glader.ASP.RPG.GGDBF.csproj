@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <RootNamespace>Glader.ASP.RPG</RootNamespace>
-    <Version>0.3.32</Version>
+    <Version>0.3.33</Version>
     <Authors>Andrew Blakely, Glader</Authors>
     <Product>Glader.ASP.RPG</Product>
     <Description>Glader.ASP.RPG is an ASP Core, EntityFramework, Refit-based and JSON-based Role-playing Game library.</Description>
@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Glader.Essentials.Common" Version="2.2.76" />
+    <PackageReference Include="Glader.Essentials.Common" Version="2.2.77" />
     <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="3.9.0-2.final">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
