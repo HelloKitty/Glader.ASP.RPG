@@ -135,12 +135,7 @@ namespace Glader.ASP.RPG
 				builder.HasIndex(c => c.CharacterId);
 				builder.HasKey(c => new {c.CharacterId, c.SlotType});
 
-				if (!typeof(TColorStructureType).IsPrimitive)
-				{
-					//TODO: A total hack, but it must be a reference type if we make it Owned.
-					Expression<Func<DBRPGCharacterCustomizableSlot<TCustomizableSlotType, TColorStructureType>, TColorStructureType>> expression = c => c.SlotColor;
-					((dynamic)builder).OwnsOne(expression);
-				}
+				builder.OwnsOneIfNeeded(c => c.SlotColor);
 			});
 
 			//Seed the DB with the available enum entries.
@@ -159,12 +154,7 @@ namespace Glader.ASP.RPG
 				builder.HasIndex(c => c.CharacterId);
 				builder.HasKey(c => new { c.CharacterId, c.SlotType });
 
-				if(!typeof(TProportionStructureType).IsPrimitive)
-				{
-					//TODO: A total hack, but it must be a reference type if we make it Owned.
-					Expression<Func<DBRPGCharacterProportionSlot<TProportionSlotType, TProportionStructureType>, TProportionStructureType>> expression = c => c.Proportion;
-					((dynamic)builder).OwnsOne(expression);
-				}
+				builder.OwnsOneIfNeeded(c => c.Proportion);
 			});
 
 			//Seed the DB with the available enum entries.
@@ -254,6 +244,8 @@ namespace Glader.ASP.RPG
 			modelBuilder.Entity<DBRPGQuality<TQualityType, TQualityColorStructureType>>(builder =>
 			{
 				builder.SeedWithEnum<DBRPGQuality<TQualityType, TQualityColorStructureType>, TQualityType>(m => new DBRPGQuality<TQualityType, TQualityColorStructureType>(m, m.GetEnumDisplay()?.Name ?? m.ToString(), m.GetEnumDescription()?.Description ?? string.Empty));
+
+				builder.OwnsOneIfNeeded(m => m.Color);
 			});
 
 			modelBuilder.Entity<DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>>(builder =>
