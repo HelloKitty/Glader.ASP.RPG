@@ -21,12 +21,11 @@ namespace Glader.ASP.RPG
 		/// <param name="builder"></param>
 		/// <param name="rpgOptionsBuilder"></param>
 		/// <returns></returns>
-		public static IMvcBuilder RegisterCharacterDataController(this IMvcBuilder builder, Func<RPGOptionsBuilder, RPGOptionsBuilder> rpgOptionsBuilder)
+		public static IMvcBuilder RegisterRPGControllers(this IMvcBuilder builder, Func<RPGOptionsBuilder, RPGOptionsBuilder> rpgOptionsBuilder)
 		{
 			if(builder == null) throw new ArgumentNullException(nameof(builder));
-
 			var rpgOptions = rpgOptionsBuilder(RPGOptionsBuilder.CreateDefault());
-			return RegisterCharacterDataController(builder, rpgOptions);
+			return RegisterRPGControllers(builder, rpgOptions);
 		}
 
 		/// <summary>
@@ -36,32 +35,34 @@ namespace Glader.ASP.RPG
 		/// <param name="builder"></param>
 		/// <param name="rpgOptions"></param>
 		/// <returns></returns>
-		public static IMvcBuilder RegisterCharacterDataController(this IMvcBuilder builder, RPGOptionsBuilder rpgOptions)
+		public static IMvcBuilder RegisterRPGControllers(this IMvcBuilder builder, RPGOptionsBuilder rpgOptions)
 		{
 			if (builder == null) throw new ArgumentNullException(nameof(builder));
 			if (rpgOptions == null) throw new ArgumentNullException(nameof(rpgOptions));
 
-			RegisterControllerNonGeneric(builder, rpgOptions, typeof(CharacterDataController<,>).MakeGenericType(rpgOptions.RaceType, rpgOptions.ClassType));
-
-			//CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>
-			RegisterControllerNonGeneric(builder, rpgOptions, typeof(CharacterAppearanceController<,,,,,>).MakeGenericType(rpgOptions.CustomizationTypes[0], rpgOptions.CustomizationTypes[1], rpgOptions.ProportionTypes[0], rpgOptions.ProportionTypes[1], rpgOptions.RaceType, rpgOptions.ClassType));
-
+			typeof(IMvcBuilderExtensions)
+				.GetMethod(nameof(RegisterRPGControllersGeneric), BindingFlags.Static | BindingFlags.NonPublic)
+				.MakeGenericMethod(rpgOptions.BuildTypeParameters())
+				.Invoke(null, new object[] { builder, rpgOptions });
 
 			return builder.RegisterController<GroupController>();
 		}
 
-		internal static void RegisterControllerNonGeneric(IMvcBuilder builder, RPGOptionsBuilder rpgOptions, Type controllerType)
+		internal static void RegisterRPGControllersGeneric<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>(IMvcBuilder builder, RPGOptionsBuilder rpgOptions)
+			where TCustomizableSlotType : Enum
+			where TProportionSlotType : Enum
+			where TRaceType : Enum
+			where TClassType : Enum
+			where TSkillType : Enum
+			where TStatType : Enum
+			where TItemClassType : Enum
+			where TQualityType : Enum
 		{
-			typeof(IMvcBuilderExtensions)
-				.GetMethod(nameof(RegisterController), BindingFlags.NonPublic | BindingFlags.Static)
-				.MakeGenericMethod(controllerType)
-				.Invoke(null, new[] {builder});
-		}
+			if (builder == null) throw new ArgumentNullException(nameof(builder));
+			if (rpgOptions == null) throw new ArgumentNullException(nameof(rpgOptions));
 
-		internal static IMvcBuilder RegisterController<TControllerType>(IMvcBuilder builder)
-			where TControllerType : Controller
-		{
-			return builder.RegisterController<TControllerType>();
+			builder.RegisterController<CharacterDataController<TRaceType, TClassType>>()
+				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>();
 		}
 	}
 }

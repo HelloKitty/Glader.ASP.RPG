@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Text;
@@ -19,8 +20,6 @@ namespace Glader.ASP.RPG
 		}
 
 		public bool RegisterAsNonGenericDBContext { get; init; } = false;
-
-		public bool RegisterGGDBFSystem { get; init; } = true;
 
 		//<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>
 		internal Type[] BuildTypeParameters()
@@ -113,36 +112,48 @@ namespace Glader.ASP.RPG
 
 			//We build the default parameters
 			var rpgOptions = rpgDatabaseOptionsBuilder(RPGOptionsBuilder.CreateDefault());
-			var dbContextType = typeof(RPGCharacterDatabaseContext<,,,,,,,,,,>).MakeGenericType(rpgOptions.BuildTypeParameters());
 
-			//services.AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>>(optionsAction);
 			typeof(IServiceCollectionExtensions)
-				.GetMethod(nameof(AddDbContext), BindingFlags.Static | BindingFlags.NonPublic)
-				.MakeGenericMethod(dbContextType)
-				.Invoke(null, new object[] {services, optionsAction});
-
-			if(rpgOptions.RegisterAsNonGenericDBContext)
-				services.AddTransient<DbContext>(provider => (DbContext)provider.GetService(dbContextType));
-
-			//Registered for consumers of non-generic context
-			services.AddTransient(typeof(IRPGDBContext), typeof(DefaultCharacterDatabaseContextAdapter<,,,,,,,,,,>).MakeGenericType(rpgOptions.BuildTypeParameters()));
-
-			//DefaultServiceEndpointRepository : IServiceEndpointRepository
-			services.AddTransient(typeof(IRPGCharacterRepository<,>).MakeGenericType(rpgOptions.RaceType, rpgOptions.ClassType), typeof(DefaultRPGCharacterRepository<,>).MakeGenericType(rpgOptions.RaceType, rpgOptions.ClassType));
-
-			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
-			//IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
-			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>
-			services.AddTransient(typeof(IRPGCharacterAppearanceRepository<,,,>).MakeGenericType(rpgOptions.CustomizationTypes[0], rpgOptions.CustomizationTypes[1], rpgOptions.ProportionTypes[0], rpgOptions.ProportionTypes[1]), typeof(DefaultRPGCharacterAppearanceRepository<,,,>).MakeGenericType(rpgOptions.CustomizationTypes[0], rpgOptions.CustomizationTypes[1], rpgOptions.ProportionTypes[0], rpgOptions.ProportionTypes[1]));
-
-			//DefaultRPGGroupRepository
-			services.AddTransient<IRPGGroupRepository, DefaultRPGGroupRepository>();
-
-			mvcBuilder.RegisterCharacterDataController(rpgOptions);
+				.GetMethod(nameof(RegisterGladerRPGSystemGeneric), BindingFlags.Static | BindingFlags.NonPublic)
+				.MakeGenericMethod(rpgOptions.BuildTypeParameters())
+				.Invoke(null, new object[] { services, optionsAction, rpgOptions, mvcBuilder });
 
 			//Example:
 			//services.AddDbContext<ServiceDiscoveryDatabaseContext>(builder => { builder.UseMySql("server=127.0.0.1;port=3306;Database=guardians.global;Uid=root;Pwd=test;"); });
 			return services;
+		}
+
+		//Copy the type parameters from: RPGCharacterDatabaseContext
+		internal static void RegisterGladerRPGSystemGeneric<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>(IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction, RPGOptionsBuilder rpgOptions, IMvcBuilder mvcBuilder)
+			where TCustomizableSlotType : Enum
+			where TProportionSlotType : Enum
+			where TRaceType : Enum
+			where TClassType : Enum
+			where TSkillType : Enum
+			where TStatType : Enum
+			where TItemClassType : Enum
+			where TQualityType : Enum
+		{
+			AddDbContext<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(services, optionsAction);
+
+			if(rpgOptions.RegisterAsNonGenericDBContext)
+				services.AddTransient<DbContext>(provider => (DbContext)provider.GetService< RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>());
+
+			//Registered for consumers of non-generic context
+			services.AddTransient<IRPGDBContext, DefaultCharacterDatabaseContextAdapter<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>();
+
+			//DefaultServiceEndpointRepository : IServiceEndpointRepository
+			services.AddTransient<IRPGCharacterRepository<TRaceType, TClassType>, DefaultRPGCharacterRepository<TRaceType, TClassType>>();
+
+			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType> : IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
+			//IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>
+			//DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType>
+			services.AddTransient<IRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>, DefaultRPGCharacterAppearanceRepository<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType>>();
+
+			//DefaultRPGGroupRepository
+			services.AddTransient<IRPGGroupRepository, DefaultRPGGroupRepository>();
+
+			IMvcBuilderExtensions.RegisterRPGControllersGeneric<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>(mvcBuilder, rpgOptions);
 		}
 
 		internal static void AddDbContext<TContextType>(IServiceCollection services, Action<DbContextOptionsBuilder> optionsAction)
@@ -163,12 +174,10 @@ namespace Glader.ASP.RPG
 			//RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>
 			var rpgOptions = rpgDatabaseOptionsBuilder(RPGOptionsBuilder.CreateDefault());
 
-			//services.RegisterGGDBFContentServices<EntityFrameworkGGDBFDataSource, AutoMapperGGDBFDataConverter, RPGStaticDataContext<TestSkillType, TestRaceType, TestClassType, TestProportionSlotType, TestCustomizationSlotType, TestStatType>>();
-			Type contextType = typeof(RPGStaticDataContext<,,,,,,,,>).MakeGenericType(rpgOptions.SkillType, rpgOptions.RaceType, rpgOptions.ClassType, rpgOptions.ProportionTypes[0], rpgOptions.CustomizationTypes[0], rpgOptions.StatType, rpgOptions.ItemClassType, rpgOptions.QualityTypes[0], rpgOptions.QualityTypes[1]);
 			typeof(IServiceCollectionExtensions)
-				.GetMethod(nameof(RegisterGGDBFContentServices), BindingFlags.Static | BindingFlags.NonPublic)
-				.MakeGenericMethod(new Type[]{ typeof(TGGDBFDataSourceType), typeof(TGGDBFConverterType), contextType })
-				.Invoke(null, new object[] { services });
+				.GetMethod(nameof(RegisterGladerRPGGGDBFGeneric), BindingFlags.Static | BindingFlags.NonPublic)
+				.MakeGenericMethod(new Type[]{ typeof(TGGDBFDataSourceType), typeof(TGGDBFConverterType) }.Concat(rpgOptions.BuildTypeParameters()).ToArray())
+				.Invoke(null, new object[] { services, rpgOptions, mvcBuilder });
 
 			mvcBuilder.RegisterGGDBFController()
 				.AddNewtonsoftJson(options =>
@@ -177,6 +186,27 @@ namespace Glader.ASP.RPG
 				});
 
 			return services;
+		}
+
+		//Copy the type parameters from: RPGCharacterDatabaseContext (keep the first 2 parameters)
+		internal static void RegisterGladerRPGGGDBFGeneric<TGGDBFDataSourceType, TGGDBFConverterType,
+			TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>(IServiceCollection services, RPGOptionsBuilder rpgOptions, IMvcBuilder mvcBuilder)
+			where TGGDBFDataSourceType : class, IGGDBFDataSource
+			where TGGDBFConverterType : class, IGGDBFDataConverter
+			where TSkillType : Enum
+			where TRaceType : Enum
+			where TClassType : Enum
+			where TCustomizableSlotType : Enum
+			where TProportionSlotType : Enum
+			where TStatType : Enum
+			where TItemClassType : Enum
+			where TQualityType : Enum
+		{
+			if (services == null) throw new ArgumentNullException(nameof(services));
+			if (rpgOptions == null) throw new ArgumentNullException(nameof(rpgOptions));
+			if (mvcBuilder == null) throw new ArgumentNullException(nameof(mvcBuilder));
+
+			RegisterGGDBFContentServices<TGGDBFDataSourceType, TGGDBFConverterType, RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(services);
 		}
 
 		internal static void RegisterGGDBFContentServices<TGGDBFDataSourceType, TGGDBFConverterType, TContextType>(IServiceCollection services)
