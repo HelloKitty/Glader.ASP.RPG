@@ -8,6 +8,6 @@ using GGDBF;
 
 namespace Glader.ASP.RPG
 {
-    [GeneratedCodeAttribute("GGDBF", "0.1.35.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.1.40.0")]
     public record DBRPGCharacterStatDefaultKey<TStatType, TRaceType, TClassType>(System.Int32 Level, TRaceType RaceId, TClassType ClassId);
 }

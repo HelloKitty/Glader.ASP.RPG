@@ -8,7 +8,7 @@ using GGDBF;
 
 namespace Glader.ASP.RPG
 {
-    [GeneratedCodeAttribute("GGDBF", "0.1.35.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.1.40.0")]
     [DataContractAttribute]
     public partial class RPGStaticDataContext_DBRPGItemClass<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : DBRPGItemClass<TItemClassType>, IGGDBFSerializable where TSkillType : System.Enum
        where TRaceType : System.Enum
