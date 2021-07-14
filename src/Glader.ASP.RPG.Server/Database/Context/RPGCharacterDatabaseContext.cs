@@ -266,9 +266,27 @@ namespace Glader.ASP.RPG
 				builder.HasIndex(m => m.TemplateId);
 			});
 
+			modelBuilder.Entity<DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>>(builder =>
+			{
+				builder.HasKey(m => new {m.Id, m.OwnershipType});
+				builder.HasIndex(m => m.Id)
+					.IsUnique();
+			});
+
 			modelBuilder.Entity<DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType>>(builder =>
 			{
+				builder.HasIndex(m => m.OwnershipId)
+					.IsUnique();
 
+				builder.HasOne(m => m.ItemOwnership)
+					.WithMany()
+					.HasForeignKey(m => new {ItemInstanceOwnershipId = m.OwnershipId, m.OwnershipType});
+
+				builder.HasIndex(m => m.CharacterId)
+					.IsUnique(false);
+
+				string propName = nameof(DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>.OwnershipType);
+				builder.HasCheckConstraint(propName, $"{propName} = {(int) ItemInstanceOwnershipType.CharacterInventory}");
 			});
 		}
 	}

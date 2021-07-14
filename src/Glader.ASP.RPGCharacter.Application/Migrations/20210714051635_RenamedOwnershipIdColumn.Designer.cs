@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType, TestItemClass, TestQualityType, TestColorType>))]
-    [Migration("20210714024827_NewInitialMigration")]
-    partial class NewInitialMigration
+    [Migration("20210714051635_RenamedOwnershipIdColumn")]
+    partial class RenamedOwnershipIdColumn
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -135,12 +135,31 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterItemInventory<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
-                    b.HasKey("CharacterId");
+                    b.Property<int>("OwnershipId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OwnershipType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CharacterId");
+
+                    b.HasIndex("OwnershipId")
+                        .IsUnique();
+
+                    b.HasIndex("OwnershipId", "OwnershipType");
 
                     b.ToTable("character_item_inventory");
+
+                    b.HasCheckConstraint("OwnershipType", "OwnershipType = 1");
                 });
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterOwnership", b =>
@@ -439,19 +458,17 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
+                    b.Property<int>("OwnershipType")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("DBRPGCharacterItemInventory<TestItemClass, TestQualityType, TestColorType>CharacterId")
-                        .HasColumnType("int");
+                    b.HasKey("Id", "OwnershipType");
 
-                    b.Property<int>("OwnershipType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DBRPGCharacterItemInventory<TestItemClass, TestQualityType, TestColorType>CharacterId");
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.ToTable("item_instance_ownership");
                 });
@@ -742,6 +759,12 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                         .HasForeignKey("CharacterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Glader.ASP.RPG.DBRPGItemInstanceOwnership<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", "ItemOwnership")
+                        .WithMany()
+                        .HasForeignKey("OwnershipId", "OwnershipType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterOwnership", b =>
@@ -912,10 +935,6 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGItemInstanceOwnership<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
                 {
-                    b.HasOne("Glader.ASP.RPG.DBRPGCharacterItemInventory<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", null)
-                        .WithMany("Items")
-                        .HasForeignKey("DBRPGCharacterItemInventory<TestItemClass, TestQualityType, TestColorType>CharacterId");
-
                     b.HasOne("Glader.ASP.RPG.DBRPGItemInstance<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", "Instance")
                         .WithMany()
                         .HasForeignKey("Id")

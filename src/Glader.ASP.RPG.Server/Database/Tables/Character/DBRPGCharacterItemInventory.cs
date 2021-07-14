@@ -14,15 +14,17 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TQualityType"></typeparam>
 	/// <typeparam name="TQualityColorStructureType"></typeparam>
 	[Table("character_item_inventory")]
-	public class DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType> 
+	public class DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType> : IDBRPGItemInventoryContainable<TItemClassType, TQualityType, TQualityColorStructureType>
 		where TItemClassType : Enum 
 		where TQualityType : Enum
 	{
+		[Key]
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; private set; }
+
 		/// <summary>
 		/// The id of the character.
 		/// </summary>
-		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public int CharacterId { get; private set; }
 
 		/// <summary>
@@ -31,27 +33,33 @@ namespace Glader.ASP.RPG
 		[ForeignKey(nameof(CharacterId))]
 		public virtual DBRPGCharacter Character { get; private set; }
 
-		/// <summary>
-		/// Collection of all Item ownerships (which map to an item instance).
-		/// </summary>
-		public virtual ICollection<DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>> Items { get; private set; }
+		/// <inheritdoc />
+		public int OwnershipId { get; private set; }
+
+		/// <inheritdoc />
+		public ItemInstanceOwnershipType OwnershipType { get; private set; }
+
+		/// <inheritdoc />
+		public virtual DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType> ItemOwnership { get; private set; }
 
 		public DBRPGCharacterItemInventory(int characterId)
 		{
 			if (characterId <= 0) throw new ArgumentOutOfRangeException(nameof(characterId));
 			CharacterId = characterId;
+			OwnershipType = ItemInstanceOwnershipType.CharacterInventory;
 		}
 
-		public void AddItem(int instanceId)
+		public void SetItem(DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType> ownership)
 		{
-			if (instanceId <= 0) throw new ArgumentOutOfRangeException(nameof(instanceId));
-			Items.Add(new DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>(instanceId, ItemInstanceOwnershipType.CharacterInventory));
-		}
+			if (ownership == null) throw new ArgumentNullException(nameof(ownership));
 
-		public void AddItem(DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType> itemInstance)
-		{
-			if (itemInstance == null) throw new ArgumentNullException(nameof(itemInstance));
-			AddItem(itemInstance.TemplateId);
+			//Important we never link an item of the wrong inventory type.
+			if (ownership.OwnershipType != ItemInstanceOwnershipType.CharacterInventory)
+				throw new InvalidOperationException($"Cannot link: {nameof(DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType>)} with {nameof(DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>.OwnershipType)}: {ownership.OwnershipType}. Must be: {ItemInstanceOwnershipType.CharacterInventory}");
+
+			OwnershipType = ItemInstanceOwnershipType.CharacterInventory;
+			OwnershipId = ownership.Id;
+			ItemOwnership = ownership;
 		}
 	}
 }

@@ -22,9 +22,8 @@ namespace Glader.ASP.RPG
 		where TQualityType : Enum
 	{
 		/// <summary>
-		/// Primary key for the ownership as well as the foreign key id for the <see cref="Instance"/>.
+		/// The foreign key id for the <see cref="Instance"/>.
 		/// </summary>
-		[Key]
 		public int Id { get; private set; }
 		
 		[Required]

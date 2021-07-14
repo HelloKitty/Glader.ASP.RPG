@@ -152,23 +152,6 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "character_item_inventory",
-                columns: table => new
-                {
-                    CharacterId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_character_item_inventory", x => x.CharacterId);
-                    table.ForeignKey(
-                        name: "FK_character_item_inventory_character_CharacterId",
-                        column: x => x.CharacterId,
-                        principalTable: "character",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "character_ownership",
                 columns: table => new
                 {
@@ -511,23 +494,44 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     Id = table.Column<int>(nullable: false),
                     OwnershipType = table.Column<int>(nullable: false),
                     CreationDate = table.Column<DateTime>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    DBRPGCharacterItemInventoryTestItemClassTestQualityTypeTes = table.Column<int>(name: "DBRPGCharacterItemInventory<TestItemClass, TestQualityType, Tes~", nullable: true)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_item_instance_ownership", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_item_instance_ownership_character_item_inventory_DBRPGCharac~",
-                        column: x => x.DBRPGCharacterItemInventoryTestItemClassTestQualityTypeTes,
-                        principalTable: "character_item_inventory",
-                        principalColumn: "CharacterId",
-                        onDelete: ReferentialAction.Restrict);
+                    table.PrimaryKey("PK_item_instance_ownership", x => new { x.Id, x.OwnershipType });
                     table.ForeignKey(
                         name: "FK_item_instance_ownership_item_instance_Id",
                         column: x => x.Id,
                         principalTable: "item_instance",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "character_item_inventory",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CharacterId = table.Column<int>(nullable: false),
+                    ItemInstanceOwnershipId = table.Column<int>(nullable: false),
+                    OwnershipType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_character_item_inventory", x => x.Id);
+                    table.CheckConstraint("OwnershipType", "OwnershipType = 1");
+                    table.ForeignKey(
+                        name: "FK_character_item_inventory_character_CharacterId",
+                        column: x => x.CharacterId,
+                        principalTable: "character",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_character_item_inventory_item_instance_ownership_ItemInstanc~",
+                        columns: x => new { x.ItemInstanceOwnershipId, x.OwnershipType },
+                        principalTable: "item_instance_ownership",
+                        principalColumns: new[] { "Id", "OwnershipType" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -635,6 +639,22 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 column: "Race");
 
             migrationBuilder.CreateIndex(
+                name: "IX_character_item_inventory_CharacterId",
+                table: "character_item_inventory",
+                column: "CharacterId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_character_item_inventory_ItemInstanceOwnershipId",
+                table: "character_item_inventory",
+                column: "ItemInstanceOwnershipId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_character_item_inventory_ItemInstanceOwnershipId_OwnershipTy~",
+                table: "character_item_inventory",
+                columns: new[] { "ItemInstanceOwnershipId", "OwnershipType" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_character_ownership_CharacterId",
                 table: "character_ownership",
                 column: "CharacterId");
@@ -695,9 +715,10 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 column: "TemplateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_item_instance_ownership_DBRPGCharacterItemInventory<TestItem~",
+                name: "IX_item_instance_ownership_Id",
                 table: "item_instance_ownership",
-                column: "DBRPGCharacterItemInventory<TestItemClass, TestQualityType, Tes~");
+                column: "Id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_item_template_QualityType",
@@ -724,6 +745,9 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 name: "character_definition");
 
             migrationBuilder.DropTable(
+                name: "character_item_inventory");
+
+            migrationBuilder.DropTable(
                 name: "character_ownership");
 
             migrationBuilder.DropTable(
@@ -739,13 +763,13 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 name: "group_member");
 
             migrationBuilder.DropTable(
-                name: "item_instance_ownership");
-
-            migrationBuilder.DropTable(
                 name: "RPGStatValue<TestStatType>");
 
             migrationBuilder.DropTable(
                 name: "character_customization_slot_type");
+
+            migrationBuilder.DropTable(
+                name: "item_instance_ownership");
 
             migrationBuilder.DropTable(
                 name: "character_proportion_slot_type");
@@ -757,31 +781,28 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                 name: "group");
 
             migrationBuilder.DropTable(
-                name: "character_item_inventory");
-
-            migrationBuilder.DropTable(
-                name: "item_instance");
-
-            migrationBuilder.DropTable(
                 name: "stat");
 
             migrationBuilder.DropTable(
                 name: "character_stat_default");
 
             migrationBuilder.DropTable(
-                name: "skill");
+                name: "item_instance");
 
             migrationBuilder.DropTable(
                 name: "character");
 
             migrationBuilder.DropTable(
-                name: "item_template");
+                name: "skill");
 
             migrationBuilder.DropTable(
                 name: "class");
 
             migrationBuilder.DropTable(
                 name: "race");
+
+            migrationBuilder.DropTable(
+                name: "item_template");
 
             migrationBuilder.DropTable(
                 name: "quality");

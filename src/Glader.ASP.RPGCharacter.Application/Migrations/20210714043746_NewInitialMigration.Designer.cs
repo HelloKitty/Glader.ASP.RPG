@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPG;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType, TestItemClass, TestQualityType, TestColorType>))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210714043746_NewInitialMigration")]
+    partial class NewInitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +142,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.Property<int>("CharacterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("OwnershipId")
+                    b.Property<int>("ItemInstanceOwnershipId")
                         .HasColumnType("int");
 
                     b.Property<int>("OwnershipType")
@@ -150,10 +152,10 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
                     b.HasIndex("CharacterId");
 
-                    b.HasIndex("OwnershipId")
+                    b.HasIndex("ItemInstanceOwnershipId")
                         .IsUnique();
 
-                    b.HasIndex("OwnershipId", "OwnershipType");
+                    b.HasIndex("ItemInstanceOwnershipId", "OwnershipType");
 
                     b.ToTable("character_item_inventory");
 
@@ -760,7 +762,7 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
 
                     b.HasOne("Glader.ASP.RPG.DBRPGItemInstanceOwnership<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", "ItemOwnership")
                         .WithMany()
-                        .HasForeignKey("OwnershipId", "OwnershipType")
+                        .HasForeignKey("ItemInstanceOwnershipId", "OwnershipType")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
