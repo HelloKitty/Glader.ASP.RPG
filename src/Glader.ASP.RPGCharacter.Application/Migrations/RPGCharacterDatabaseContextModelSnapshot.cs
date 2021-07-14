@@ -131,6 +131,16 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.ToTable("character_definition");
                 });
 
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterItemInventory<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
+                {
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CharacterId");
+
+                    b.ToTable("character_item_inventory");
+                });
+
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterOwnership", b =>
                 {
                     b.Property<int>("OwnershipId")
@@ -400,6 +410,48 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                             Description = "",
                             VisualName = "Armor"
                         });
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGItemInstance<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("TemplateId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TemplateId");
+
+                    b.ToTable("item_instance");
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGItemInstanceOwnership<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("DBRPGCharacterItemInventory<TestItemClass, TestQualityType, TestColorType>CharacterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OwnershipType")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DBRPGCharacterItemInventory<TestItemClass, TestQualityType, TestColorType>CharacterId");
+
+                    b.ToTable("item_instance_ownership");
                 });
 
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGItemTemplate<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
@@ -681,6 +733,15 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterItemInventory<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
+                {
+                    b.HasOne("Glader.ASP.RPG.DBRPGCharacter", "Character")
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Glader.ASP.RPG.DBRPGCharacterOwnership", b =>
                 {
                     b.HasOne("Glader.ASP.RPG.DBRPGCharacter", "Character")
@@ -834,6 +895,28 @@ namespace Glader.ASP.RPGCharacter.Application.Migrations
                     b.HasOne("Glader.ASP.RPG.DBRPGGroup", "Group")
                         .WithMany("Members")
                         .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGItemInstance<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
+                {
+                    b.HasOne("Glader.ASP.RPG.DBRPGItemTemplate<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Glader.ASP.RPG.DBRPGItemInstanceOwnership<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", b =>
+                {
+                    b.HasOne("Glader.ASP.RPG.DBRPGCharacterItemInventory<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", null)
+                        .WithMany("Items")
+                        .HasForeignKey("DBRPGCharacterItemInventory<TestItemClass, TestQualityType, TestColorType>CharacterId");
+
+                    b.HasOne("Glader.ASP.RPG.DBRPGItemInstance<Glader.ASP.RPG.TestItemClass, Glader.ASP.RPG.TestQualityType, Glader.ASP.RPG.TestColorType>", "Instance")
+                        .WithMany()
+                        .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
