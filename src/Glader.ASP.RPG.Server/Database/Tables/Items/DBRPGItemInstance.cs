@@ -19,6 +19,12 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+
+		[Required]
+		public int TemplateId { get; private set; }
+
+		[ForeignKey(nameof(TemplateId))]
+		public virtual DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType> Template { get; private set; }
 		public int Id { get; private set; }
 
 		/// <summary>
@@ -27,12 +33,6 @@ namespace Glader.ASP.RPG
 		[Required]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public DateTime CreationDate { get; private set; }
-
-		[Required]
-		public int TemplateId { get; private set; }
-
-		[ForeignKey(nameof(TemplateId))]
-		public virtual DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType> Template { get; private set; }
 
 		public DBRPGItemInstance(int templateId)
 		{
