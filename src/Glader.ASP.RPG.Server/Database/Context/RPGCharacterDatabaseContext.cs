@@ -82,6 +82,8 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType>> ItemInstances { get; private set; }
 
+		public DbSet<DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>> ItemInstanceOwnerships { get; private set; }
+
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>> options)
 			: base(options)
 		{
