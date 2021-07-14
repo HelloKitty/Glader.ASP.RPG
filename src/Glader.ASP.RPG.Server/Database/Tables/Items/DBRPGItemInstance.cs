@@ -19,13 +19,13 @@ namespace Glader.ASP.RPG
 		/// </summary>
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int Id { get; private set; }
 
 		[Required]
 		public int TemplateId { get; private set; }
 
 		[ForeignKey(nameof(TemplateId))]
 		public virtual DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType> Template { get; private set; }
-		public int Id { get; private set; }
 
 		/// <summary>
 		/// The creation data of the character.
