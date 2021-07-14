@@ -13,7 +13,8 @@ namespace Glader.ASP.RPG
 
 	}
 
-	public class DefaultRPGItemInstanceRepository<TItemClassType, TQualityType, TQualityColorStructureType> : GeneralGenericCrudRepositoryProvider<int, DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType>> 
+	public class DefaultRPGItemInstanceRepository<TItemClassType, TQualityType, TQualityColorStructureType> 
+		: GeneralGenericCrudRepositoryProvider<int, DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType>>, IRPGItemInstanceRepository<TItemClassType, TQualityType, TQualityColorStructureType>
 		where TItemClassType : Enum 
 		where TQualityType : Enum
 	{

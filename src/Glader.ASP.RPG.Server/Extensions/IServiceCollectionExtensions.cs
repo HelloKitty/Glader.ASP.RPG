@@ -152,6 +152,7 @@ namespace Glader.ASP.RPG
 
 			//DefaultRPGGroupRepository
 			services.AddTransient<IRPGGroupRepository, DefaultRPGGroupRepository>();
+			services.AddTransient<IRPGItemInstanceRepository<TItemClassType, TQualityType, TQualityColorStructureType>, DefaultRPGItemInstanceRepository<TItemClassType, TQualityType, TQualityColorStructureType>>();
 
 			IMvcBuilderExtensions.RegisterRPGControllersGeneric<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>(mvcBuilder, rpgOptions);
 		}
