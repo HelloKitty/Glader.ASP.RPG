@@ -61,5 +61,13 @@ namespace Glader.ASP.RPG
 			OwnershipId = ownership.Id;
 			ItemOwnership = ownership;
 		}
+
+		public void SetItem(DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType> item) 
+		{
+			if (item == null) throw new ArgumentNullException(nameof(item));
+			ItemOwnership = new DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>(item.Id, ItemInstanceOwnershipType.CharacterInventory);
+			OwnershipType = ItemInstanceOwnershipType.CharacterInventory;
+			OwnershipId = ItemOwnership.Id;
+		}
 	}
 }
