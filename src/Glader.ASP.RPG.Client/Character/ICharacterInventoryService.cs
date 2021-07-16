@@ -41,6 +41,7 @@ namespace Glader.ASP.RPG
 		[Delete("/api/CharacterInventory/{cid}/{iid}/Remove")]
 		Task<bool> RemoveItemAsync([AliasAs("cid")] int characterId, [AliasAs("iid")] int instanceId, CancellationToken token = default);
 
+		//TODO: Require Role server authorization
 		/// <summary>
 		/// Retrieves the character's inventory if it exists.
 		/// </summary>

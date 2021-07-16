@@ -48,11 +48,16 @@ namespace Glader.ASP.RPG
 			return await InventoryRepository.TryDeleteAsync(characterId, instanceId, token);
 		}
 
+		//TODO: Require Role server authorization
+		/// <inheritdoc />
 		[ProducesJson]
 		[AuthorizeJwt]
 		[HttpGet("{cid}")]
 		public async Task<ResponseModel<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>> RetrieveItemsAsync(int characterId, CancellationToken token = default)
 		{
+			if(Logger.IsEnabled(LogLevel.Warning))
+				Logger.LogWarning($"WARNING: API must be secured by Server role one day.");
+
 			if (!await InventoryRepository.CharacterHasItemsAsync(characterId, token))
 				return Failure<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>(CharacterItemInventoryQueryResult.Empty);
 
