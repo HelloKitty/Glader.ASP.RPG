@@ -62,7 +62,8 @@ namespace Glader.ASP.RPG
 			if (rpgOptions == null) throw new ArgumentNullException(nameof(rpgOptions));
 
 			builder.RegisterController<CharacterDataController<TRaceType, TClassType>>()
-				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>();
+				.RegisterController<CharacterAppearanceController<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType>>()
+				.RegisterController<CharacterInventoryController<TItemClassType, TQualityType, TQualityColorStructureType>>();
 		}
 	}
 }
