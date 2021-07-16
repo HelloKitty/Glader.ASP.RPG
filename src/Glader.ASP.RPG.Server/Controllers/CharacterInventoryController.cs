@@ -23,19 +23,27 @@ namespace Glader.ASP.RPG
 			InventoryRepository = inventoryRepository ?? throw new ArgumentNullException(nameof(inventoryRepository));
 		}
 
+		//TODO: Require Role server authorization
 		/// <inheritdoc />
 		[AuthorizeJwt]
 		[HttpPost("{cid}/{iid}/Add")]
 		public async Task<bool> AddItemAsync([FromRoute(Name = "cid")] int characterId, [FromRoute(Name = "iid")] int instanceId, CancellationToken token = default)
 		{
+			if(Logger.IsEnabled(LogLevel.Warning))
+				Logger.LogWarning($"WARNING: API must be secured by Server role one day.");
+
 			return await InventoryRepository.AddInstanceAsync(characterId, instanceId, token);
 		}
 
+		//TODO: Require Role server authorization
 		/// <inheritdoc />
 		[AuthorizeJwt]
 		[HttpDelete("{cid}/{iid}/Add")]
 		public async Task<bool> RemoveItemAsync([FromRoute(Name = "cid")] int characterId, [FromRoute(Name = "iid")] int instanceId, CancellationToken token = default)
 		{
+			if(Logger.IsEnabled(LogLevel.Warning))
+				Logger.LogWarning($"WARNING: API must be secured by Server role one day.");
+
 			return await InventoryRepository.TryDeleteAsync(characterId, instanceId, token);
 		}
 	}
