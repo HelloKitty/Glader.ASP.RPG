@@ -9,7 +9,9 @@ namespace Glader.ASP.RPG
 	public enum ItemInstanceCreationResult
 	{
 		Success = GladerEssentialsModelConstants.RESPONSE_CODE_SUCCESS_VALUE,
-		GeneralServerError = 2
+		GeneralServerError = 2,
+		RequestInvalid = 3,
+		TemplateMissing = 4
 	}
 
 	/// <summary>
