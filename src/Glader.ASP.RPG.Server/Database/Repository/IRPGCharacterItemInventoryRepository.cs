@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -62,6 +63,14 @@ namespace Glader.ASP.RPG
 		/// <param name="token">The cancel token.</param>
 		/// <returns>True if the item is removed.</returns>
 		Task<bool> TryDeleteAsync(int characterId, int instanceId, CancellationToken token = default);
+
+		/// <summary>
+		/// Retrieves the character's inventory items.
+		/// </summary>
+		/// <param name="characterId">The character's id.</param>
+		/// <param name="token">Cancel token.</param>
+		/// <returns>Inventory items.</returns>
+		Task<DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType>[]> RetrieveCharacterInventoryAsync(int characterId, CancellationToken token = default);
 	}
 
 	public class DefaultRPGCharacterItemInventoryRepository<TItemClassType, TQualityType, TQualityColorStructureType> : IRPGCharacterItemInventoryRepository<TItemClassType, TQualityType, TQualityColorStructureType>
@@ -164,6 +173,17 @@ namespace Glader.ASP.RPG
 				return false;
 
 			return await TryDeleteAsync(inventoryItem, token);
+		}
+
+		/// <inheritdoc />
+		public async Task<DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType>[]> RetrieveCharacterInventoryAsync(int characterId, CancellationToken token = default)
+		{
+			if (characterId <= 0) throw new ArgumentOutOfRangeException(nameof(characterId));
+
+			//Just load all the items I guess.
+			return await ModelSet
+				.Where(m => m.CharacterId == characterId)
+				.ToArrayAsync(token);
 		}
 	}
 }

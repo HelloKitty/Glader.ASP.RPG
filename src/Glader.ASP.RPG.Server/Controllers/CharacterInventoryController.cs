@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -45,6 +46,26 @@ namespace Glader.ASP.RPG
 				Logger.LogWarning($"WARNING: API must be secured by Server role one day.");
 
 			return await InventoryRepository.TryDeleteAsync(characterId, instanceId, token);
+		}
+
+		[ProducesJson]
+		[AuthorizeJwt]
+		[HttpGet("{cid}")]
+		public async Task<ResponseModel<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>> RetrieveItemsAsync(int characterId, CancellationToken token = default)
+		{
+			if (!await InventoryRepository.CharacterHasItemsAsync(characterId, token))
+				return Failure<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>(CharacterItemInventoryQueryResult.Empty);
+
+			var inventory = await InventoryRepository.RetrieveCharacterInventoryAsync(characterId, token);
+
+			if (!inventory.Any())
+				return Failure<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>(CharacterItemInventoryQueryResult.Empty);
+
+			var items = inventory
+				.Select(i => new RPGCharacterInventoryItemData(i.ItemOwnership.Instance.Id, i.ItemOwnership.Instance.TemplateId))
+				.ToArray();
+
+			return Success<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>(new RPGCharacterItemInventoryResponse(items));
 		}
 	}
 }
