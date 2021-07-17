@@ -183,6 +183,9 @@ namespace Glader.ASP.RPG
 			//Just load all the items I guess.
 			return await ModelSet
 				.Where(m => m.CharacterId == characterId)
+				.Include(m => m.ItemOwnership)
+				.ThenInclude(m => m.Instance)
+				.ThenInclude(m => m.Template)
 				.ToArrayAsync(token);
 		}
 	}
