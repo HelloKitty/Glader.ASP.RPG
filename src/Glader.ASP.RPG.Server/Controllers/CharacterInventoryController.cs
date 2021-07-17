@@ -53,7 +53,7 @@ namespace Glader.ASP.RPG
 		[ProducesJson]
 		[AuthorizeJwt]
 		[HttpGet("{cid}")]
-		public async Task<ResponseModel<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>> RetrieveItemsAsync(int characterId, CancellationToken token = default)
+		public async Task<ResponseModel<RPGCharacterItemInventoryResponse, CharacterItemInventoryQueryResult>> RetrieveItemsAsync([FromRoute(Name = "cid")] int characterId, CancellationToken token = default)
 		{
 			if(Logger.IsEnabled(LogLevel.Warning))
 				Logger.LogWarning($"WARNING: API must be secured by Server role one day.");
