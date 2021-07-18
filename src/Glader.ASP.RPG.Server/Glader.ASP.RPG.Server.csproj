@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGDBF.DataSource.Http.Server.ASP" Version="0.1.40" />
+    <PackageReference Include="GGDBF.DataSource.Http.Server.ASP" Version="0.1.42" />
     <PackageReference Include="Glader.ASP.Authentication.Models" Version="0.0.5" />
     <PackageReference Include="Glader.Essentials.ASP" Version="2.2.77" />
     <PackageReference Include="Glader.Essentials.Database" Version="2.2.77" />

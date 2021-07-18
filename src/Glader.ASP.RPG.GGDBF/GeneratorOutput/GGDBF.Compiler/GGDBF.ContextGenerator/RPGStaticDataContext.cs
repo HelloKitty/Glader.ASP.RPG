@@ -8,7 +8,7 @@ using Glader.ASP.RPG;
 
 namespace Glader.ASP.RPG
 {
-    [GeneratedCodeAttribute("GGDBF", "0.1.40.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.1.42.0")]
     public interface IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : IGGDBFContext where TSkillType : System.Enum
        where TRaceType : System.Enum
        where TClassType : System.Enum
@@ -43,9 +43,11 @@ namespace Glader.ASP.RPG
 
         public IReadOnlyDictionary<Int32, DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemDefault { get; }
 
+        public IReadOnlyDictionary<Int32, DBRPGCharacterItemRaceClassDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemRaceClassDefault { get; }
+
     }
 
-    [GeneratedCodeAttribute("GGDBF", "0.1.40.0")]
+    [GeneratedCodeAttribute("GGDBF", "0.1.42.0")]
     public partial class RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : IRPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> where TSkillType : System.Enum
         where TRaceType : System.Enum
         where TClassType : System.Enum
@@ -74,6 +76,7 @@ namespace Glader.ASP.RPG
                 Quality = await source.RetrieveTableAsync<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>>("Quality")),
                 ItemTemplate = await source.RetrieveTableAsync<Int32, DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>, RPGStaticDataContext_DBRPGItemTemplate<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<Int32, DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>>("ItemTemplate")),
                 CharacterItemDefault = await source.RetrieveTableAsync<Int32, DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>, RPGStaticDataContext_DBRPGCharacterItemDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<Int32, DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>>("CharacterItemDefault")),
+                CharacterItemRaceClassDefault = await source.RetrieveTableAsync<Int32, DBRPGCharacterItemRaceClassDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>, RPGStaticDataContext_DBRPGCharacterItemRaceClassDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<Int32, DBRPGCharacterItemRaceClassDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>>("CharacterItemRaceClassDefault")),
             };
         }
     }

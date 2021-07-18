@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGDBF.DataSource.Http" Version="0.1.40" />
+    <PackageReference Include="GGDBF.DataSource.Http" Version="0.1.42" />
   </ItemGroup>
 
   <ItemGroup>
