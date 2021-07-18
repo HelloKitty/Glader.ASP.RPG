@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -50,7 +51,11 @@ namespace Glader.ASP.RPG
 
 		public async Task<DBRPGCharacter> CreateCharacterAsync(int ownershipId, string name, TRaceType race, TClassType classType, CancellationToken token = default)
 		{
-			await using IDbContextTransaction transaction = await Context.Database.BeginTransactionAsync(token);
+			var defaultItems = await Context.Set<DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>>()
+				.Where(i => Equals(i.ClassId, classType) && Equals(i.RaceId, race))
+				.ToArrayAsync(token);
+
+			await using IDbContextTransaction transaction = await Context.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, token);
 
 			try
 			{
@@ -74,9 +79,7 @@ namespace Glader.ASP.RPG
 					.AddRangeAsync(new DBRPGCharacterDefinition<TRaceType, TClassType>(entry.Entity.Id, race, classType));
 
 				//This adds all the default items a character should have upon creation
-				foreach (var item in await Context.Set<DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>>()
-					.Where(i => Equals(i.ClassId, classType) && Equals(i.RaceId, race))
-					.ToArrayAsync(token))
+				foreach (var item in defaultItems)
 				{
 					var itemInstanceEntity = Context
 						.Set<DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType>>()
