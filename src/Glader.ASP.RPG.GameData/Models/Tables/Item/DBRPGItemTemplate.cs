@@ -13,7 +13,7 @@ namespace Glader.ASP.RPG
 	/// </summary>
 	/// <typeparam name="TItemClassType">The itemclass type.</typeparam>
 	/// <typeparam name="TQualityType">Quality type enum.</typeparam>
-	/// <typeparam name="TQualityColorStructureType"></typeparam>
+	/// <typeparam name="TQualityColorStructureType">The structure for the color.</typeparam>
 	[DataContract]
 	[Table("item_template")]
 	public class DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType> : IModelDescriptable
