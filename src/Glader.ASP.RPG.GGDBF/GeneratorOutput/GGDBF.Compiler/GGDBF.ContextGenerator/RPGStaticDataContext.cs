@@ -41,6 +41,8 @@ namespace Glader.ASP.RPG
 
         public IReadOnlyDictionary<Int32, DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>> ItemTemplate { get; }
 
+        public IReadOnlyDictionary<Int32, DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemDefault { get; }
+
     }
 
     [GeneratedCodeAttribute("GGDBF", "0.1.40.0")]
@@ -71,6 +73,7 @@ namespace Glader.ASP.RPG
                 ItemSubClass = await source.RetrieveTableAsync<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>, RPGStaticDataContext_DBRPGSItemSubClass<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<DBRPGSItemSubClassKey<TItemClassType>, DBRPGSItemSubClass<TItemClassType>>("ItemSubClass") { KeyResolutionFunction = m => new DBRPGSItemSubClassKey<TItemClassType>(m.ItemClassId, m.SubClassId) }),
                 Quality = await source.RetrieveTableAsync<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<TQualityType, DBRPGQuality<TQualityType, TQualityColorStructureType>>("Quality")),
                 ItemTemplate = await source.RetrieveTableAsync<Int32, DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>, RPGStaticDataContext_DBRPGItemTemplate<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<Int32, DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>>("ItemTemplate")),
+                CharacterItemDefault = await source.RetrieveTableAsync<Int32, DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>, RPGStaticDataContext_DBRPGCharacterItemDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>>(new NameOverrideTableRetrievalConfig<Int32, DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>>("CharacterItemDefault")),
             };
         }
     }

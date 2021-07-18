@@ -9,6 +9,7 @@ namespace Glader.ASP.RPG
 {
 	/// <summary>
 	/// Table for RPG default items for characters.
+	/// (Ex. Items all characters should have by default)
 	/// </summary>
 	/// <typeparam name="TItemClassType">The itemclass type.</typeparam>
 	/// <typeparam name="TQualityType">Quality type enum.</typeparam>
