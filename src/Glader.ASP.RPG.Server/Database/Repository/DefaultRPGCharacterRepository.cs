@@ -14,9 +14,11 @@ namespace Glader.ASP.RPG
 	/// <summary>
 	/// Default EF Core database-backed implementation of <see cref="IRPGCharacterRepository{TRaceType,TClassType}"/>
 	/// </summary>
-	public sealed class DefaultRPGCharacterRepository<TRaceType, TClassType> : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter>, IRPGCharacterRepository<TRaceType, TClassType>
+	public sealed class DefaultRPGCharacterRepository<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType> : GeneralGenericCrudRepositoryProvider<int, DBRPGCharacter>, IRPGCharacterRepository<TRaceType, TClassType>
 		where TRaceType : Enum 
 		where TClassType : Enum
+		where TItemClassType : Enum
+		where TQualityType : Enum
 	{
 		public DefaultRPGCharacterRepository(IRPGDBContext contextAdapter) 
 			: base(contextAdapter.Context.Set<DBRPGCharacter>(), contextAdapter.Context)
@@ -70,6 +72,25 @@ namespace Glader.ASP.RPG
 				await Context
 					.Set<DBRPGCharacterDefinition<TRaceType, TClassType>>()
 					.AddRangeAsync(new DBRPGCharacterDefinition<TRaceType, TClassType>(entry.Entity.Id, race, classType));
+
+				//This adds all the default items a character should have upon creation
+				foreach (var item in await Context.Set<DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>>()
+					.Where(i => Equals(i.ClassId, classType) && Equals(i.RaceId, race))
+					.ToArrayAsync(token))
+				{
+					var itemInstanceEntity = Context
+						.Set<DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType>>()
+						.Add(new DBRPGItemInstance<TItemClassType, TQualityType, TQualityColorStructureType>(item.ItemTemplateId));
+
+					//Must do this so we end up with proper instance id
+					await Context.SaveChangesAsync(token);
+
+					var inventoryItem = new DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType>(entry.Entity.Id);
+					inventoryItem.SetItem(itemInstanceEntity.Entity);
+
+					Context.Set<DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType>>()
+						.Add(inventoryItem);
+				}
 
 				await Context.SaveChangesAsync(token);
 				await transaction.CommitAsync(token);
