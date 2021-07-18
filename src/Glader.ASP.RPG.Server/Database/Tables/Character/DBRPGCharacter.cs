@@ -36,14 +36,11 @@ namespace Glader.ASP.RPG
 		public DateTime LastModifiedDate { get; private set; }
 
 		[InverseProperty(nameof(DBRPGCharacterProgress.Character))]
-		public virtual DBRPGCharacterProgress Progress { get; private set; }
+		public virtual DBRPGCharacterProgress Progress { get; internal set; }
 
 		public DBRPGCharacter(string name)
 		{
 			Name = name ?? throw new ArgumentNullException(nameof(name));
-
-			//Empty progress with defaults.
-			Progress = new DBRPGCharacterProgress();
 		}
 	}
 }

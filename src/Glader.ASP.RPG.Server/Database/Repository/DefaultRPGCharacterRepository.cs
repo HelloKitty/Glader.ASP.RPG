@@ -52,11 +52,13 @@ namespace Glader.ASP.RPG
 
 			try
 			{
-				EntityEntry<DBRPGCharacter> entry = await Context
+				EntityEntry<DBRPGCharacter> entry = Context
 					.Set<DBRPGCharacter>()
-					.AddAsync(new DBRPGCharacter(name), token);
+					.Add(new DBRPGCharacter(name));
 
 				await Context.SaveChangesAsync(token);
+
+				entry.Entity.Progress = new DBRPGCharacterProgress();
 
 				//Now we link the character via the Ownership table
 				await Context
