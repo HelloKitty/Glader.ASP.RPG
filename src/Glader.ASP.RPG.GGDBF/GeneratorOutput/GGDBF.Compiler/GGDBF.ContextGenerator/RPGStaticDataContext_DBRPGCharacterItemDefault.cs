@@ -10,7 +10,7 @@ namespace Glader.ASP.RPG
 {
     [GeneratedCodeAttribute("GGDBF", "0.1.42.0")]
     [DataContractAttribute]
-    public partial class RPGStaticDataContext_DBRPGCharacterItemDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>, IGGDBFSerializable where TSkillType : System.Enum
+    public partial class RPGStaticDataContext_DBRPGCharacterItemDefault<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> : DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>, IGGDBFSerializable where TSkillType : System.Enum
        where TRaceType : System.Enum
        where TClassType : System.Enum
        where TProportionSlotType : System.Enum
@@ -24,6 +24,16 @@ namespace Glader.ASP.RPG
         public override Glader.ASP.RPG.DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType> ItemTemplate
         {
             get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>.Instance.ItemTemplate[base.ItemTemplateId];
+        }
+        [IgnoreDataMemberAttribute]
+        public override Glader.ASP.RPG.DBRPGRace<TRaceType> Race
+        {
+            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>.Instance.Race[base.RaceId];
+        }
+        [IgnoreDataMemberAttribute]
+        public override Glader.ASP.RPG.DBRPGClass<TClassType> Class
+        {
+            get => RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>.Instance.@Class[base.ClassId];
         }
         public RPGStaticDataContext_DBRPGCharacterItemDefault() { }
 

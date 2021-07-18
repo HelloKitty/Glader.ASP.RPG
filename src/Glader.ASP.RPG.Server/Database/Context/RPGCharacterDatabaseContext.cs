@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using Glader.Essentials;
 using Microsoft.EntityFrameworkCore;
@@ -86,9 +88,7 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGCharacterItemInventory<TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemInventories { get; private set; }
 
-		public DbSet<DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemDefaults { get; private set; }
-		
-		public DbSet<DBRPGCharacterItemRaceClassDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemRaceClassDefaults { get; private set; }
+		public DbSet<DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemDefaults { get; private set; }
 
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>> options)
 			: base(options)

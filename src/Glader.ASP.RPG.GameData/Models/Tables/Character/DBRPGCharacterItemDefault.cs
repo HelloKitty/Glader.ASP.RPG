@@ -14,11 +14,15 @@ namespace Glader.ASP.RPG
 	/// <typeparam name="TItemClassType">The itemclass type.</typeparam>
 	/// <typeparam name="TQualityType">Quality type enum.</typeparam>
 	/// <typeparam name="TQualityColorStructureType">The structure for the color.</typeparam>
+	/// <typeparam name="TClassType">The class type.</typeparam>
+	/// <typeparam name="TRaceType">The race type.</typeparam>
 	[DataContract]
 	[Table("character_item_default")]
-	public class DBRPGCharacterItemDefault<TItemClassType, TQualityType, TQualityColorStructureType>
+	public class DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>
 		where TItemClassType : Enum 
 		where TQualityType : Enum
+		where TRaceType : Enum
+		where TClassType : Enum
 	{
 		/// <summary>
 		/// The Item Class identifier.
@@ -35,10 +39,25 @@ namespace Glader.ASP.RPG
 		[ForeignKey(nameof(ItemTemplateId))]
 		public virtual DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType> ItemTemplate { get; private set; }
 
-		public DBRPGCharacterItemDefault(int itemTemplateId)
+		[DataMember(Order = 3)]
+		public TRaceType RaceId { get; private set; }
+
+		[ForeignKey(nameof(RaceId))]
+		[IgnoreDataMember]
+		public virtual DBRPGRace<TRaceType> Race { get; private set; }
+
+		[DataMember(Order = 4)]
+		public TClassType ClassId { get; private set; }
+
+		[ForeignKey(nameof(ClassId))]
+		[IgnoreDataMember]
+		public virtual DBRPGClass<TClassType> @Class { get; private set; }
+
+		public DBRPGCharacterItemDefault(int itemTemplateId, TRaceType raceId, TClassType classId)
 		{
-			if (itemTemplateId <= 0) throw new ArgumentOutOfRangeException(nameof(itemTemplateId));
 			ItemTemplateId = itemTemplateId;
+			RaceId = raceId ?? throw new ArgumentNullException(nameof(raceId));
+			ClassId = classId ?? throw new ArgumentNullException(nameof(classId));
 		}
 
 		/// <summary>

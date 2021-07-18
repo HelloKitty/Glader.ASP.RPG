@@ -18,7 +18,7 @@ namespace Glader.ASP.RPG
 		/// <param name="race">The race.</param>
 		/// <param name="class">The class.</param>
 		/// <returns>Enumerable of item templates.</returns>
-		public static IEnumerable<DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>> EnumerateDefaultItems<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>(this IReadOnlyDictionary<int, DBRPGCharacterItemRaceClassDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>> table, TRaceType race, TClassType @class) 
+		public static IEnumerable<DBRPGItemTemplate<TItemClassType, TQualityType, TQualityColorStructureType>> EnumerateDefaultItems<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>(this IReadOnlyDictionary<int, DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>> table, TRaceType race, TClassType @class) 
 			where TItemClassType : Enum 
 			where TQualityType : Enum
 			where TRaceType : Enum

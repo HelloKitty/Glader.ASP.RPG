@@ -3,14 +3,16 @@ using System;
 using Glader.ASP.RPG;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Glader.ASP.RPGCharacter.Application.Migrations
 {
     [DbContext(typeof(RPGCharacterDatabaseContext<TestCustomizationSlotType, TestColorType, TestProportionSlotType, TestVectorType<float>, TestRaceType, TestClassType, TestSkillType, TestStatType, TestItemClass, TestQualityType, TestColorType>))]
-    partial class RPGCharacterDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210718083908_TryFixedFurtherDefaultItemTables")]
+    partial class TryFixedFurtherDefaultItemTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
