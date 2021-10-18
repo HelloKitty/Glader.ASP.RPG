@@ -34,12 +34,19 @@ namespace Glader.ASP.RPG
 		[DataMember(Order = 3)]
 		public Vector3<float> EntryPoint { get; private set; }
 
-		/// <inheritdoc />
+		/// <summary>
+		/// Indicates if this is a type of map that is persistent.
+		/// (Ex. Non-persistent maps could be instanced dungeons)
+		/// </summary>
 		[DataMember(Order = 4)]
-		public string VisualName { get; private set; }
+		public bool IsPersistent { get; private set; }
 
 		/// <inheritdoc />
 		[DataMember(Order = 5)]
+		public string VisualName { get; private set; }
+
+		/// <inheritdoc />
+		[DataMember(Order = 6)]
 		public string Description { get; private set; }
 
 		public DBRPGMap(string contentPath, Vector3<float> entryPoint, string visualName, string description)
