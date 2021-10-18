@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="GGDBF.Common" Version="0.1.42" />
+    <PackageReference Include="Glader.Essentials.Common" Version="2.2.77" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
   </ItemGroup>
 

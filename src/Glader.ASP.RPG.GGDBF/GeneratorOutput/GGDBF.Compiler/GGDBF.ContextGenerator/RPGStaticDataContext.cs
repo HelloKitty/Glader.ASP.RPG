@@ -19,6 +19,8 @@ namespace Glader.ASP.RPG
        where TQualityType : System.Enum
 
     {
+        public IReadOnlyDictionary<Int32, DBRPGMap> Map { get; }
+
         public IReadOnlyDictionary<TSkillType, DBRPGSkill<TSkillType>> Skill { get; }
 
         public IReadOnlyDictionary<TRaceType, DBRPGRace<TRaceType>> Race { get; }
@@ -58,10 +60,13 @@ namespace Glader.ASP.RPG
     {
         public static RPGStaticDataContext<TSkillType, TRaceType, TClassType, TProportionSlotType, TCustomizableSlotType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType> Instance { get; private set; }
 
+        public IReadOnlyDictionary<Int32, DBRPGMap> Map { get; init; }
+
         public static async Task Initialize(IGGDBFDataSource source)
         {
             Instance = new()
             {
+                Map = await source.RetrieveTableAsync<Int32, DBRPGMap>(new NameOverrideTableRetrievalConfig<Int32, DBRPGMap>("Map")),
                 Skill = await source.RetrieveTableAsync<TSkillType, DBRPGSkill<TSkillType>>(new NameOverrideTableRetrievalConfig<TSkillType, DBRPGSkill<TSkillType>>("Skill")),
                 Race = await source.RetrieveTableAsync<TRaceType, DBRPGRace<TRaceType>>(new NameOverrideTableRetrievalConfig<TRaceType, DBRPGRace<TRaceType>>("Race")),
                 @Class = await source.RetrieveTableAsync<TClassType, DBRPGClass<TClassType>>(new NameOverrideTableRetrievalConfig<TClassType, DBRPGClass<TClassType>>("Class")),

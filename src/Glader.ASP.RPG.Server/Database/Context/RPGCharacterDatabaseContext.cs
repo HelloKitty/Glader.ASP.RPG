@@ -90,6 +90,8 @@ namespace Glader.ASP.RPG
 
 		public DbSet<DBRPGCharacterItemDefault<TRaceType, TClassType, TItemClassType, TQualityType, TQualityColorStructureType>> CharacterItemDefaults { get; private set; }
 
+		public DbSet<DBRPGMap> Maps { get; set; }
+
 		public RPGCharacterDatabaseContext(DbContextOptions<RPGCharacterDatabaseContext<TCustomizableSlotType, TColorStructureType, TProportionSlotType, TProportionStructureType, TRaceType, TClassType, TSkillType, TStatType, TItemClassType, TQualityType, TQualityColorStructureType>> options)
 			: base(options)
 		{
@@ -291,6 +293,11 @@ namespace Glader.ASP.RPG
 
 				string propName = nameof(DBRPGItemInstanceOwnership<TItemClassType, TQualityType, TQualityColorStructureType>.OwnershipType);
 				builder.HasCheckConstraint(propName, $"{propName} = {(int) ItemInstanceOwnershipType.CharacterInventory}");
+			});
+
+			modelBuilder.Entity<DBRPGMap>(builder =>
+			{
+				builder.OwnsOne(m => m.EntryPoint);
 			});
 		}
 	}

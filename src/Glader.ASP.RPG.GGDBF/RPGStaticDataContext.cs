@@ -4,6 +4,7 @@ using GGDBF;
 
 namespace Glader.ASP.RPG
 {
+	[RequiredDataModel(typeof(DBRPGMap))]
 	[RequiredDataModel(typeof(DBRPGSkill<>))]
 	[RequiredDataModel(typeof(DBRPGRace<>))]
 	[RequiredDataModel(typeof(DBRPGClass<>))]
