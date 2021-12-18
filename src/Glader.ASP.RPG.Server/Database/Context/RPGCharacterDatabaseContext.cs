@@ -230,6 +230,9 @@ namespace Glader.ASP.RPG
 						.WithMany()
 						.HasForeignKey(definition => definition.StatType)
 						.IsRequired();*/
+
+					//TODO: Don't hardcode the table name.
+					m.ToTable("character_stat_default_rpgstats");
 				});
 
 				builder.HasKey(m => new {m.Level, m.RaceId, m.ClassId});
